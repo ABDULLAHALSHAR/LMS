@@ -47,7 +47,7 @@
 
 <script>
 // ضع هنا رابط Google Apps Script المنشور بصيغة /exec
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLTQ_JnbB3lgJTGh69G9lVPJtuevV5hJSh3OQV4T23XmIhrH7cH9Y6nlLJ9NSfTeQg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjGZ0EFYDtrab0yjY2CGhQ0R0IvejcxlxRNDJNGKi6mJltEBG0RAtW9oIOabLClxiR6g/exec';
 let TOKEN = localStorage.getItem('hrAcademyToken') || '';
 let DATA = null;
 let CURRENT_PAGE = 'dashboard';
@@ -62,7 +62,7 @@ function api(action,payload={}){
   return new Promise((resolve,reject)=>{
     const cb='__misk_cb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
     const script=document.createElement('script');
-    const timer=setTimeout(()=>finish(new Error('تعذر الوصول إلى خادم المنصة. تأكد من نشر Google Apps Script بصلاحية Anyone ثم أعد المحاولة.')),15000);
+    const timer=setTimeout(()=>finish(new Error('انتهت مهلة الاتصال بالخادم. افتح رابط /exec مباشرة وتأكد أن Web App منشور على Anyone وأن آخر نسخة من Code.gs تم نشرها.')),15000);
     function finish(err,data){
       clearTimeout(timer);
       try{delete window[cb]}catch(_){window[cb]=undefined}
@@ -73,7 +73,7 @@ function api(action,payload={}){
       if(!j || j.ok===false) return finish(new Error((j&&j.error)||'تعذر الاتصال بالخادم'));
       finish(null,j.data??j);
     };
-    script.onerror=()=>finish(new Error('تعذر الاتصال بـ Google Apps Script. تحقق من رابط /exec وإعدادات النشر.'));
+    script.onerror=()=>finish(new Error('تعذر تحميل استجابة Google Apps Script. غالباً النشر ليس Anyone أو أن الـ Deployment لا يحتوي آخر نسخة من doGet.'));
     const q=new URLSearchParams({action,token:TOKEN||'',payload:JSON.stringify(payload||{}),callback:cb,_:String(Date.now())});
     script.src=SCRIPT_URL+'?'+q.toString();
     document.head.appendChild(script);
@@ -81,9 +81,22 @@ function api(action,payload={}){
 }
 function toast(msg){ const d=document.createElement('div'); d.textContent=msg; Object.assign(d.style,{position:'fixed',left:'24px',bottom:'24px',background:'#0f172a',color:'#fff',padding:'12px 16px',borderRadius:'12px',zIndex:99,boxShadow:'0 10px 30px #0003'}); document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
 
+async function checkServerHealth(){
+  try{
+    const h=await api('health');
+    if(!h.sheetConfigured || !h.sheetAccessible){
+      throw new Error(h.sheetError || 'Google Sheet غير مربوط بالخادم');
+    }
+    if((h.missingSheets||[]).length){
+      throw new Error('الشيت متصل لكن توجد صفحات ناقصة: '+h.missingSheets.join('، '));
+    }
+    return h;
+  }catch(e){ throw e; }
+}
+
 async function login(){
   $('loginError').classList.add('hidden');
-  try{const r=await api('login',{id:$('loginId').value.trim(),pin:$('loginPin').value.trim()}); TOKEN=r.token; localStorage.setItem('hrAcademyToken',TOKEN); DATA=await api('bootstrap'); openApp();}
+  try{await checkServerHealth(); const r=await api('login',{id:$('loginId').value.trim(),pin:$('loginPin').value.trim()}); TOKEN=r.token; localStorage.setItem('hrAcademyToken',TOKEN); DATA=await api('bootstrap'); openApp();}
   catch(e){$('loginError').textContent=(e&&e.message)||'تعذر تسجيل الدخول إلى المنصة';$('loginError').classList.remove('hidden');}
 }
 async function logout(){try{await api('logout')}catch(e){} TOKEN='';DATA=null;localStorage.removeItem('hrAcademyToken');$('appView').classList.add('hidden');$('loginView').classList.remove('hidden');}
