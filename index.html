@@ -691,6 +691,7 @@ function applyCourseContentFallback(){
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwCMxBMFAXByjcMTaIYifwSGoEBG5vVkLeoAgwFh_2uomd2bkU_SsdJe5NxlSK3wp2bJg/exec';
+const EXPECTED_BACKEND_BUILD='MISK-2026-09-04-01';
 
 /* ---- Grok / xAI for the "Ask me" assistant.
    The xAI API key is stored securely in Google Apps Script Script Properties.
@@ -1041,8 +1042,20 @@ document.addEventListener('visibilitychange',()=>{
 function openApp(){
  $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('assistFab').classList.remove('hidden');
  loadLocalNeeds();loadStudy();buildNav();updateHeader();showPage('dashboard');initAssistant();startMiskAutoSync();
- // اقرأ أحدث بيانات المستخدم مباشرة من Google Sheet بعد فتح المنصة.
  setTimeout(liveSync,250);
+
+ // فحص صريح يمنع اختلاط HTML جديد مع Deployment قديم.
+ publicPing().then(p=>{
+   if(!p?.build || p.build!==EXPECTED_BACKEND_BUILD){
+     const msg=LANG==='ar'
+       ?`تنبيه تقني: الموقع يستخدم Backend قديم. المتوقع ${EXPECTED_BACKEND_BUILD} والموجود ${p?.build||'نسخة قديمة بدون رقم إصدار'}. لذلك Grok ومزامنة Google Sheet لن يعملا بالشكل الجديد.`
+       :`Technical notice: the site is using an old backend. Expected ${EXPECTED_BACKEND_BUILD}, received ${p?.build||'legacy build'}.`;
+     console.error(msg,p);
+     assistBot(msg);
+   }else{
+     console.info('Misk backend verified',p);
+   }
+ }).catch(e=>console.warn('Backend build check:',e));
 }
 function updateHeader(){
   $('topUserName').textContent=DATA.user.name||'—';
@@ -1828,7 +1841,7 @@ function initAssistant(){
      if(AI_KEY){
        $('assistMode').textContent=LANG==='ar'?`Grok · متصل (${s.model||'xAI'})`:`Grok · Connected (${s.model||'xAI'})`;
      }else{
-       const reason=s?.error||'Unknown error';
+       const reason=s?.error||(s?.build?('Unknown error · build '+s.build):'Backend قديم أو غير متوافق مع نسخة الموقع');
        $('assistMode').textContent=LANG==='ar'?'Grok · غير متصل':'Grok · Not connected';
        console.warn('Grok status:',reason);
        assistBot(LANG==='ar'?`تنبيه: Grok غير متصل حالياً. السبب: ${reason}`:`Notice: Grok is not connected. Reason: ${reason}`);
