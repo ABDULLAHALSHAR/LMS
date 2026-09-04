@@ -690,7 +690,7 @@ function applyCourseContentFallback(){
 
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwYRgcbRP7VCgi9Uj7DheaLvTMjliDrJgnLskK35tlBAYZnNIosfbG_jY-03RLPhlG-4Q/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwCMxBMFAXByjcMTaIYifwSGoEBG5vVkLeoAgwFh_2uomd2bkU_SsdJe5NxlSK3wp2bJg/exec';
 
 /* ---- Grok / xAI for the "Ask me" assistant.
    The xAI API key is stored securely in Google Apps Script Script Properties.
@@ -979,14 +979,19 @@ let MISK_SYNC_BUSY=false;
 
 function mergeLiveSync(fresh){
   if(!fresh||!DATA)return;
+  const oldUser=JSON.stringify(DATA.user||{});
+  const oldUsers=JSON.stringify(DATA.users||[]);
   const oldRole=DATA.user&&DATA.user.role;
-  if(fresh.user) DATA.user={...(DATA.user||{}),...fresh.user};
-  if(Array.isArray(fresh.users) && fresh.users.length) DATA.users=fresh.users;
-  if(fresh.settings) DATA.settings={...(DATA.settings||{}),...fresh.settings};
-  updateHeader();
 
-  // إذا تغيرت بيانات المستخدم أو قائمة الموظفين، نعكسها مباشرة في الصفحة المفتوحة.
-  if(CURRENT){
+  if(fresh.user) DATA.user={...(DATA.user||{}),...fresh.user};
+  if(Array.isArray(fresh.users)) DATA.users=fresh.users;
+  if(fresh.settings) DATA.settings={...(DATA.settings||{}),...fresh.settings};
+
+  const userChanged=oldUser!==JSON.stringify(DATA.user||{});
+  const usersChanged=oldUsers!==JSON.stringify(DATA.users||[]);
+  if(userChanged) updateHeader();
+
+  if(CURRENT && (userChanged||usersChanged)){
     if(oldRole !== (DATA.user&&DATA.user.role)) buildNav();
     render();
   }
@@ -1022,8 +1027,8 @@ function startMiskAutoSync(){
   if(MISK_SYNC_TIMER) clearInterval(MISK_SYNC_TIMER);
   if(MISK_FULL_SYNC_TIMER) clearInterval(MISK_FULL_SYNC_TIMER);
 
-  // مزامنة خفيفة كل 15 ثانية للاسم، المسمى، الإدارة، البريد، الجوال والصورة.
-  MISK_SYNC_TIMER=setInterval(liveSync,15000);
+  // مزامنة خفيفة كل 5 ثوانٍ للاسم، المسمى، الإدارة، البريد، الجوال والصورة.
+  MISK_SYNC_TIMER=setInterval(liveSync,5000);
 
   // مزامنة كاملة أقل تكراراً حتى لا نبطئ المنصة.
   const sec=Math.max(60,Number((DATA&&DATA.settings&&DATA.settings.AutoRefreshSeconds)||120));
@@ -1038,6 +1043,8 @@ document.addEventListener('visibilitychange',()=>{
 function openApp(){
  $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('assistFab').classList.remove('hidden');
  loadLocalNeeds();loadStudy();buildNav();updateHeader();showPage('dashboard');initAssistant();startMiskAutoSync();
+ // اقرأ أحدث بيانات المستخدم مباشرة من Google Sheet بعد فتح المنصة.
+ setTimeout(liveSync,250);
 }
 function updateHeader(){
   $('topUserName').textContent=DATA.user.name||'—';
