@@ -690,14 +690,13 @@ function applyCourseContentFallback(){
 
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx8okujMpQHUNDBn0JHFqxjiX2F3fIJg1G4KDRPwye134aT5W37MrVPX2MMSfDth22gWw/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwYRgcbRP7VCgi9Uj7DheaLvTMjliDrJgnLskK35tlBAYZnNIosfbG_jY-03RLPhlG-4Q/exec';
 
-/* ---- Optional AI key for the "Ask me" assistant. ----
-   Leave '' to run the assistant fully OFFLINE (answers from platform data + FAQ).
-   Put a key here (or set localStorage 'miskAiKey') to enable smart online answers. */
-let AI_KEY=localStorage.getItem('miskAiKey')||'';
-const AI_URL='https://api.openai.com/v1/chat/completions';
-const AI_MODEL='gpt-4o-mini';
+/* ---- Grok / xAI for the "Ask me" assistant.
+   The xAI API key is stored securely in Google Apps Script Script Properties.
+   No API key is stored in this HTML or GitHub. */
+let AI_KEY='backend-grok';
+const AI_PROVIDER='grok';
 
 let TOKEN=localStorage.getItem('miskHrToken')||'';
 let DATA=null,CURRENT='dashboard',CAL_DATE=new Date();
@@ -718,7 +717,7 @@ const I18N={
   brand_full:'منصة مسك للموارد البشرية',brand_sub:'للموارد البشرية',
   login_pitch:'منصة داخلية لتدريب الموظفين وإدارة البرامج التدريبية، ومتابعة الحضور والنتائج، وقياس الاحتياج التدريبي وإصدار الشهادات.',
   f_courses:'إدارة الدورات',f_train:'تدريب الموظفين',f_assess:'حضور وتقييم',f_needs:'قياس الاحتياج التدريبي',
-  logout:'تسجيل الخروج',assist_title:'مساعد مسك',assist_mode_local:'يجيب من بيانات المنصة',assist_mode_ai:'مساعد ذكي · متصل',assist_ph:'اكتب سؤالك...',
+  logout:'تسجيل الخروج',assist_title:'مساعد مسك',assist_mode_local:'يجيب من بيانات المنصة',assist_mode_ai:'Grok · متصل',assist_ph:'اكتب سؤالك...',
   nav_dashboard:'الرئيسية',nav_courses:'الدورات التدريبية',nav_sessions:'الجلسات التدريبية',nav_requests_emp:'طلباتي التدريبية',nav_requests:'طلبات التدريب',
   nav_calendar:'التقويم',nav_certificates:'الشهادات',nav_needs:'الاحتياج التدريبي',nav_reports:'التقارير',nav_employees:'الموظفون',nav_trainers:'المدربون',
   nav_notifications:'الإشعارات',nav_settings:'الإعدادات',
@@ -897,7 +896,8 @@ function api(action,payload={}){
     if(!SCRIPT_URL||!SCRIPT_URL.includes('/exec')){const e=new Error(LANG==='ar'?'لم يتم ضبط رابط الخادم.':'Server URL is not set');e.kind='config';return reject(e)}
     const cb='misk_cb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
     const s=document.createElement('script');
-    const timer=setTimeout(()=>{const e=new Error(LANG==='ar'?'تعذر الوصول إلى خادم المنصة. تأكد من نشر التطبيق بصلاحية Anyone.':'Cannot reach the server. Ensure the Web App is deployed with Anyone access.');e.kind='network';done(e)},18000);
+    const timeoutMs=action==='askGrok'?45000:18000;
+    const timer=setTimeout(()=>{const e=new Error(LANG==='ar'?'تعذر الوصول إلى خادم المنصة. تأكد من نشر التطبيق بصلاحية Anyone.':'Cannot reach the server. Ensure the Web App is deployed with Anyone access.');e.kind='network';done(e)},timeoutMs);
     function done(err,data){clearTimeout(timer);try{delete window[cb]}catch(_){window[cb]=undefined}s.remove();err?reject(err):resolve(data)}
     window[cb]=(j)=>{if(!j||j.ok===false){const e=new Error(j?.error||'Request failed');e.kind='server';return done(e)}done(null,j.data??j)};
     const q=new URLSearchParams({action,callback:cb,token:TOKEN,payload:JSON.stringify(payload)});
@@ -1814,7 +1814,18 @@ async function markRead(id){try{await api('markNotificationRead',{notificationId
    ASK-ME ASSISTANT (offline FAQ/data + optional AI key)
    ============================================================ */
 let ASSIST_OPEN=false;
-function initAssistant(){$('assistBody').innerHTML='';assistBot(t('assist_hi'));renderAssistChips();$('assistMode').textContent=AI_KEY?t('assist_mode_ai'):t('assist_mode_local')}
+function initAssistant(){
+ $('assistBody').innerHTML='';assistBot(t('assist_hi'));renderAssistChips();
+ $('assistMode').textContent=LANG==='ar'?'Grok · جارٍ التحقق':'Grok · Checking';
+ if(!DEMO_MODE && TOKEN && TOKEN!=='demo'){
+   api('grokStatus').then(s=>{
+     AI_KEY=s?.configured?'backend-grok':'';
+     $('assistMode').textContent=AI_KEY?t('assist_mode_ai'):t('assist_mode_local');
+   }).catch(()=>{AI_KEY='';$('assistMode').textContent=t('assist_mode_local')});
+ }else{
+   AI_KEY='';$('assistMode').textContent=t('assist_mode_local');
+ }
+}
 function toggleAssist(){ASSIST_OPEN=!ASSIST_OPEN;$('assistPanel').classList.toggle('hidden',!ASSIST_OPEN);if(ASSIST_OPEN)setTimeout(()=>$('assistInput').focus(),50)}
 function assistBot(txt){const d=document.createElement('div');d.className='msg bot';d.textContent=txt;$('assistBody').appendChild(d);$('assistBody').scrollTop=1e9}
 function assistMe(txt){const d=document.createElement('div');d.className='msg me';d.textContent=txt;$('assistBody').appendChild(d);$('assistBody').scrollTop=1e9}
@@ -1839,12 +1850,11 @@ function assistLocal(q){
  if(has('طلب','اطلب','request','enroll','كيف')){return LANG==='ar'?'لطلب دورة: افتح «الدورات التدريبية» ثم اضغط «طلب التسجيل» على الدورة المطلوبة، واكتب سبب رغبتك. سيصل الطلب للمدير للمراجعة.':'To request a course: open "Training courses", press "Request to enroll" on the course, and add your reason. The admin will review it.'}
  if(has('نجاح','pass','درجة','score')){return LANG==='ar'?`درجة النجاح الافتراضية ${DATA.settings?.PassingScore||70}%، وقد تختلف لكل دورة. يمكن للمدير تعديلها من «الإعدادات».`:`Default passing score is ${DATA.settings?.PassingScore||70}%, and can differ per course. Admins change it in Settings.`}
  if(has('لغة','language','english','عربي')){return LANG==='ar'?'تقدر تبدّل اللغة بين العربية والإنجليزية من زر اللغة أعلى الصفحة.':'Switch language via the language button at the top.'}
- return LANG==='ar'?'أقدر أساعدك في: دوراتك، جلساتك، شهاداتك، احتياجك التدريبي، وكيفية طلب الدورات. جرّب أحد الأزرار بالأعلى. (لتفعيل الإجابات الذكية، أضف مفتاح API في الكود أو الإعدادات.)':"I can help with: your courses, sessions, certificates, training needs, and how to request courses. Try a button above. (Add an API key in code/settings for smart answers.)";
+ return LANG==='ar'?'أقدر أساعدك في: دوراتك، جلساتك، شهاداتك، احتياجك التدريبي، وكيفية طلب الدورات. جرّب أحد الأزرار بالأعلى. (إذا تعذر اتصال Grok، سأجيبك مؤقتاً من بيانات المنصة المحلية.)':"I can help with: your courses, sessions, certificates, training needs, and how to request courses. Try a button above. (If Grok is unavailable, I will temporarily answer from local platform data.)";
 }
 async function assistAI(q){
- const ctx=`Platform: Misk HR. User: ${DATA.user.name}, role ${DATA.user.role}, dept ${deptName(DATA.user.departmentCode)}. Courses: ${(DATA.courses||[]).map(c=>val(c,'اسم الدورة')).join('; ')}. Answer briefly in ${LANG==='ar'?'Arabic':'English'}.`;
- const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AI_KEY},body:JSON.stringify({model:AI_MODEL,messages:[{role:'system',content:ctx},{role:'user',content:q}],max_tokens:300})});
- const j=await r.json();return j.choices?.[0]?.message?.content?.trim()||assistLocal(q);
+ const r=await api('askGrok',{question:q,lang:LANG});
+ return String(r?.answer||'').trim()||assistLocal(q);
 }
 
 /* ------------------ BOOT ------------------ */
