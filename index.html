@@ -237,6 +237,27 @@ tbody tr:hover td{background:var(--soft)}
 .quiz-progress{height:6px;background:var(--line);border-radius:8px;overflow:hidden;margin-bottom:18px}
 .quiz-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--brand2),var(--brand1));transition:width .3s}
 
+/* course viewer */
+.viewer{display:grid;grid-template-columns:250px 1fr;gap:16px}
+.les-list{border:1px solid var(--line);border-radius:14px;overflow:hidden;align-self:start;background:var(--card)}
+.les-item{display:flex;align-items:center;gap:10px;padding:12px 13px;border-bottom:1px solid var(--line);cursor:pointer;font-size:12.5px;transition:.12s}
+.les-item:last-child{border-bottom:0}
+.les-item:hover{background:var(--soft)}
+.les-item.active{background:var(--soft);border-inline-start:3px solid var(--brand2)}
+.les-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;color:var(--muted)}
+.les-item.done .les-num{background:var(--ok);border-color:var(--ok);color:#fff}
+.les-item b{font-size:12.5px;display:block}.les-item small{color:var(--muted);font-size:10px}
+.les-pane{border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:var(--card);min-height:340px;display:flex;flex-direction:column}
+.les-pane h2{font-size:19px;margin:0 0 4px}
+.les-type{font-size:10.5px;font-weight:800;color:var(--teal);margin-bottom:14px}
+.les-body{font-size:14px;line-height:2;color:var(--ink);flex:1}
+.les-video{background:var(--soft);border:1px dashed var(--brand2);border-radius:12px;padding:26px;text-align:center;color:var(--muted);margin-bottom:14px}
+.les-video iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}
+.les-foot{display:flex;gap:9px;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.study-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px}
+.study-ns{background:var(--bg);color:var(--muted)}.study-ip{background:var(--warnBg);color:var(--warn)}.study-cp{background:var(--okBg);color:var(--ok)}
+@media(max-width:760px){.viewer{grid-template-columns:1fr}.les-list{order:2}}
+
 /* modal wide variant */
 .modal-card.wide{width:min(920px,100%)}
 .print-actions{display:flex;gap:9px;justify-content:flex-start;margin-top:16px;flex-wrap:wrap}
@@ -456,7 +477,7 @@ const DEMO_DATA={"settings":{"PlatformName":"منصة مسك للموارد ال
 const LOGO='data:image/webp;base64,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';
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycby-HVLIdhkP1Fk7yxavAJ43irSypPovSHVLwudRaO8O9B66nSM6RdnL5gCuIf8LcOgPdg/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyQQ9kC08Isf9cyK7lpk_MOZ1EIAYd2NXXCjUo6ETlpyLRdWZh0LZHRBhB1ZIFJ4tLsjA/exec';
 
 /* ---- Optional AI key for the "Ask me" assistant. ----
    Leave '' to run the assistant fully OFFLINE (answers from platform data + FAQ).
@@ -531,7 +552,12 @@ const I18N={
   need_dist:'توزيع مستوى الاحتياج',by_skill_gap:'الفجوة حسب المهارة',by_dept_need:'الاحتياج حسب الإدارة',impact_note:'المؤشرات محسوبة آلياً من بيانات التقييمات والحضور وتحليل الاحتياج.',
   method_title:'كيف يعمل التقييم؟',
   method_body:'يقيس النظام لكل موظف فجوة المهارات بمقارنة (المهارات المطلوبة لوظيفته وإدارته) مع (ما أثبته فعلياً). المصادر: متطلبات التخصص، نتائج الاختبارات، نسبة الحضور، والتقييم الذاتي. الناتج مؤشر احتياج (٠–١٠٠٪) ومستوى (منخفض/متوسط/عالٍ) ودورات مقترحة لسدّ الفجوة.',
-  sig_spec:'متطلبات التخصص/الإدارة',sig_exam:'نتائج الاختبارات',sig_att:'الالتزام بالحضور',sig_quiz:'التقييم الذاتي',why_need:'لماذا يحتاج هذا الموظف؟',view_analysis:'تفاصيل التحليل',emp_analysis:'تحليل احتياج الموظف'
+  sig_spec:'متطلبات التخصص/الإدارة',sig_exam:'نتائج الاختبارات',sig_att:'الالتزام بالحضور',sig_quiz:'التقييم الذاتي',why_need:'لماذا يحتاج هذا الموظف؟',view_analysis:'تفاصيل التحليل',emp_analysis:'تحليل احتياج الموظف',
+  study_course:'ادرس الدورة',view_material:'عرض المادة التدريبية',course_content:'محتوى الدورة',lesson_n:'الدرس',lessons_progress:'تقدّم الدروس',
+  next_lesson:'التالي',prev_lesson:'السابق',mark_done:'إتمام الدرس',lesson_done:'تم',reading_type:'قراءة',video_type:'فيديو',add_video_note:'سيضيف مسؤول المنصة رابط الفيديو لاحقاً.',
+  minutes_l:'دقيقة',no_content:'لا يوجد محتوى إلكتروني لهذه الدورة بعد.',start_course_quiz:'ابدأ اختبار الدورة',course_quiz:'اختبار الدورة',
+  q_of_n:'سؤال',of_n:'من',submit_quiz:'إنهاء وتصحيح',course_passed:'مبارك! أتممت الدورة بنجاح',course_failed:'لم تجتز الاختبار هذه المرة',your_score_is:'درجتك',pass_mark:'درجة النجاح',retry_quiz:'إعادة المحاولة',
+  back_to_courses:'رجوع للدورات',continue_study:'متابعة الدراسة',trainer_material_sub:'المادة العلمية للدورات التي تدرّبها',all_lessons_done:'أنهيت كل الدروس — انتقل للاختبار',study_progress:'حالة الدراسة',not_started:'لم تبدأ',in_progress:'قيد الدراسة',completed_st:'مكتملة'
  },
  en:{
   login_title:'Sign in',login_sub:'Use your employee ID to access your account.',emp_id:'Employee ID',login_btn:'Enter platform',
@@ -586,7 +612,12 @@ const I18N={
   need_dist:'Need-level distribution',by_skill_gap:'Gap by skill',by_dept_need:'Need by department',impact_note:'Indicators are computed automatically from assessments, attendance and needs analysis.',
   method_title:'How does the assessment work?',
   method_body:'For each employee the system measures the skill gap by comparing (skills required by their role & department) with (what they have actually demonstrated). Sources: specialty requirements, exam results, attendance, and self-assessment. Output: a need index (0–100%), a level (low/medium/high), and recommended courses to close the gap.',
-  sig_spec:'Specialty/department requirements',sig_exam:'Exam results',sig_att:'Attendance commitment',sig_quiz:'Self-assessment',why_need:'Why does this employee need it?',view_analysis:'Analysis details',emp_analysis:'Employee needs analysis'
+  sig_spec:'Specialty/department requirements',sig_exam:'Exam results',sig_att:'Attendance commitment',sig_quiz:'Self-assessment',why_need:'Why does this employee need it?',view_analysis:'Analysis details',emp_analysis:'Employee needs analysis',
+  study_course:'Study course',view_material:'View training material',course_content:'Course content',lesson_n:'Lesson',lessons_progress:'Lessons progress',
+  next_lesson:'Next',prev_lesson:'Back',mark_done:'Complete lesson',lesson_done:'Done',reading_type:'Reading',video_type:'Video',add_video_note:'The platform admin will add the video link later.',
+  minutes_l:'min',no_content:'No online content for this course yet.',start_course_quiz:'Start course quiz',course_quiz:'Course quiz',
+  q_of_n:'Question',of_n:'of',submit_quiz:'Finish & grade',course_passed:'Congratulations! You completed the course',course_failed:'You did not pass this time',your_score_is:'Your score',pass_mark:'Pass mark',retry_quiz:'Try again',
+  back_to_courses:'Back to courses',continue_study:'Continue studying',trainer_material_sub:'Material for the courses you train',all_lessons_done:'All lessons done — go to the quiz',study_progress:'Study status',not_started:'Not started',in_progress:'In progress',completed_st:'Completed'
  }
 };
 const t=k=>I18N[LANG][k]??I18N.ar[k]??k;
@@ -713,7 +744,7 @@ async function refreshData(){if(DEMO_MODE){DATA=demoBootstrap(DATA.user&&DATA.us
 function initials(name){return String(name||'M').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('')}
 function openApp(){
  $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('assistFab').classList.remove('hidden');
- loadLocalNeeds();buildNav();updateHeader();showPage('dashboard');initAssistant();
+ loadLocalNeeds();loadStudy();buildNav();updateHeader();showPage('dashboard');initAssistant();
 }
 function updateHeader(){
   $('topUserName').textContent=DATA.user.name||'—';$('topUserTitle').textContent=DATA.user.title||roleName(DATA.user.role);
@@ -933,10 +964,143 @@ function dashboard(){
 }
 
 function coursesPage(){
- const canEdit=DATA.user.role==='admin';const covers=['HR','◎','AI','XL','◆','🔐'];
+ const canEdit=DATA.user.role==='admin';const covers=['HR','◎','AI','XL','◆','🔐'];const role=DATA.user.role;
  $('content').innerHTML=pageHead('nav_courses','courses_sub',canEdit?`<button class="primary-btn" onclick="courseModal()">${t('add_course')}</button>`:'')+
- `<div class="cards">${(DATA.courses||[]).map((c,i)=>`<div class="course-card"><div class="course-cover">${covers[i%6]}</div><div class="course-body"><div class="course-code">${esc(val(c,'رمز الدورة'))} · ${t('pass_score')} ${esc(val(c,'درجة النجاح')||passScoreOf(val(c,'رمز الدورة')))}%</div><h3>${esc(val(c,'اسم الدورة'))}</h3><p>${esc(val(c,'الوصف'))}</p><div class="chips"><span class="chip teal">${esc(val(c,'المستوى'))}</span><span class="chip">${esc(val(c,'النمط'))}</span><span class="chip">${esc(val(c,'الساعات'))} ${t('hours')}</span></div><div class="course-foot">${statusPill(val(c,'الحالة'))}<small>${t('trainer_l')}: ${esc(trainerName(val(c,'رقم المدرب')))}</small></div>${DATA.user.role==='employee'?`<button class="primary-btn" style="width:100%;margin-top:12px" onclick="requestModal('${esc(val(c,'رمز الدورة'))}')">${t('request_enroll')}</button>`:canEdit?`<button class="ghost-btn" style="width:100%;margin-top:12px" onclick='courseModal(${JSON.stringify(c).replace(/'/g,"&#39;")})'>${t('edit_course')}</button>`:''}</div></div>`).join('')||`<div class="empty">${t('no_courses')}</div>`}</div>`;
+ `<div class="cards">${(DATA.courses||[]).map((c,i)=>{
+   const code=val(c,'رمز الدورة');const hasContent=lessonsOf(code).length>0;
+   const st=courseStatus(code);
+   const stBadge=role==='employee'&&hasContent?`<span class="study-badge ${st==='completed'?'study-cp':st==='in_progress'?'study-ip':'study-ns'}">${t(st==='completed'?'completed_st':st==='in_progress'?'in_progress':'not_started')}</span>`:'';
+   let actions='';
+   if(role==='employee'){
+     actions=`<div style="display:flex;gap:8px;margin-top:12px">${hasContent?`<button class="primary-btn" style="flex:1" onclick="openCourse('${esc(code)}')">${t('study_course')}</button>`:''}<button class="ghost-btn" style="flex:1" onclick="requestModal('${esc(code)}')">${t('request_enroll')}</button></div>`;
+   }else if(role==='trainer'){
+     const mine=String(val(c,'رقم المدرب'))===String(DATA.user.id);
+     actions=`<button class="${mine?'primary-btn':'ghost-btn'}" style="width:100%;margin-top:12px" onclick="openCourse('${esc(code)}')">${mine?t('view_material'):t('course_content')}</button>`;
+   }else if(canEdit){
+     actions=`<div style="display:flex;gap:8px;margin-top:12px"><button class="ghost-btn" style="flex:1" onclick="openCourse('${esc(code)}')">${t('course_content')}</button><button class="ghost-btn" style="flex:1" onclick='courseModal(${JSON.stringify(c).replace(/'/g,"&#39;")})'>${t('edit_course')}</button></div>`;
+   }
+   return `<div class="course-card"><div class="course-cover">${covers[i%6]}</div><div class="course-body"><div class="course-code">${esc(code)} · ${t('pass_score')} ${esc(val(c,'درجة النجاح')||passScoreOf(code))}%</div><h3>${esc(val(c,'اسم الدورة'))}</h3><p>${esc(val(c,'الوصف'))}</p><div class="chips"><span class="chip teal">${esc(val(c,'المستوى'))}</span><span class="chip">${esc(val(c,'النمط'))}</span><span class="chip">${esc(val(c,'الساعات'))} ${t('hours')}</span>${hasContent?`<span class="chip">${lessonsOf(code).length} ${t('lesson_n')}</span>`:''}</div><div class="course-foot">${stBadge||statusPill(val(c,'الحالة'))}<small>${t('trainer_l')}: ${esc(trainerName(val(c,'رقم المدرب')))}</small></div>${actions}</div></div>`;
+ }).join('')||`<div class="empty">${t('no_courses')}</div>`}</div>`;
 }
+
+/* ---------- Course content viewer + study tracking ---------- */
+function lessonsOf(code){return (DATA.courseContent||[]).filter(x=>String(x.courseCode)===String(code)).sort((a,b)=>a.lesson-b.lesson)}
+function quizOf(code){return (DATA.courseQuizzes||[]).filter(x=>String(x.courseCode)===String(code)).sort((a,b)=>a.q-b.q)}
+let STUDY={};
+function loadStudy(){try{STUDY=JSON.parse(localStorage.getItem('miskStudy')||'{}')}catch(_){STUDY={}}}
+function saveStudy(){localStorage.setItem('miskStudy',JSON.stringify(STUDY))}
+function studyRec(code){const u=DATA.user.id;STUDY[u]=STUDY[u]||{};STUDY[u][code]=STUDY[u][code]||{done:{},completed:false,score:0};return STUDY[u][code]}
+function courseStatus(code){
+ const u=DATA.user.id;const r=STUDY[u]&&STUDY[u][code];
+ if(r&&r.completed)return 'completed';
+ // reflect backend completion (passed assessment on an enrollment for this course)
+ const ens=(DATA.enrollments||[]).filter(e=>String(val(e,'رقم الموظف'))===String(u)&&String(val(e,'رمز الدورة'))===String(code));
+ const enrIds=new Set(ens.map(e=>String(val(e,'رقم التسجيل'))));
+ const passed=(DATA.assessments||[]).some(a=>enrIds.has(String(val(a,'رقم التسجيل')))&&val(a,'النتيجة')==='ناجح');
+ if(passed)return 'completed';
+ if(r&&Object.keys(r.done).length)return 'in_progress';
+ return 'not_started';
+}
+let CV={code:'',lessons:[],idx:0};
+function openCourse(code){
+ CV={code,lessons:lessonsOf(code),idx:0};
+ if(!CV.lessons.length){openModal(`<h3>${esc(courseName(code))}</h3><div class="empty">${t('no_content')}</div><div class="modal-actions"><button class="ghost-btn" onclick="closeModal()">${t('close')}</button></div>`);return}
+ // resume at first not-done lesson
+ const rec=studyRec(code);const firstUndone=CV.lessons.findIndex(l=>!rec.done[l.lesson]);
+ CV.idx=firstUndone<0?0:firstUndone;
+ renderCourse();
+}
+function renderCourse(){
+ const code=CV.code,rec=studyRec(code),c=(DATA.courses||[]).find(o=>val(o,'رمز الدورة')===code)||{};
+ const doneCount=CV.lessons.filter(l=>rec.done[l.lesson]).length,total=CV.lessons.length;
+ const pct=Math.round(doneCount/total*100);
+ const les=CV.lessons[CV.idx];
+ const isTrainerOrAdmin=DATA.user.role!=='employee';
+ const list=CV.lessons.map((l,i)=>`<div class="les-item ${i===CV.idx?'active':''} ${rec.done[l.lesson]?'done':''}" onclick="cvGo(${i})"><div class="les-num">${rec.done[l.lesson]?'✓':i+1}</div><div><b>${esc(l.title)}</b><small>${l.type==='فيديو'?t('video_type'):t('reading_type')} · ${l.minutes} ${t('minutes_l')}</small></div></div>`).join('');
+ let media='';
+ if(les.type==='فيديو'){
+  const emb=embedUrl(les.link);
+  media=emb?`<div class="les-video"><iframe src="${esc(emb)}" allowfullscreen loading="lazy"></iframe></div>`:`<div class="les-video">▶ ${esc(les.title)}<br><small>${t('add_video_note')}</small></div>`;
+ }
+ const body=`
+ <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px;flex-wrap:wrap">
+   <h3 style="margin:0">${esc(val(c,'اسم الدورة')||code)}</h3>
+   <span class="study-badge ${courseStatus(code)==='completed'?'study-cp':doneCount?'study-ip':'study-ns'}">${t('lessons_progress')}: ${doneCount}/${total}</span>
+ </div>
+ <div class="quiz-progress"><i style="width:${pct}%"></i></div>
+ <div class="viewer">
+   <div class="les-list">${list}</div>
+   <div class="les-pane">
+     <h2>${esc(les.title)}</h2>
+     <div class="les-type">${les.type==='فيديو'?t('video_type'):t('reading_type')} · ${les.minutes} ${t('minutes_l')}</div>
+     ${media}
+     <div class="les-body">${esc(les.body).replace(/\n/g,'<br>')}</div>
+     <div class="les-foot">
+       <div style="display:flex;gap:8px">
+         <button class="ghost-btn" onclick="cvNav(-1)" ${CV.idx===0?'disabled style=opacity:.4':''}>${t('prev_lesson')}</button>
+         <button class="ghost-btn" onclick="cvNav(1)" ${CV.idx>=total-1?'disabled style=opacity:.4':''}>${t('next_lesson')}</button>
+       </div>
+       <div style="display:flex;gap:8px">
+         ${!isTrainerOrAdmin?(rec.done[les.lesson]?`<span class="study-badge study-cp">✓ ${t('lesson_done')}</span>`:`<button class="primary-btn" onclick="cvDone()">${t('mark_done')}</button>`):''}
+       </div>
+     </div>
+   </div>
+ </div>
+ <div class="modal-actions" style="justify-content:space-between">
+   <button class="ghost-btn" onclick="closeModal()">${t('back_to_courses')}</button>
+   ${!isTrainerOrAdmin&&doneCount===total&&quizOf(code).length?`<button class="primary-btn" onclick="startCourseQuiz('${esc(code)}')">${t('start_course_quiz')}</button>`:(!isTrainerOrAdmin&&quizOf(code).length?`<span style="font-size:11px;color:var(--muted);align-self:center">${t('all_lessons_done')}</span>`:'')}
+ </div>`;
+ openModal(body,true);
+}
+function embedUrl(u){
+ u=String(u||'').trim();if(!u)return '';
+ let m=u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+ if(m)return 'https://www.youtube.com/embed/'+m[1];
+ if(/youtube\.com\/embed\//.test(u))return u;
+ if(/vimeo\.com\/(\d+)/.test(u))return 'https://player.vimeo.com/video/'+u.match(/vimeo\.com\/(\d+)/)[1];
+ return u; // assume already embeddable
+}
+function cvGo(i){CV.idx=i;renderCourse()}
+function cvNav(d){CV.idx=Math.max(0,Math.min(CV.lessons.length-1,CV.idx+d));renderCourse()}
+function cvDone(){const rec=studyRec(CV.code);rec.done[CV.lessons[CV.idx].lesson]=true;saveStudy();if(CV.idx<CV.lessons.length-1)CV.idx++;renderCourse()}
+
+/* ---------- Course quiz ---------- */
+let CQ={code:'',qs:[],i:0,ans:{}};
+function startCourseQuiz(code){CQ={code,qs:quizOf(code),i:0,ans:{}};renderCourseQuiz()}
+function renderCourseQuiz(){
+ const q=CQ.qs[CQ.i],letters=['أ','ب','ج','د'],pct=Math.round(CQ.i/CQ.qs.length*100);
+ openModal(`<h3>${t('course_quiz')} — ${esc(courseName(CQ.code))}</h3>
+  <div class="quiz-progress"><i style="width:${pct}%"></i></div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${t('q_of_n')} ${CQ.i+1} ${t('of_n')} ${CQ.qs.length}</div>
+  <div class="quiz-q"><div class="qh">${esc(q.question)}</div><div class="quiz-opts">
+   ${q.options.map((o,idx)=>o?`<button class="quiz-opt ${CQ.ans[q.q]===letters[idx]?'sel':''}" onclick="cqPick(${q.q},'${letters[idx]}')"><span class="dot"></span>${esc(o)}</button>`:'').join('')}
+  </div></div>
+  <div class="modal-actions">
+   ${CQ.i>0?`<button class="ghost-btn" onclick="cqNav(-1)">${t('prev_lesson')}</button>`:''}
+   ${CQ.i<CQ.qs.length-1?`<button class="primary-btn" onclick="cqNav(1)" ${CQ.ans[q.q]==null?'disabled style=opacity:.5':''}>${t('next_lesson')}</button>`:`<button class="primary-btn" onclick="cqFinish()" ${CQ.ans[q.q]==null?'disabled style=opacity:.5':''}>${t('submit_quiz')}</button>`}
+   <button class="ghost-btn" onclick="openCourse('${esc(CQ.code)}')">${t('cancel')}</button>
+  </div>`,true);
+}
+function cqPick(qn,letter){CQ.ans[qn]=letter;renderCourseQuiz()}
+function cqNav(d){CQ.i=Math.max(0,Math.min(CQ.qs.length-1,CQ.i+d));renderCourseQuiz()}
+function cqFinish(){
+ let correct=0;CQ.qs.forEach(q=>{if(CQ.ans[q.q]===q.answer)correct++});
+ const score=Math.round(correct/CQ.qs.length*100),pass=passScoreOf(CQ.code),ok=score>=pass;
+ const rec=studyRec(CQ.code);rec.score=score;rec.completed=ok;saveStudy();
+ // record to backend (best-effort; works offline via local)
+ api('completeCourse',{courseCode:CQ.code,score}).then(()=>{refreshData().catch(()=>{})}).catch(()=>{});
+ openModal(`<div style="text-align:center;padding:8px 4px">
+   <div style="font-size:46px">${ok?'🎉':'📘'}</div>
+   <h3 style="margin:8px 0">${ok?t('course_passed'):t('course_failed')}</h3>
+   <div class="gauge" style="justify-content:center;margin:12px 0">${gaugeSvg(score)}</div>
+   <p style="font-size:13px;color:var(--muted)">${t('your_score_is')}: <b style="color:var(--ink)">${score}%</b> · ${t('pass_mark')}: ${pass}%</p>
+   <div class="modal-actions" style="justify-content:center">
+     ${ok?`<button class="primary-btn" onclick="closeModal();showPage('certificates')">${t('view_cert')}</button>`:`<button class="primary-btn" onclick="startCourseQuiz('${esc(CQ.code)}')">${t('retry_quiz')}</button>`}
+     <button class="ghost-btn" onclick="closeModal();showPage('courses')">${t('back_to_courses')}</button>
+   </div>
+ </div>`,true);
+}
+
 
 function sessionsPage(){
  const canEdit=DATA.user.role==='admin';
