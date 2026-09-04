@@ -306,6 +306,68 @@ tbody tr:hover td{background:var(--soft)}
 @media(max-width:900px){.profile-grid{grid-template-columns:1fr}.metric-row{grid-template-columns:1fr 1fr}}
 @media print{body *{visibility:hidden}.printable,.printable *{visibility:visible}.printable{position:absolute;inset:0;width:100%;background:#fff}.sidebar,.topbar{display:none!important}}
 
+
+/* ===== MISK 2026 UX REFRESH ===== */
+html[dir="rtl"] body{direction:rtl;text-align:right}
+html[dir="ltr"] body{direction:ltr;text-align:left}
+html[dir="rtl"] .sidebar{right:0!important;left:auto!important}
+html[dir="ltr"] .sidebar{left:0!important;right:auto!important}
+html[dir="rtl"] .workspace{margin-right:var(--sidebar)!important;margin-left:0!important}
+html[dir="ltr"] .workspace{margin-left:var(--sidebar)!important;margin-right:0!important}
+html[dir="rtl"] .assist-fab,html[dir="rtl"] .assist-panel{right:24px!important;left:auto!important}
+html[dir="ltr"] .assist-fab,html[dir="ltr"] .assist-panel{left:24px!important;right:auto!important}
+body{background:linear-gradient(180deg,#f7f9fc 0%,#eef3f8 100%);letter-spacing:.01em}
+.sidebar{box-shadow:0 0 36px rgba(4,28,58,.12)}
+.topbar{backdrop-filter:blur(12px);box-shadow:0 4px 18px rgba(10,35,66,.04)}
+.content{max-width:1600px;width:100%;margin:0 auto}
+.welcome-card{border:1px solid rgba(255,255,255,.16);box-shadow:0 22px 55px rgba(7,56,108,.16);overflow:hidden}
+.panel,.kpi,.course-card,.table-box,.profile-card,.ai-card,.letter-card{box-shadow:0 10px 30px rgba(12,37,65,.06);border-color:#e5ebf3}
+.kpi{transition:transform .18s ease,box-shadow .18s ease}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 16px 38px rgba(12,37,65,.10)}
+img{max-width:100%;height:auto}
+.js-logo,.login-logo,.welcome-side img,.assist-head img{object-fit:contain}
+.employee-photo{object-fit:cover;background:#eef3f8}
+.assist-fab{width:auto;min-width:64px;padding:0 18px;border-radius:30px;gap:8px;font-weight:800}
+.assist-fab::after{content:"اسألني";font-size:12px}
+html[lang="en"] .assist-fab::after{content:"Ask me"}
+.assist-panel{border-radius:24px;box-shadow:0 28px 90px rgba(6,31,58,.28)}
+.assist-foot input{min-width:0}
+.ai-dashboard-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}
+.ai-summary{background:linear-gradient(145deg,#07386c,#0b4c80);color:#fff;border-radius:20px;padding:22px;box-shadow:0 18px 45px rgba(7,56,108,.18)}
+.ai-summary h3{margin:0 0 6px}.ai-summary p{color:#d7e7f5;margin:0 0 18px}
+.ai-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ai-stat{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:13px}
+.ai-stat b{display:block;font-size:24px}.ai-stat span{font-size:10px;color:#d9e8f5}
+.ai-bars{display:flex;flex-direction:column;gap:12px}
+.ai-bar-line{display:grid;grid-template-columns:minmax(90px,140px) 1fr 42px;align-items:center;gap:10px;font-size:12px}
+.ai-bar-track{height:10px;background:#edf2f7;border-radius:99px;overflow:hidden}
+.ai-bar-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand2),var(--brand1))}
+.cert-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.cert-card-new{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 10px 30px rgba(12,37,65,.06);position:relative;overflow:hidden}
+.cert-card-new:before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:5px;background:linear-gradient(var(--brand2),var(--brand1))}
+.cert-card-new .cert-mark{width:48px;height:48px;border-radius:14px;background:var(--soft);display:grid;place-items:center;color:var(--brand1);font-weight:900;margin-bottom:12px}
+.cert-card-new h3{margin:4px 0 8px;font-size:15px}.cert-card-new p{margin:3px 0;color:var(--muted);font-size:11px}
+.cert-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.cert-sheet{max-width:900px;margin:auto;background:#fff;color:#0b2440;border:10px solid #07386c;padding:46px;text-align:center;position:relative}
+.cert-sheet:after{content:"";position:absolute;inset:10px;border:2px solid #0ca7a5;pointer-events:none}
+.cert-sheet .cert-logo{width:145px;max-height:80px;object-fit:contain;margin:0 auto 18px}
+.cert-sheet h1{font-size:32px;color:#07386c;margin:12px 0}.cert-sheet .cert-name{font-size:30px;font-weight:900;color:#0ca7a5;margin:18px 0}
+.cert-sheet .seal{width:86px;height:86px;border-radius:50%;border:3px solid #0ca7a5;display:grid;place-items:center;margin:22px auto;font-weight:900;color:#07386c}
+@media(max-width:900px){.ai-dashboard-grid{grid-template-columns:1fr}.ai-stat-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){
+ html[dir] .sidebar{left:0!important;right:0!important}
+ html[dir] .workspace{margin-left:0!important;margin-right:0!important}
+ .assist-fab{min-width:56px;padding:0 14px}
+ .assist-fab::after{display:none}
+ .cert-gallery{grid-template-columns:1fr}
+}
+@media print{
+ body *{visibility:hidden!important}
+ .printable,.printable *{visibility:visible!important}
+ .printable{position:absolute!important;left:0!important;top:0!important;width:100%!important}
+ .printable button{display:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -554,7 +616,7 @@ function toggleTheme(){THEME=THEME==='dark'?'light':'dark';applyTheme()}
 
 /* ------------------ Language ------------------ */
 function applyLang(){
- document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';
+ document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';document.body.dir=LANG==='ar'?'rtl':'ltr';
  document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
  const lbl=LANG==='ar'?'EN':'ع';if($('langLabel'))$('langLabel').textContent=lbl;if($('langLabel2'))$('langLabel2').textContent=lbl;
@@ -614,7 +676,7 @@ async function refreshData(){try{DATA=await api('bootstrap');updateHeader();rend
 function initials(name){return String(name||'M').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('')}
 function openApp(){
  $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('assistFab').classList.remove('hidden');
- loadLocalNeeds();buildNav();updateHeader();showPage('dashboard');initAssistant();
+ loadLocalNeeds();buildNav();updateHeader();showPage('dashboard');safeAssistantInit();
 }
 function updateHeader(){
   $('topUserName').textContent=DATA.user.name||'—';$('topUserTitle').textContent=DATA.user.title||roleName(DATA.user.role);$('avatar').textContent=initials(DATA.user.name);
@@ -782,6 +844,26 @@ function dashboard(){
      ${latest.map((c,i)=>`<div class="mini-row"><div class="mini-badge">${['HR','◎','AI'][i]||'★'}</div><div style="flex:1"><b>${esc(val(c,'اسم الدورة'))}</b><small>${esc(trainerName(val(c,'رقم المدرب')))} · ${esc(val(c,'الساعات'))} ${t('hours')}</small><div class="progress ${i===1?'warn':i===2?'bad':''}"><i style="width:${[72,48,26][i]||40}%"></i></div></div></div>`).join('')}
    </div>
  </div>`;
+
+ renderAIDashboard();
+}
+
+
+function renderAIDashboard(){
+ if(!DATA||!$('content'))return;
+ const rows=DATA.aiAnalysis||[];
+ if(!rows.length)return;
+ const need=rows.filter(r=>String(val(r,'need','قرار الاحتياج')).includes('يحتاج')).length;
+ const dev=rows.filter(r=>String(val(r,'need','قرار الاحتياج')).includes('تطوير')).length;
+ const noNeed=rows.filter(r=>String(val(r,'need','قرار الاحتياج')).includes('لا يحتاج')).length;
+ const avg=Math.round(rows.reduce((s,r)=>s+Number(val(r,'aiScore','مؤشر AI %')||0),0)/rows.length);
+ const depts={};
+ rows.forEach(r=>{const d=val(r,'department','الإدارة')||'—';const score=Number(val(r,'aiScore','مؤشر AI %')||0);if(!depts[d])depts[d]=[];depts[d].push(score)});
+ const bars=Object.entries(depts).slice(0,8).map(([d,a])=>{const v=Math.round(a.reduce((x,y)=>x+y,0)/a.length);return `<div class="ai-bar-line"><span>${esc(d)}</span><div class="ai-bar-track"><i style="width:${v}%"></i></div><b>${v}%</b></div>`}).join('');
+ const wrap=document.createElement('div');
+ wrap.className='ai-dashboard-grid';
+ wrap.innerHTML=`<div class="ai-summary"><h3>${LANG==='ar'?'تحليل الاحتياج والتطوير بالذكاء الاصطناعي':'AI Training & Development Analysis'}</h3><p>${LANG==='ar'?'قراءة موحدة للأداء والمهارات وتقييم المدير والالتزام.':'Unified view of performance, skills, manager rating and commitment.'}</p><div class="ai-stat-row"><div class="ai-stat"><b>${rows.length}</b><span>${LANG==='ar'?'تم تحليلهم':'Analyzed'}</span></div><div class="ai-stat"><b>${need}</b><span>${LANG==='ar'?'يحتاج تدريب':'Need training'}</span></div><div class="ai-stat"><b>${dev}</b><span>${LANG==='ar'?'خطة تطوير':'Development plan'}</span></div><div class="ai-stat"><b>${avg}%</b><span>${LANG==='ar'?'متوسط AI':'AI average'}</span></div></div></div><div class="panel"><div class="panel-head"><h3>${LANG==='ar'?'متوسط مؤشر AI حسب الإدارة':'AI score by department'}</h3><button class="link-btn" onclick="go('talentAI')">${LANG==='ar'?'التفاصيل':'Details'}</button></div><div class="ai-bars">${bars}</div><small style="display:block;margin-top:14px;color:var(--muted)">${LANG==='ar'?`لا يحتاج حالياً: ${noNeed}`:`No current need: ${noNeed}`}</small></div>`;
+ $('content').appendChild(wrap);
 }
 
 function coursesPage(){
@@ -815,9 +897,13 @@ function calendarPage(){
 function moveMonth(n){CAL_DATE=new Date(CAL_DATE.getFullYear(),CAL_DATE.getMonth()+n,1);calendarPage()}
 
 function certificatesPage(){
- let certs=DATA.certificates||[];if(DATA.user.role==='employee')certs=certs.filter(c=>String(val(c,'رقم الموظف'))===DATA.user.id);
- const rows=certs.map(c=>`<tr><td>${esc(val(c,'رقم الشهادة'))}</td><td>${esc(userName(val(c,'رقم الموظف')))}</td><td>${esc(courseName(val(c,'رمز الدورة')))}</td><td>${esc(val(c,'تاريخ الإصدار'))}</td><td>${statusPill(val(c,'الحالة'))}</td><td>${val(c,'الرابط')?`<a target="_blank" href="${esc(val(c,'الرابط'))}">${t('open_cert')}</a>`:'—'}</td></tr>`).join('');
- $('content').innerHTML=pageHead('cert_title','cert_sub')+`<div class="table-box"><table><thead><tr><th>${t('c_cert')}</th><th>${t('c_emp')}</th><th>${t('c_course')}</th><th>${t('c_issue')}</th><th>${t('c_status')}</th><th>${t('c_link')}</th></tr></thead><tbody>${rows||`<tr><td colspan="6" class="empty">${t('no_certs')}</td></tr>`}</tbody></table></div>`;
+ let certs=DATA.certificates||[];
+ if(DATA.user.role==='employee') certs=certs.filter(c=>String(val(c,'رقم الموظف'))===String(DATA.user.id));
+ const cards=certs.map((c,i)=>{
+   const no=val(c,'رقم الشهادة'), emp=userName(val(c,'رقم الموظف')), course=courseName(val(c,'رمز الدورة')), date=val(c,'تاريخ الإصدار');
+   return `<div class="cert-card-new"><div class="cert-mark">✓</div><small>${esc(no)}</small><h3>${esc(course)}</h3><p>${esc(emp)}</p><p>${esc(date)} · ${statusPill(val(c,'الحالة'))}</p><div class="cert-actions"><button class="primary-btn" onclick="openCertificateByNo('${esc(no)}')">${t('open_cert')}</button><button class="ghost-btn" onclick="openCertificateByNo('${esc(no)}',true)">طباعة / PDF</button></div></div>`;
+ }).join('');
+ $('content').innerHTML=pageHead('cert_title','cert_sub')+`<div class="cert-gallery">${cards||`<div class="empty">${t('no_certs')}</div>`}</div>`;
 }
 
 function reportsPage(){
@@ -1003,6 +1089,18 @@ function assistSend(preset){
  if(AI_KEY){assistTyping(true);assistAI(q).then(a=>{assistTyping(false);assistBot(a)}).catch(()=>{assistTyping(false);assistBot(assistLocal(q))})}
  else{setTimeout(()=>assistBot(assistLocal(q)),200)}
 }
+
+function safeAssistantInit(){
+ try{
+   const fab=$('assistFab'), panel=$('assistPanel'), input=$('assistInput');
+   if(fab){fab.classList.remove('hidden');fab.onclick=toggleAssist}
+   if(input){
+     input.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();assistSend()}};
+   }
+   if(DATA&&DATA.user)initAssistant();
+ }catch(e){console.error('Assistant init',e)}
+}
+
 /* offline knowledge from platform data */
 function assistLocal(q){
  const s=q.toLowerCase(),u=DATA.user;
@@ -1093,12 +1191,31 @@ function profilePage(){
 function changeEmployeePhoto(ev,id){const f=ev.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem('misk_photo_'+id,r.result);profilePage()};r.readAsDataURL(f)}
 function printIdCard(){window.print()}
 function renderEmployeeLetters(id){const ls=letters().filter(x=>String(val(x,'employeeId','رقم الموظف'))===String(id)&&val(x,'status','الحالة')==='معتمد');if(!ls.length)return '<div class="empty">لا يوجد خطاب موافقة صادر حالياً.</div>';return ls.map(x=>`<div class="reason-box" style="margin-bottom:10px"><b>${val(x,'letterNo','رقم الخطاب')}</b><br>${val(x,'letterText','نص الخطاب')}<br><small>${val(x,'decisionDate','تاريخ القرار')} · ${val(x,'approvedBy','المعتمد بواسطة')}</small><br><button class="ghost-btn" style="margin-top:8px" onclick='openApprovalLetter(${JSON.stringify(JSON.stringify(x))})'>فتح الخطاب</button></div>`).join('')}
-function openApprovalLetter(raw){const x=JSON.parse(raw);openModal('خطاب قبول التدريب',`<div class="print-sheet printable"><h2>منصة مسك للموارد البشرية</h2><h3 style="text-align:center">خطاب موافقة على طلب تدريب</h3><p>السادة/ إدارة ${val(x,'department','الإدارة')} المحترمين</p><p>السلام عليكم ورحمة الله وبركاته،</p><p style="line-height:2">${val(x,'letterText','نص الخطاب')}</p><p>رقم الخطاب: <b>${val(x,'letterNo','رقم الخطاب')}</b><br>تاريخ القرار: ${val(x,'decisionDate','تاريخ القرار')}</p><div class="sign"><span>الموارد البشرية</span><span>${val(x,'approvedBy','المعتمد بواسطة')}</span></div><div style="text-align:center;margin-top:28px"><button class="primary-btn" onclick="window.print()">طباعة الخطاب</button></div></div>`)}
+function openApprovalLetter(raw){const x=JSON.parse(raw);openModal(`<div class="print-sheet printable"><h2>منصة مسك للموارد البشرية</h2><h3 style="text-align:center">خطاب موافقة على طلب تدريب</h3><p>السادة/ إدارة ${val(x,'department','الإدارة')} المحترمين</p><p>السلام عليكم ورحمة الله وبركاته،</p><p style="line-height:2">${val(x,'letterText','نص الخطاب')}</p><p>رقم الخطاب: <b>${val(x,'letterNo','رقم الخطاب')}</b><br>تاريخ القرار: ${val(x,'decisionDate','تاريخ القرار')}</p><div class="sign"><span>الموارد البشرية</span><span>${val(x,'approvedBy','المعتمد بواسطة')}</span></div><div style="text-align:center;margin-top:28px"><button class="primary-btn" onclick="window.print()">طباعة الخطاب</button></div></div>`)}
 
-function openPlatformCertificate(cert){
- const emp=(DATA.users||[]).find(u=>u.id===val(cert,'employeeId','رقم الموظف'))||DATA.user;
+function openCertificateByNo(no,autoPrint=false){
+ const cert=(DATA.certificates||[]).find(x=>String(val(x,'certificateNo','رقم الشهادة'))===String(no));
+ if(cert)openPlatformCertificate(cert,autoPrint);
+}
+function openPlatformCertificate(cert,autoPrint=false){
+ const emp=(DATA.users||[]).find(u=>String(u.id)===String(val(cert,'employeeId','رقم الموظف')))||DATA.user;
  const course=(DATA.courses||[]).find(c=>String(c.code||c['رمز الدورة'])===String(val(cert,'courseCode','رمز الدورة')));
- openModal('شهادة منصة مسك',`<div class="cert-sheet printable"><div style="font-weight:900">منصة مسك للموارد البشرية</div><h1>شهادة إتمام برنامج تدريبي</h1><p>تشهد منصة مسك بأن</p><div class="cert-name">${emp?.name||''}</div><p>قد أتم بنجاح برنامج</p><h2>${course?.name||course?.['اسم الدورة']||val(cert,'courseCode','رمز الدورة')}</h2><p>رقم الشهادة: ${val(cert,'certificateNo','رقم الشهادة')} · تاريخ الإصدار: ${val(cert,'issueDate','تاريخ الإصدار')}</p><div class="seal">MISK</div><p>إدارة الموارد البشرية والتطوير</p><button class="primary-btn" onclick="window.print()">طباعة / حفظ PDF</button></div>`)}
+ const html=`<div class="cert-sheet printable">
+   <img class="cert-logo" src="${LOGO}" alt="Misk">
+   <div style="font-weight:900;color:#07386c">منصة مسك للموارد البشرية</div>
+   <h1>شهادة إتمام برنامج تدريبي</h1>
+   <p>تشهد منصة مسك بأن</p>
+   <div class="cert-name">${esc(emp?.name||'')}</div>
+   <p>قد أتم بنجاح البرنامج التدريبي</p>
+   <h2>${esc(course?.name||course?.['اسم الدورة']||val(cert,'courseCode','رمز الدورة'))}</h2>
+   <p>رقم الشهادة: <b>${esc(val(cert,'certificateNo','رقم الشهادة'))}</b></p>
+   <p>تاريخ الإصدار: ${esc(val(cert,'issueDate','تاريخ الإصدار'))}</p>
+   <div class="seal">MISK</div><p>إدارة الموارد البشرية والتطوير</p>
+   <button class="primary-btn" onclick="window.print()">طباعة / حفظ PDF</button>
+ </div>`;
+ openModal(html);
+ if(autoPrint)setTimeout(()=>window.print(),300);
+}
 
 document.addEventListener('DOMContentLoaded',()=>{setTimeout(installMiskExtensionNav,300)});
 
