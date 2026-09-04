@@ -900,7 +900,7 @@ function api(action,payload={}){
     const timer=setTimeout(()=>{const e=new Error(LANG==='ar'?'تعذر الوصول إلى خادم المنصة. تأكد من نشر التطبيق بصلاحية Anyone.':'Cannot reach the server. Ensure the Web App is deployed with Anyone access.');e.kind='network';done(e)},timeoutMs);
     function done(err,data){clearTimeout(timer);try{delete window[cb]}catch(_){window[cb]=undefined}s.remove();err?reject(err):resolve(data)}
     window[cb]=(j)=>{if(!j||j.ok===false){const e=new Error(j?.error||'Request failed');e.kind='server';return done(e)}done(null,j.data??j)};
-    const q=new URLSearchParams({action,callback:cb,token:TOKEN,payload:JSON.stringify(payload)});
+    const q=new URLSearchParams({action,callback:cb,token:TOKEN,payload:JSON.stringify(payload),_ts:String(Date.now())});
     s.src=SCRIPT_URL+'?'+q.toString();s.onerror=()=>{const e=new Error(LANG==='ar'?'تعذر الاتصال بـ Google Apps Script.':'Cannot connect to Google Apps Script.');e.kind='network';done(e)};document.body.appendChild(s);
   })
 }
@@ -979,19 +979,17 @@ let MISK_SYNC_BUSY=false;
 
 function mergeLiveSync(fresh){
   if(!fresh||!DATA)return;
-  const oldUser=JSON.stringify(DATA.user||{});
-  const oldUsers=JSON.stringify(DATA.users||[]);
   const oldRole=DATA.user&&DATA.user.role;
+  const oldUser=JSON.stringify(DATA.user||{});
 
-  if(fresh.user) DATA.user={...(DATA.user||{}),...fresh.user};
-  if(Array.isArray(fresh.users)) DATA.users=fresh.users;
-  if(fresh.settings) DATA.settings={...(DATA.settings||{}),...fresh.settings};
+  // liveSync now returns the same structure as bootstrap.
+  DATA={...DATA,...fresh};
+  applyCourseContentFallback();
 
   const userChanged=oldUser!==JSON.stringify(DATA.user||{});
-  const usersChanged=oldUsers!==JSON.stringify(DATA.users||[]);
   if(userChanged) updateHeader();
 
-  if(CURRENT && (userChanged||usersChanged)){
+  if(CURRENT){
     if(oldRole !== (DATA.user&&DATA.user.role)) buildNav();
     render();
   }
@@ -1027,8 +1025,8 @@ function startMiskAutoSync(){
   if(MISK_SYNC_TIMER) clearInterval(MISK_SYNC_TIMER);
   if(MISK_FULL_SYNC_TIMER) clearInterval(MISK_FULL_SYNC_TIMER);
 
-  // مزامنة خفيفة كل 5 ثوانٍ للاسم، المسمى، الإدارة، البريد، الجوال والصورة.
-  MISK_SYNC_TIMER=setInterval(liveSync,5000);
+  // مزامنة كاملة كل 15 ثانية للاسم، المسمى، الإدارة، البريد، الجوال والصورة.
+  MISK_SYNC_TIMER=setInterval(liveSync,15000);
 
   // مزامنة كاملة أقل تكراراً حتى لا نبطئ المنصة.
   const sec=Math.max(60,Number((DATA&&DATA.settings&&DATA.settings.AutoRefreshSeconds)||120));
@@ -1823,12 +1821,23 @@ async function markRead(id){try{await api('markNotificationRead',{notificationId
 let ASSIST_OPEN=false;
 function initAssistant(){
  $('assistBody').innerHTML='';assistBot(t('assist_hi'));renderAssistChips();
- $('assistMode').textContent=LANG==='ar'?'Grok · جارٍ التحقق':'Grok · Checking';
+ $('assistMode').textContent=LANG==='ar'?'Grok · جارٍ اختبار الاتصال':'Grok · Testing connection';
  if(!DEMO_MODE && TOKEN && TOKEN!=='demo'){
    api('grokStatus').then(s=>{
-     AI_KEY=s?.configured?'backend-grok':'';
-     $('assistMode').textContent=AI_KEY?t('assist_mode_ai'):t('assist_mode_local');
-   }).catch(()=>{AI_KEY='';$('assistMode').textContent=t('assist_mode_local')});
+     AI_KEY=s?.connected?'backend-grok':'';
+     if(AI_KEY){
+       $('assistMode').textContent=LANG==='ar'?`Grok · متصل (${s.model||'xAI'})`:`Grok · Connected (${s.model||'xAI'})`;
+     }else{
+       const reason=s?.error||'Unknown error';
+       $('assistMode').textContent=LANG==='ar'?'Grok · غير متصل':'Grok · Not connected';
+       console.warn('Grok status:',reason);
+       assistBot(LANG==='ar'?`تنبيه: Grok غير متصل حالياً. السبب: ${reason}`:`Notice: Grok is not connected. Reason: ${reason}`);
+     }
+   }).catch(e=>{
+     AI_KEY='';
+     $('assistMode').textContent=LANG==='ar'?'Grok · فشل الفحص':'Grok · Check failed';
+     console.warn('Grok status error:',e);
+   });
  }else{
    AI_KEY='';$('assistMode').textContent=t('assist_mode_local');
  }
@@ -1843,7 +1852,11 @@ function renderAssistChips(){
 }
 function assistSend(preset){
  const q=preset||$('assistInput').value.trim();if(!q)return;$('assistInput').value='';assistMe(q);
- if(AI_KEY){assistTyping(true);assistAI(q).then(a=>{assistTyping(false);assistBot(a)}).catch(()=>{assistTyping(false);assistBot(assistLocal(q))})}
+ if(AI_KEY){assistTyping(true);assistAI(q).then(a=>{assistTyping(false);assistBot(a)}).catch(e=>{
+   assistTyping(false);
+   const msg=String(e?.message||e||'');
+   assistBot(LANG==='ar'?`تعذر رد Grok: ${msg}\n\nسأعطيك مؤقتاً الرد المحلي:\n${assistLocal(q)}`:`Grok failed: ${msg}\n\nTemporary local answer:\n${assistLocal(q)}`);
+ })}
  else{setTimeout(()=>assistBot(assistLocal(q)),200)}
 }
 /* offline knowledge from platform data */
