@@ -739,6 +739,46 @@ let COLOR=localStorage.getItem('miskColor')||'misk';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));
 const val=(o,k)=>o?.[k]??'';
+const DYN_EN={
+  'عبدالله الشريف':'Abdullah Alsharif',
+  'مدير الموارد البشرية':'Human Resources Manager',
+  'نائب مدير الموارد البشرية':'Deputy Human Resources Manager',
+  'أخصائي موارد بشرية':'Human Resources Specialist',
+  'مشرف موارد بشرية':'Human Resources Supervisor',
+  'مسؤول موارد بشرية':'Human Resources Officer',
+  'مدرب':'Trainer','موظف':'Employee','مدير':'Manager','مشرف':'Supervisor',
+  'الموارد البشرية':'Human Resources','المالية':'Finance','تقنية المعلومات':'IT',
+  'المبيعات':'Sales','سلسلة الإمداد':'Supply Chain','التشغيل':'Operations',
+  'نشط':'Active','غير نشط':'Inactive','متاح':'Available','موقوف':'Suspended',
+  'ملغي':'Cancelled','مؤكد':'Confirmed','مكتمل':'Completed','معتمد':'Approved',
+  'قيد المراجعة':'Under Review','بانتظار الموافقة':'Pending Approval',
+  'مرفوض':'Rejected','ناجح':'Passed','راسب':'Failed','حاضر':'Present',
+  'غائب':'Absent','منسحب':'Withdrawn','متأخر':'Late','غير مقروء':'Unread',
+  'مبتدئ':'Beginner','متوسط':'Intermediate','متقدم':'Advanced',
+  'حضوري':'In-person','عن بعد':'Online','هجين':'Hybrid',
+  'أساسيات الموارد البشرية':'HR Fundamentals',
+  'إدارة الأداء الفعّالة':'Effective Performance Management',
+  'مهارات المقابلات والتوظيف':'Interviewing & Recruitment Skills',
+  'Excel للموارد البشرية':'Excel for HR',
+  'الذكاء الاصطناعي في العمل':'AI at Work',
+  'أساسيات الأمن السيبراني':'Cybersecurity Fundamentals'
+};
+function dyn(v){
+  if(v===null||v===undefined) return '';
+  const s=String(v);
+  return LANG==='en' ? (DYN_EN[s]||s) : s;
+}
+function displayField(o,arKey,enKeys=[]){
+  if(!o) return '';
+  if(LANG==='en'){
+    for(const k of enKeys){
+      const v=o?.[k];
+      if(v!==undefined && v!==null && String(v).trim()!=='') return String(v);
+    }
+  }
+  return dyn(val(o,arKey));
+}
+
 const num=v=>Number(v||0);
 
 /* ------------------ i18n ------------------ */
@@ -1059,13 +1099,34 @@ async function refreshData(){
       return;
     }
 
-    await liveSync();
-    toast(LANG==='ar'?'تم تحديث البيانات':'Data refreshed');
+    // Refresh directly from the backend instead of depending on the background sync state.
+    let fresh;
+    try{
+      fresh = await api('liveSync');
+    }catch(syncErr){
+      console.warn('liveSync refresh failed, trying bootstrap:', syncErr);
+      fresh = await api('bootstrap');
+    }
+
+    if(fresh){
+      if(typeof mergeLiveSync === 'function'){
+        mergeLiveSync(fresh);
+      }else{
+        DATA = fresh;
+      }
+
+      if(typeof applyCourseContentFallback === 'function') applyCourseContentFallback();
+      if(typeof buildNav === 'function') buildNav();
+      if(typeof updateHeader === 'function') updateHeader();
+      if(typeof render === 'function') render();
+    }
+
+    toast(LANG==='ar'?'تم تحديث البيانات من Google Sheet':'Data refreshed from Google Sheet');
   }catch(e){
     console.error('Refresh failed:',e);
-    toast(LANG==='ar'
+    toast((e && e.message) ? e.message : (LANG==='ar'
       ?'تعذر تحديث البيانات. حاول مرة أخرى.'
-      :'Could not refresh data. Please try again.');
+      :'Could not refresh data. Please try again.'));
   }finally{
     if(spinTimer) clearInterval(spinTimer);
     if(icon) icon.style.transform = oldTransform;
@@ -1126,9 +1187,7 @@ function openApp(){
 }
 function userDisplayName(u){
   if(!u) return '—';
-  if(LANG==='en'){
-    return u.nameEn || u.name || '—';
-  }
+  if(LANG==='en') return u.nameEn || DYN_EN[String(u.name||'').trim()] || u.name || '—';
   return u.name || u.nameEn || '—';
 }
 
@@ -1143,17 +1202,12 @@ const TITLE_EN_FALLBACK={
   'مشرف موارد بشرية':'Human Resources Supervisor',
   'مسؤول موارد بشرية':'Human Resources Officer',
   'موظف موارد بشرية':'Human Resources Employee',
-  'مدير':'Manager',
-  'مشرف':'Supervisor',
-  'موظف':'Employee',
-  'مدرب':'Trainer'
+  'مدير':'Manager','مشرف':'Supervisor','موظف':'Employee','مدرب':'Trainer'
 };
 
 function userDisplayTitle(u){
   if(!u) return '—';
-  if(LANG==='en'){
-    return u.titleEn || TITLE_EN_FALLBACK[String(u.title||'').trim()] || u.title || roleName(u.role);
-  }
+  if(LANG==='en') return u.titleEn || TITLE_EN_FALLBACK[String(u.title||'').trim()] || dyn(u.title) || roleName(u.role);
   return u.title || u.titleEn || roleName(u.role);
 }
 
@@ -1193,17 +1247,33 @@ function buildNav(){
 }
 function showPage(p){CURRENT=p;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));render()}
 function pageHead(titleKey,subKey,actions=''){return `<div class="page-head"><div><h1>${t(titleKey)}</h1><p>${t(subKey)}</p></div><div class="toolbar">${actions}</div></div>`}
-function courseName(c){const x=(DATA.courses||[]).find(o=>val(o,'رمز الدورة')===c);return x?val(x,'اسم الدورة'):c}
-function userName(id){return (DATA.users||[]).find(x=>x.id===id)?.name||id}
-function deptName(code){const d=(DATA.departments||[]).find(x=>val(x,'رمز الإدارة')===code);if(!d)return code;return LANG==='en'&&val(d,'الاسم الإنجليزي')?val(d,'الاسم الإنجليزي'):val(d,'الإدارة')}
-function trainerName(id){return userName(id)}
-function passScoreOf(code){const c=(DATA.courses||[]).find(o=>val(o,'رمز الدورة')===code);return num(c&&val(c,'درجة النجاح'))||num(DATA.settings?.PassingScore)||70}
-function statusPill(s){
- const map={'معتمد':'ok','مؤكد':'ok','مكتمل':'ok','ناجح':'ok','صادرة':'ok','حاضر':'ok','نشط':'ok','متاح':'ok',
-  'قيد المراجعة':'warn','بانتظار الموافقة':'warn','متأخر':'warn','غير مقروء':'warn',
-  'مرفوض':'bad','راسب':'bad','غائب':'bad','منسحب':'bad','موقوف':'bad','ملغي':'bad'};
- const c=map[s]||'info';return `<span class="status ${c}">${esc(s||'—')}</span>`;
+function courseName(c){
+  const x=(DATA.courses||[]).find(o=>val(o,'رمز الدورة')===c);
+  if(!x) return c;
+  return displayField(x,'اسم الدورة',['اسم الدورة الإنجليزي','اسم الدورة بالإنجليزية','English Course Name','Course Name EN']);
 }
+function userName(id){
+  const u=(DATA.users||[]).find(x=>x.id===id);
+  return u ? userDisplayName(u) : id;
+}
+function deptName(code){
+  const d=(DATA.departments||[]).find(x=>val(x,'رمز الإدارة')===code);
+  if(!d)return code;
+  return displayField(d,'الإدارة',['الاسم الإنجليزي','الاسم الانجليزي','English Name','Department EN']);
+}
+function trainerName(id){return userName(id)}
+function passScoreOf(code){
+  const c=(DATA.courses||[]).find(o=>val(o,'رمز الدورة')===code);
+  return num(c&&val(c,'درجة النجاح'))||num(DATA.settings?.PassingScore)||70;
+}
+function statusPill(s){
+  const map={'معتمد':'ok','مؤكد':'ok','مكتمل':'ok','ناجح':'ok','صادرة':'ok','حاضر':'ok','نشط':'ok','متاح':'ok',
+    'قيد المراجعة':'warn','بانتظار الموافقة':'warn','متأخر':'warn','غير مقروء':'warn',
+    'مرفوض':'bad','راسب':'bad','غائب':'bad','منسحب':'bad','موقوف':'bad','ملغي':'bad'};
+  const c=map[s]||'info';
+  return `<span class="status ${c}">${esc(dyn(s||'—'))}</span>`;
+}
+
 
 /* ============================================================
    TRAINING-NEEDS ENGINE (specialty + self-assessment quiz)
@@ -1383,7 +1453,7 @@ function dashboard(){
      ${upcoming.map((s,i)=>{const d=new Date(val(s,'التاريخ')+'T00:00:00');const cls=i===1?'b':i===2?'p':'';return `<div class="session-row"><div class="date-box ${cls}"><b>${d.getDate()}</b><span>${d.toLocaleDateString(LANG==='ar'?'ar-SA':'en-US',{month:'short'})}</span></div><div class="session-info"><b>${esc(courseName(val(s,'رمز الدورة')))}</b><small>${esc(trainerName(val(s,'رقم المدرب'))||'')} </small><small>${esc(val(s,'من'))} - ${esc(val(s,'إلى'))} · ${esc(val(s,'المكان/الرابط'))}</small></div><img class="session-thumb" src="${courseImage(i+3)}" alt=""></div>`}).join('')||`<div class="empty">${t('no_sessions')}</div>`}
    </div>
    <div class="panel"><div class="panel-head"><h3>${t('latest_courses')}</h3><button class="link-btn" onclick="showPage('courses')">${t('view_all')} ${LANG==='ar'?'‹':'›'}</button></div>
-     ${latest.map((c,i)=>`<div class="mini-row"><img class="mini-thumb" src="${courseImage(i)}" alt=""><div style="min-width:0"><b>${esc(val(c,'اسم الدورة'))}</b><small>${esc(trainerName(val(c,'رقم المدرب')))} · ${esc(val(c,'الساعات'))} ${t('hours')}</small><div style="display:flex;align-items:center;gap:10px;margin-top:7px"><span style="font-size:10.5px;color:${i===1?'#e59c00':i===2?'#d7193f':'#009b84'}">${LANG==='ar'?'التقدم':'Progress'}: ${[65,40,20][i]}%</span><div class="progress ${i===1?'warn':i===2?'bad':''}" style="flex:1;margin:0"><i style="width:${[65,40,20][i]}%"></i></div></div></div></div>`).join('')}
+     ${latest.map((c,i)=>`<div class="mini-row"><img class="mini-thumb" src="${courseImage(i)}" alt=""><div style="min-width:0"><b>${esc(dyn(val(c,'اسم الدورة')))}</b><small>${esc(trainerName(val(c,'رقم المدرب')))} · ${esc(val(c,'الساعات'))} ${t('hours')}</small><div style="display:flex;align-items:center;gap:10px;margin-top:7px"><span style="font-size:10.5px;color:${i===1?'#e59c00':i===2?'#d7193f':'#009b84'}">${LANG==='ar'?'التقدم':'Progress'}: ${[65,40,20][i]}%</span><div class="progress ${i===1?'warn':i===2?'bad':''}" style="flex:1;margin:0"><i style="width:${[65,40,20][i]}%"></i></div></div></div></div>`).join('')}
    </div>
  </div>`;
 }
@@ -1404,7 +1474,7 @@ function coursesPage(){
    }else if(canEdit){
      actions=`<div style="display:flex;gap:8px;margin-top:12px"><button class="ghost-btn" style="flex:1" onclick="openCourse('${esc(code)}')">${t('course_content')}</button><button class="ghost-btn" style="flex:1" onclick='courseModal(${JSON.stringify(c).replace(/'/g,"&#39;")})'>${t('edit_course')}</button></div>`;
    }
-   return `<div class="course-card"><div class="course-cover"><img src="${courseImage(i)}" alt="${esc(val(c,'اسم الدورة'))}"></div><div class="course-body"><div class="course-code">${esc(code)} · ${t('pass_score')} ${esc(val(c,'درجة النجاح')||passScoreOf(code))}%</div><h3>${esc(val(c,'اسم الدورة'))}</h3><p>${esc(val(c,'الوصف'))}</p><div class="chips"><span class="chip teal">${esc(val(c,'المستوى'))}</span><span class="chip">${esc(val(c,'النمط'))}</span><span class="chip">${esc(val(c,'الساعات'))} ${t('hours')}</span>${hasContent?`<span class="chip">${lessonsOf(code).length} ${t('lesson_n')}</span>`:''}</div><div class="course-foot">${stBadge||statusPill(val(c,'الحالة'))}<small>${t('trainer_l')}: ${esc(trainerName(val(c,'رقم المدرب')))}</small></div>${actions}</div></div>`;
+   return `<div class="course-card"><div class="course-cover"><img src="${courseImage(i)}" alt="${esc(dyn(val(c,'اسم الدورة')))}"></div><div class="course-body"><div class="course-code">${esc(code)} · ${t('pass_score')} ${esc(val(c,'درجة النجاح')||passScoreOf(code))}%</div><h3>${esc(dyn(val(c,'اسم الدورة')))}</h3><p>${esc(val(c,'الوصف'))}</p><div class="chips"><span class="chip teal">${esc(dyn(val(c,'المستوى')))}</span><span class="chip">${esc(dyn(val(c,'النمط')))}</span><span class="chip">${esc(val(c,'الساعات'))} ${t('hours')}</span>${hasContent?`<span class="chip">${lessonsOf(code).length} ${t('lesson_n')}</span>`:''}</div><div class="course-foot">${stBadge||statusPill(val(c,'الحالة'))}<small>${t('trainer_l')}: ${esc(trainerName(val(c,'رقم المدرب')))}</small></div>${actions}</div></div>`;
  }).join('')||`<div class="empty">${t('no_courses')}</div>`}</div>`;
 }
 
@@ -1852,7 +1922,7 @@ function quizFinish(){
 function settingsPage(){
  if(DATA.user.role!=='admin')return dashboard();const s=DATA.settings||{};
  const themeCards=Object.entries(THEMES).map(([k,v])=>`<div class="theme-swatch ${k===COLOR?'sel':''}" onclick="pickTheme('${k}')"><div class="theme-dots"><span style="background:${v.b1}"></span><span style="background:${v.b2}"></span></div><small>${v.name[LANG]}</small></div>`).join('');
- const scoreRows=(DATA.courses||[]).map(c=>`<div class="score-row"><div><b>${esc(val(c,'اسم الدورة'))}</b><small>${esc(val(c,'رمز الدورة'))} · ${esc(val(c,'المستوى'))}</small></div><input type="number" min="0" max="100" id="ps_${esc(val(c,'رمز الدورة'))}" value="${esc(val(c,'درجة النجاح')||passScoreOf(val(c,'رمز الدورة')))}"><div class="sc-status" style="text-align:center">%</div></div>`).join('');
+ const scoreRows=(DATA.courses||[]).map(c=>`<div class="score-row"><div><b>${esc(dyn(val(c,'اسم الدورة')))}</b><small>${esc(val(c,'رمز الدورة'))} · ${esc(dyn(val(c,'المستوى')))}</small></div><input type="number" min="0" max="100" id="ps_${esc(val(c,'رمز الدورة'))}" value="${esc(val(c,'درجة النجاح')||passScoreOf(val(c,'رمز الدورة')))}"><div class="sc-status" style="text-align:center">%</div></div>`).join('');
  $('content').innerHTML=pageHead('set_title','set_sub')+`
  <div class="panel" style="margin-bottom:16px">
    <div class="sec-title">${ICONS.settings} ${t('set_general')}</div>
@@ -1907,17 +1977,17 @@ $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 
 function courseModal(c={}){
  const trainers=(DATA.users||[]).filter(u=>u.role==='trainer');
- openModal(`<h3>${val(c,'رمز الدورة')?t('edit_course'):t('add_course')}</h3><div class="settings-grid"><div class="field"><label>${t('c_session').replace('الجلسة','الدورة')||'رمز الدورة'}</label><input id="cCode" value="${esc(val(c,'رمز الدورة'))}" ${val(c,'رمز الدورة')?'readonly':''}></div><div class="field"><label>${t('c_course')}</label><input id="cName" value="${esc(val(c,'اسم الدورة'))}"></div><div class="field"><label>${t('level')}</label><select id="cLevel">${['مبتدئ','متوسط','متقدم'].map(x=>`<option ${val(c,'المستوى')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('mode')}</label><select id="cMode">${['حضوري','عن بعد','هجين'].map(x=>`<option ${val(c,'النمط')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('trainer_l')}</label><select id="cTrainer"><option value="">—</option>${trainers.map(tr=>`<option value="${esc(tr.id)}" ${val(c,'رقم المدرب')===tr.id?'selected':''}>${esc(userDisplayName(tr))}</option>`).join('')}</select></div><div class="field"><label>${t('hours')}</label><input id="cHours" type="number" value="${esc(val(c,'الساعات')||6)}"></div><div class="field"><label>${t('c_status').replace('الحالة','السعة')||'السعة'}</label><input id="cCap" type="number" value="${esc(val(c,'السعة')||25)}"></div><div class="field"><label>${t('pass_score')}</label><input id="cPass" type="number" value="${esc(val(c,'درجة النجاح')||70)}"></div></div><div class="field"><label>${t('c_details')}</label><textarea id="cDesc" rows="3">${esc(val(c,'الوصف'))}</textarea></div><div class="modal-actions"><button class="primary-btn" onclick="saveCourse()">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+ openModal(`<h3>${val(c,'رمز الدورة')?t('edit_course'):t('add_course')}</h3><div class="settings-grid"><div class="field"><label>${t('c_session').replace('الجلسة','الدورة')||'رمز الدورة'}</label><input id="cCode" value="${esc(val(c,'رمز الدورة'))}" ${val(c,'رمز الدورة')?'readonly':''}></div><div class="field"><label>${t('c_course')}</label><input id="cName" value="${esc(dyn(val(c,'اسم الدورة')))}"></div><div class="field"><label>${t('level')}</label><select id="cLevel">${['مبتدئ','متوسط','متقدم'].map(x=>`<option ${val(c,'المستوى')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('mode')}</label><select id="cMode">${['حضوري','عن بعد','هجين'].map(x=>`<option ${val(c,'النمط')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('trainer_l')}</label><select id="cTrainer"><option value="">—</option>${trainers.map(tr=>`<option value="${esc(tr.id)}" ${val(c,'رقم المدرب')===tr.id?'selected':''}>${esc(userDisplayName(tr))}</option>`).join('')}</select></div><div class="field"><label>${t('hours')}</label><input id="cHours" type="number" value="${esc(val(c,'الساعات')||6)}"></div><div class="field"><label>${t('c_status').replace('الحالة','السعة')||'السعة'}</label><input id="cCap" type="number" value="${esc(val(c,'السعة')||25)}"></div><div class="field"><label>${t('pass_score')}</label><input id="cPass" type="number" value="${esc(val(c,'درجة النجاح')||70)}"></div></div><div class="field"><label>${t('c_details')}</label><textarea id="cDesc" rows="3">${esc(val(c,'الوصف'))}</textarea></div><div class="modal-actions"><button class="primary-btn" onclick="saveCourse()">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
 }
 async function saveCourse(){try{await api('saveCourse',{course:{code:$('cCode').value,name:$('cName').value,level:$('cLevel').value,mode:$('cMode').value,trainerId:$('cTrainer').value,hours:$('cHours').value,capacity:$('cCap').value,passScore:$('cPass').value,description:$('cDesc').value,status:'نشط'}});closeModal();await refreshData();showPage('courses')}catch(e){toast(e.message)}}
 
 function sessionModal(s={}){
- openModal(`<h3>${val(s,'رقم الجلسة')?t('edit'):t('add_session')}</h3><div class="settings-grid"><div class="field"><label>${t('c_course')}</label><select id="sCourse">${(DATA.courses||[]).map(c=>`<option value="${esc(val(c,'رمز الدورة'))}" ${val(s,'رمز الدورة')===val(c,'رمز الدورة')?'selected':''}>${esc(val(c,'اسم الدورة'))}</option>`).join('')}</select></div><div class="field"><label>${t('c_date')}</label><input id="sDate" type="date" value="${esc(val(s,'التاريخ'))}"></div><div class="field"><label>${LANG==='ar'?'من':'From'}</label><input id="sFrom" type="time" value="${esc(val(s,'من')||'09:00')}"></div><div class="field"><label>${LANG==='ar'?'إلى':'To'}</label><input id="sTo" type="time" value="${esc(val(s,'إلى')||'12:00')}"></div></div><div class="field"><label>${t('c_place')}</label><input id="sLoc" value="${esc(val(s,'المكان/الرابط'))}"></div><div class="modal-actions"><button class="primary-btn" onclick="saveSession('${esc(val(s,'رقم الجلسة'))}')">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+ openModal(`<h3>${val(s,'رقم الجلسة')?t('edit'):t('add_session')}</h3><div class="settings-grid"><div class="field"><label>${t('c_course')}</label><select id="sCourse">${(DATA.courses||[]).map(c=>`<option value="${esc(val(c,'رمز الدورة'))}" ${val(s,'رمز الدورة')===val(c,'رمز الدورة')?'selected':''}>${esc(dyn(val(c,'اسم الدورة')))}</option>`).join('')}</select></div><div class="field"><label>${t('c_date')}</label><input id="sDate" type="date" value="${esc(val(s,'التاريخ'))}"></div><div class="field"><label>${LANG==='ar'?'من':'From'}</label><input id="sFrom" type="time" value="${esc(val(s,'من')||'09:00')}"></div><div class="field"><label>${LANG==='ar'?'إلى':'To'}</label><input id="sTo" type="time" value="${esc(val(s,'إلى')||'12:00')}"></div></div><div class="field"><label>${t('c_place')}</label><input id="sLoc" value="${esc(val(s,'المكان/الرابط'))}"></div><div class="modal-actions"><button class="primary-btn" onclick="saveSession('${esc(val(s,'رقم الجلسة'))}')">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
 }
 async function saveSession(id){try{await api('saveSession',{session:{id,courseCode:$('sCourse').value,date:$('sDate').value,from:$('sFrom').value,to:$('sTo').value,location:$('sLoc').value,status:'متاح'}});closeModal();await refreshData();showPage('sessions')}catch(e){toast(e.message)}}
 
 function userModal(role,u={}){
- openModal(`<h3>${u.id?t('edit'):(role==='trainer'?t('add_trainer'):t('add_emp'))}</h3><div class="settings-grid"><div class="field"><label>${t('c_id')}</label><input id="uId" value="${esc(u.id||'')}" ${u.id?'readonly':''}></div><div class="field"><label>${t('c_name')}</label><input id="uName" value="${esc(u.name||'')}"></div><div class="field"><label>${t('c_title')}</label><input id="uTitle" value="${esc(u.title||'')}"></div><div class="field"><label>${t('c_dept')}</label><select id="uDept">${(DATA.departments||[]).map(d=>`<option value="${esc(val(d,'رمز الإدارة'))}" ${u.departmentCode===val(d,'رمز الإدارة')?'selected':''}>${esc(val(d,'الإدارة'))}</option>`).join('')}</select></div><div class="field"><label>${t('c_mobile')}</label><input id="uMobile" value="${esc(u.mobile||'')}"></div><div class="field"><label>${t('c_mail')}</label><input id="uEmail" value="${esc(u.email||'')}"></div><div class="field"><label>PIN</label><input id="uPin" value=""></div></div><div class="modal-actions"><button class="primary-btn" onclick="saveUser('${role}')">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+ openModal(`<h3>${u.id?t('edit'):(role==='trainer'?t('add_trainer'):t('add_emp'))}</h3><div class="settings-grid"><div class="field"><label>${t('c_id')}</label><input id="uId" value="${esc(u.id||'')}" ${u.id?'readonly':''}></div><div class="field"><label>${t('c_name')}</label><input id="uName" value="${esc(u.name||'')}"></div><div class="field"><label>${t('c_title')}</label><input id="uTitle" value="${esc(u.title||'')}"></div><div class="field"><label>${t('c_dept')}</label><select id="uDept">${(DATA.departments||[]).map(d=>`<option value="${esc(val(d,'رمز الإدارة'))}" ${u.departmentCode===val(d,'رمز الإدارة')?'selected':''}>${esc(dyn(val(d,'الإدارة')))}</option>`).join('')}</select></div><div class="field"><label>${t('c_mobile')}</label><input id="uMobile" value="${esc(u.mobile||'')}"></div><div class="field"><label>${t('c_mail')}</label><input id="uEmail" value="${esc(u.email||'')}"></div><div class="field"><label>PIN</label><input id="uPin" value=""></div></div><div class="modal-actions"><button class="primary-btn" onclick="saveUser('${role}')">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
 }
 async function saveUser(role){try{await api('saveUser',{user:{id:$('uId').value,name:$('uName').value,role,title:$('uTitle').value,departmentCode:$('uDept').value,mobile:$('uMobile').value,email:$('uEmail').value,pin:$('uPin').value,status:'نشط'}});closeModal();await refreshData();showPage(role==='trainer'?'trainers':'employees')}catch(e){toast(e.message)}}
 
