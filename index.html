@@ -699,11 +699,11 @@ function applyCourseContentFallback(){
 
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycby0bxlZK9JAX95C5osAR5jCp6QnnZHMstN-Yaa2tgIXD8XpnS0uo6Vsp1zo1-jXKQZVkA/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwe6oRVnOsRbYCim0s4lEQehLymxepsff1SRGS0ijWkQMgRELgM7eNYzjH6tI5pIoWD/exec';
 const EXPECTED_BACKEND_BUILD='MISK-2026-09-04-01';
 
-/* ---- Grok / xAI for the "Ask me" assistant.
-   The xAI API key is stored securely in Google Apps Script Script Properties.
+/* ---- Groq / Groq for the "Ask me" assistant.
+   The Groq API key is stored securely in Google Apps Script Script Properties.
    No API key is stored in this HTML or GitHub. */
 let AI_KEY='backend-grok';
 const AI_PROVIDER='groq';
@@ -906,7 +906,7 @@ function api(action,payload={}){
     if(!SCRIPT_URL||!SCRIPT_URL.includes('/exec')){const e=new Error(LANG==='ar'?'لم يتم ضبط رابط الخادم.':'Server URL is not set');e.kind='config';return reject(e)}
     const cb='misk_cb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
     const s=document.createElement('script');
-    const timeoutMs=action==='askGrok'?45000:18000;
+    const timeoutMs=action==='askGroq'?45000:18000;
     const timer=setTimeout(()=>{const e=new Error(LANG==='ar'?'تعذر الوصول إلى خادم المنصة. تأكد من نشر التطبيق بصلاحية Anyone.':'Cannot reach the server. Ensure the Web App is deployed with Anyone access.');e.kind='network';done(e)},timeoutMs);
     function done(err,data){clearTimeout(timer);try{delete window[cb]}catch(_){window[cb]=undefined}s.remove();err?reject(err):resolve(data)}
     window[cb]=(j)=>{if(!j||j.ok===false){const e=new Error(j?.error||'Request failed');e.kind='server';return done(e)}done(null,j.data??j)};
@@ -1057,7 +1057,7 @@ function openApp(){
  publicPing().then(p=>{
    if(!p?.build || p.build!==EXPECTED_BACKEND_BUILD){
      const msg=LANG==='ar'
-       ?`تنبيه تقني: الموقع يستخدم Backend قديم. المتوقع ${EXPECTED_BACKEND_BUILD} والموجود ${p?.build||'نسخة قديمة بدون رقم إصدار'}. لذلك Grok ومزامنة Google Sheet لن يعملا بالشكل الجديد.`
+       ?`تنبيه تقني: الموقع يستخدم Backend قديم. المتوقع ${EXPECTED_BACKEND_BUILD} والموجود ${p?.build||'نسخة قديمة بدون رقم إصدار'}. لذلك Groq ومزامنة Google Sheet لن يعملا بالشكل الجديد.`
        :`Technical notice: the site is using an old backend. Expected ${EXPECTED_BACKEND_BUILD}, received ${p?.build||'legacy build'}.`;
      console.error(msg,p);
      assistBot(msg);
@@ -1852,13 +1852,13 @@ function initAssistant(){
      }else{
        const reason=s?.error||(s?.build?('Unknown error · build '+s.build):'Backend قديم أو غير متوافق مع نسخة الموقع');
        $('assistMode').textContent=LANG==='ar'?'Groq · غير متصل':'Groq · Not connected';
-       console.warn('Grok status:',reason);
+       console.warn('Groq status:',reason);
        assistBot(LANG==='ar'?`تنبيه: Groq غير متصل حالياً. السبب: ${reason}`:`Notice: Groq is not connected. Reason: ${reason}`);
      }
    }).catch(e=>{
      AI_KEY='';
      $('assistMode').textContent=LANG==='ar'?'Groq · فشل الفحص':'Groq · Check failed';
-     console.warn('Grok status error:',e);
+     console.warn('Groq status error:',e);
    });
  }else{
    AI_KEY='';$('assistMode').textContent=t('assist_mode_local');
