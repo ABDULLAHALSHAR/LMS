@@ -721,7 +721,7 @@ function applyCourseContentFallback(){
 
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz2itlbxL5on36_yFMuANyfk2WENd5cqL48uy5PuWN51vsvOS5uV_N4Gr3D-USYx19WHw/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwVw1hsa649SwQOQ5cR8zzNnAlMhYs6o5iSA_mindlbkhHZNGxps2PXh6pXHNuHr9aeDQ/exec';
 const EXPECTED_BACKEND_BUILD='MISK-2026-09-04-01';
 
 /* ---- Groq / Groq for the "Ask me" assistant.
@@ -1126,11 +1126,35 @@ function openApp(){
 }
 function userDisplayName(u){
   if(!u) return '—';
-  return LANG==='en' ? (u.nameEn||u.name||'—') : (u.name||u.nameEn||'—');
+  if(LANG==='en'){
+    return u.nameEn || u.name || '—';
+  }
+  return u.name || u.nameEn || '—';
 }
+
+const TITLE_EN_FALLBACK={
+  'مدير الموارد البشرية':'Human Resources Manager',
+  'مدير الموارد البشريه':'Human Resources Manager',
+  'نائب مدير الموارد البشرية':'Deputy Human Resources Manager',
+  'نائب مدير الموارد البشريه':'Deputy Human Resources Manager',
+  'مدير الموارد البشرية والتطوير':'Human Resources & Development Manager',
+  'أخصائي موارد بشرية':'Human Resources Specialist',
+  'اخصائي موارد بشرية':'Human Resources Specialist',
+  'مشرف موارد بشرية':'Human Resources Supervisor',
+  'مسؤول موارد بشرية':'Human Resources Officer',
+  'موظف موارد بشرية':'Human Resources Employee',
+  'مدير':'Manager',
+  'مشرف':'Supervisor',
+  'موظف':'Employee',
+  'مدرب':'Trainer'
+};
+
 function userDisplayTitle(u){
   if(!u) return '—';
-  return LANG==='en' ? (u.titleEn||u.title||roleName(u.role)) : (u.title||u.titleEn||roleName(u.role));
+  if(LANG==='en'){
+    return u.titleEn || TITLE_EN_FALLBACK[String(u.title||'').trim()] || u.title || roleName(u.role);
+  }
+  return u.title || u.titleEn || roleName(u.role);
 }
 
 function updateHeader(){
