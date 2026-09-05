@@ -979,29 +979,50 @@ async function login(){
 function showLoginError(html){const el=$('loginError');el.innerHTML=html;el.classList.remove('hidden')}
 async function logout(){try{if(!DEMO_MODE)await api('logout')}catch(_){ }if(MISK_SYNC_TIMER)clearInterval(MISK_SYNC_TIMER);if(MISK_FULL_SYNC_TIMER)clearInterval(MISK_FULL_SYNC_TIMER);TOKEN='';DATA=null;DEMO_MODE=false;localStorage.removeItem('miskHrToken');if($('demoBanner'))$('demoBanner').remove();$('appView').classList.add('hidden');$('assistFab').classList.add('hidden');$('assistPanel').classList.add('hidden');$('loginView').classList.remove('hidden')}
 async function restore(){if(!TOKEN)return;try{DATA=await api('bootstrap');applyCourseContentFallback();DEMO_MODE=false;openApp()}catch(_){TOKEN='';localStorage.removeItem('miskHrToken')}}
-async function refreshData(){try{DATA=await api('bootstrap');applyCourseContentFallback();DEMO_MODE=false;updateHeader();render();toast(t('data_refreshed'))}catch(e){toast(e.message)}}
+async function refreshData(){
+  const btn = document.querySelector('[onclick="refreshData()"]');
+  const icon = btn ? (btn.querySelector('svg') || btn.querySelector('i')) : null;
+  const oldTransform = icon ? icon.style.transform : '';
+  let angle = 0;
+  let spinTimer = null;
 
-function initials(name){return String(name||'M').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('')}
+  if(btn){
+    btn.disabled = true;
+    btn.setAttribute('aria-busy','true');
+  }
+  if(icon){
+    icon.style.transition = 'transform .12s linear';
+    spinTimer = setInterval(()=>{
+      angle = (angle + 45) % 360;
+      icon.style.transform = `rotate(${angle}deg)`;
+    },120);
+  }
 
-let MISK_SYNC_TIMER=null;
-let MISK_FULL_SYNC_TIMER=null;
-let MISK_SYNC_BUSY=false;
+  try{
+    if(DEMO_MODE){
+      render();
+      toast(LANG==='ar'?'تم تحديث البيانات':'Data refreshed');
+      return;
+    }
 
-function mergeLiveSync(fresh){
-  if(!fresh||!DATA)return;
-  const oldRole=DATA.user&&DATA.user.role;
-  const oldUser=JSON.stringify(DATA.user||{});
-
-  // liveSync now returns the same structure as bootstrap.
-  DATA={...DATA,...fresh};
-  applyCourseContentFallback();
-
-  const userChanged=oldUser!==JSON.stringify(DATA.user||{});
-  if(userChanged) updateHeader();
-
-  if(CURRENT){
-    if(oldRole !== (DATA.user&&DATA.user.role)) buildNav();
+    DATA = await api('bootstrap');
+    applyCourseContentFallback();
+    buildNav();
+    updateHeader();
     render();
+    toast(LANG==='ar'?'تم تحديث البيانات من Google Sheet':'Data refreshed from Google Sheet');
+  }catch(e){
+    console.error('Refresh failed:',e);
+    toast(LANG==='ar'
+      ?'تعذر تحديث البيانات. حاول مرة أخرى.'
+      :'Could not refresh data. Please try again.');
+  }finally{
+    if(spinTimer) clearInterval(spinTimer);
+    if(icon) icon.style.transform = oldTransform;
+    if(btn){
+      btn.disabled = false;
+      btn.removeAttribute('aria-busy');
+    }
   }
 }
 
@@ -1052,19 +1073,6 @@ function openApp(){
  $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('assistFab').classList.remove('hidden');
  loadLocalNeeds();loadStudy();buildNav();updateHeader();showPage('dashboard');initAssistant();startMiskAutoSync();
  setTimeout(liveSync,250);
-
- // فحص صريح يمنع اختلاط HTML جديد مع Deployment قديم.
- publicPing().then(p=>{
-   if(!p?.build || p.build!==EXPECTED_BACKEND_BUILD){
-     const msg=LANG==='ar'
-       ?`تنبيه تقني: الموقع يستخدم Backend قديم. المتوقع ${EXPECTED_BACKEND_BUILD} والموجود ${p?.build||'نسخة قديمة بدون رقم إصدار'}. لذلك Groq ومزامنة Google Sheet لن يعملا بالشكل الجديد.`
-       :`Technical notice: the site is using an old backend. Expected ${EXPECTED_BACKEND_BUILD}, received ${p?.build||'legacy build'}.`;
-     console.error(msg,p);
-     assistBot(msg);
-   }else{
-     console.info('Misk backend verified',p);
-   }
- }).catch(e=>console.warn('Backend build check:',e));
 }
 function updateHeader(){
   $('topUserName').textContent=DATA.user.name||'—';
