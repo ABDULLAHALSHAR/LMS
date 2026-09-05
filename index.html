@@ -761,7 +761,12 @@ const DYN_EN={
   'مهارات المقابلات والتوظيف':'Interviewing & Recruitment Skills',
   'Excel للموارد البشرية':'Excel for HR',
   'الذكاء الاصطناعي في العمل':'AI at Work',
-  'أساسيات الأمن السيبراني':'Cybersecurity Fundamentals'
+  'أساسيات الأمن السيبراني':'Cybersecurity Fundamentals',
+  'تحليل البيانات في الموارد البشرية':'HR Data Analytics',
+  'القيادة الفعالة':'Effective Leadership',
+  'مهارات التواصل':'Communication Skills',
+  'قاعة التدريب 1':'Training Room 1',
+  'قاعة التدريب 2':'Training Room 2'
 };
 function dyn(v){
   if(v===null||v===undefined) return '';
@@ -960,21 +965,16 @@ function applyLang(){
  const lbl=LANG==='ar'?'EN':'ع';if($('langLabel'))$('langLabel').textContent=lbl;if($('langLabel2'))$('langLabel2').textContent=lbl;
  localStorage.setItem('miskLang',LANG);
 }
-function toggleLang(){LANG=LANG==='ar'?'en':'ar';applyLang();if(DATA){buildNav();updateHeader();render();renderAssistChips();$('assistMode').textContent=AI_KEY?t('assist_mode_ai'):t('assist_mode_local')}}
-
-/* ------------------ API (JSONP) ------------------ */
-function api(action,payload={}){
-  return new Promise((resolve,reject)=>{
-    if(!SCRIPT_URL||!SCRIPT_URL.includes('/exec')){const e=new Error(LANG==='ar'?'لم يتم ضبط رابط الخادم.':'Server URL is not set');e.kind='config';return reject(e)}
-    const cb='misk_cb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
-    const s=document.createElement('script');
-    const timeoutMs=action==='askGroq'?45000:18000;
-    const timer=setTimeout(()=>{const e=new Error(LANG==='ar'?'تعذر الوصول إلى خادم المنصة. تأكد من نشر التطبيق بصلاحية Anyone.':'Cannot reach the server. Ensure the Web App is deployed with Anyone access.');e.kind='network';done(e)},timeoutMs);
-    function done(err,data){clearTimeout(timer);try{delete window[cb]}catch(_){window[cb]=undefined}s.remove();err?reject(err):resolve(data)}
-    window[cb]=(j)=>{if(!j||j.ok===false){const e=new Error(j?.error||'Request failed');e.kind='server';return done(e)}done(null,j.data??j)};
-    const q=new URLSearchParams({action,callback:cb,token:TOKEN,payload:JSON.stringify(payload),_ts:String(Date.now())});
-    s.src=SCRIPT_URL+'?'+q.toString();s.onerror=()=>{const e=new Error(LANG==='ar'?'تعذر الاتصال بـ Google Apps Script.':'Cannot connect to Google Apps Script.');e.kind='network';done(e)};document.body.appendChild(s);
-  })
+function toggleLang(){
+  LANG=LANG==='ar'?'en':'ar';
+  applyLang();
+  if(DATA){
+    buildNav();
+    updateHeader();
+    render();
+    renderAssistChips();
+    if($('assistMode')) $('assistMode').textContent=AI_KEY?t('assist_mode_ai'):t('assist_mode_local');
+  }
 }
 
 
@@ -1213,8 +1213,8 @@ function userDisplayTitle(u){
 
 function updateHeader(){
   const u=DATA.user||{};
-  const displayName = LANG==='en' ? (u.nameEn||u.name||'—') : (u.name||u.nameEn||'—');
-  const displayTitle = LANG==='en' ? (u.titleEn||u.title||roleName(u.role)) : (u.title||u.titleEn||roleName(u.role));
+  const displayName=userDisplayName(u);
+  const displayTitle=userDisplayTitle(u);
 
   $('topUserName').textContent=displayName;
   $('topUserTitle').textContent=displayTitle;
@@ -1250,7 +1250,11 @@ function pageHead(titleKey,subKey,actions=''){return `<div class="page-head"><di
 function courseName(c){
   const x=(DATA.courses||[]).find(o=>val(o,'رمز الدورة')===c);
   if(!x) return c;
-  return displayField(x,'اسم الدورة',['اسم الدورة الإنجليزي','اسم الدورة بالإنجليزية','English Course Name','Course Name EN']);
+  return displayField(x,'اسم الدورة',[
+    'اسم الدورة الإنجليزي','اسم الدورة الانجليزي',
+    'اسم الدورة بالإنجليزية','اسم الدورة بالانجليزية',
+    'English Course Name','Course Name EN','Course Name English'
+  ]);
 }
 function userName(id){
   const u=(DATA.users||[]).find(x=>x.id===id);
@@ -1450,7 +1454,7 @@ function dashboard(){
  <div class="kpis">${kpis.map((k,i)=>`<div class="kpi" style="--kc:${kc[i][1]};--kbg:${kc[i][2]}"><div class="kpi-icon">${ICONS[k[2]]}</div><div class="kpi-num">${k[0]}</div><div class="kpi-label">${t(k[1])}</div><button class="kpi-link" onclick="showPage('${kpiPages[i]}')">${t('view_all')} ${LANG==='ar'?'‹':'›'}</button></div>`).join('')}</div>
  <div class="dashboard-grid">
    <div class="panel"><div class="panel-head"><h3>${t('upcoming_sessions')}</h3><button class="link-btn" onclick="showPage('calendar')">${t('full_cal')} ${LANG==='ar'?'‹':'›'}</button></div>
-     ${upcoming.map((s,i)=>{const d=new Date(val(s,'التاريخ')+'T00:00:00');const cls=i===1?'b':i===2?'p':'';return `<div class="session-row"><div class="date-box ${cls}"><b>${d.getDate()}</b><span>${d.toLocaleDateString(LANG==='ar'?'ar-SA':'en-US',{month:'short'})}</span></div><div class="session-info"><b>${esc(courseName(val(s,'رمز الدورة')))}</b><small>${esc(trainerName(val(s,'رقم المدرب'))||'')} </small><small>${esc(val(s,'من'))} - ${esc(val(s,'إلى'))} · ${esc(val(s,'المكان/الرابط'))}</small></div><img class="session-thumb" src="${courseImage(i+3)}" alt=""></div>`}).join('')||`<div class="empty">${t('no_sessions')}</div>`}
+     ${upcoming.map((s,i)=>{const d=new Date(val(s,'التاريخ')+'T00:00:00');const cls=i===1?'b':i===2?'p':'';return `<div class="session-row"><div class="date-box ${cls}"><b>${d.getDate()}</b><span>${d.toLocaleDateString(LANG==='ar'?'ar-SA':'en-US',{month:'short'})}</span></div><div class="session-info"><b>${esc(courseName(val(s,'رمز الدورة')))}</b><small>${esc(trainerName(val(s,'رقم المدرب'))||'')} </small><small>${esc(val(s,'من'))} - ${esc(val(s,'إلى'))} · ${esc(dyn(val(s,'المكان/الرابط')))}</small></div><img class="session-thumb" src="${courseImage(i+3)}" alt=""></div>`}).join('')||`<div class="empty">${t('no_sessions')}</div>`}
    </div>
    <div class="panel"><div class="panel-head"><h3>${t('latest_courses')}</h3><button class="link-btn" onclick="showPage('courses')">${t('view_all')} ${LANG==='ar'?'‹':'›'}</button></div>
      ${latest.map((c,i)=>`<div class="mini-row"><img class="mini-thumb" src="${courseImage(i)}" alt=""><div style="min-width:0"><b>${esc(dyn(val(c,'اسم الدورة')))}</b><small>${esc(trainerName(val(c,'رقم المدرب')))} · ${esc(val(c,'الساعات'))} ${t('hours')}</small><div style="display:flex;align-items:center;gap:10px;margin-top:7px"><span style="font-size:10.5px;color:${i===1?'#e59c00':i===2?'#d7193f':'#009b84'}">${LANG==='ar'?'التقدم':'Progress'}: ${[65,40,20][i]}%</span><div class="progress ${i===1?'warn':i===2?'bad':''}" style="flex:1;margin:0"><i style="width:${[65,40,20][i]}%"></i></div></div></div></div>`).join('')}
@@ -1599,7 +1603,7 @@ function cqFinish(){
 
 function sessionsPage(){
  const canEdit=DATA.user.role==='admin';
- const rows=(DATA.sessions||[]).map(s=>`<tr><td>${esc(val(s,'رقم الجلسة'))}</td><td>${esc(courseName(val(s,'رمز الدورة')))}</td><td>${esc(val(s,'التاريخ'))}</td><td>${esc(val(s,'من'))} - ${esc(val(s,'إلى'))}</td><td>${esc(val(s,'المكان/الرابط'))}</td><td>${statusPill(val(s,'الحالة'))}</td>${canEdit?`<td><button class="ghost-btn" onclick='sessionModal(${JSON.stringify(s).replace(/'/g,"&#39;")})'>${t('edit')}</button></td>`:''}</tr>`).join('');
+ const rows=(DATA.sessions||[]).map(s=>`<tr><td>${esc(val(s,'رقم الجلسة'))}</td><td>${esc(courseName(val(s,'رمز الدورة')))}</td><td>${esc(val(s,'التاريخ'))}</td><td>${esc(val(s,'من'))} - ${esc(val(s,'إلى'))}</td><td>${esc(dyn(val(s,'المكان/الرابط')))}</td><td>${statusPill(val(s,'الحالة'))}</td>${canEdit?`<td><button class="ghost-btn" onclick='sessionModal(${JSON.stringify(s).replace(/'/g,"&#39;")})'>${t('edit')}</button></td>`:''}</tr>`).join('');
  $('content').innerHTML=pageHead('nav_sessions','sessions_sub',canEdit?`<button class="primary-btn" onclick="sessionModal()">${t('add_session')}</button>`:'')+`<div class="table-box"><table><thead><tr><th>${t('c_session')}</th><th>${t('c_course')}</th><th>${t('c_date')}</th><th>${t('c_time')}</th><th>${t('c_place')}</th><th>${t('c_status')}</th>${canEdit?`<th>${t('c_action')}</th>`:''}</tr></thead><tbody>${rows||`<tr><td colspan="7" class="empty">${t('no_sessions')}</td></tr>`}</tbody></table></div>`;
 }
 
@@ -1982,7 +1986,7 @@ function courseModal(c={}){
 async function saveCourse(){try{await api('saveCourse',{course:{code:$('cCode').value,name:$('cName').value,level:$('cLevel').value,mode:$('cMode').value,trainerId:$('cTrainer').value,hours:$('cHours').value,capacity:$('cCap').value,passScore:$('cPass').value,description:$('cDesc').value,status:'نشط'}});closeModal();await refreshData();showPage('courses')}catch(e){toast(e.message)}}
 
 function sessionModal(s={}){
- openModal(`<h3>${val(s,'رقم الجلسة')?t('edit'):t('add_session')}</h3><div class="settings-grid"><div class="field"><label>${t('c_course')}</label><select id="sCourse">${(DATA.courses||[]).map(c=>`<option value="${esc(val(c,'رمز الدورة'))}" ${val(s,'رمز الدورة')===val(c,'رمز الدورة')?'selected':''}>${esc(dyn(val(c,'اسم الدورة')))}</option>`).join('')}</select></div><div class="field"><label>${t('c_date')}</label><input id="sDate" type="date" value="${esc(val(s,'التاريخ'))}"></div><div class="field"><label>${LANG==='ar'?'من':'From'}</label><input id="sFrom" type="time" value="${esc(val(s,'من')||'09:00')}"></div><div class="field"><label>${LANG==='ar'?'إلى':'To'}</label><input id="sTo" type="time" value="${esc(val(s,'إلى')||'12:00')}"></div></div><div class="field"><label>${t('c_place')}</label><input id="sLoc" value="${esc(val(s,'المكان/الرابط'))}"></div><div class="modal-actions"><button class="primary-btn" onclick="saveSession('${esc(val(s,'رقم الجلسة'))}')">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+ openModal(`<h3>${val(s,'رقم الجلسة')?t('edit'):t('add_session')}</h3><div class="settings-grid"><div class="field"><label>${t('c_course')}</label><select id="sCourse">${(DATA.courses||[]).map(c=>`<option value="${esc(val(c,'رمز الدورة'))}" ${val(s,'رمز الدورة')===val(c,'رمز الدورة')?'selected':''}>${esc(dyn(val(c,'اسم الدورة')))}</option>`).join('')}</select></div><div class="field"><label>${t('c_date')}</label><input id="sDate" type="date" value="${esc(val(s,'التاريخ'))}"></div><div class="field"><label>${LANG==='ar'?'من':'From'}</label><input id="sFrom" type="time" value="${esc(val(s,'من')||'09:00')}"></div><div class="field"><label>${LANG==='ar'?'إلى':'To'}</label><input id="sTo" type="time" value="${esc(val(s,'إلى')||'12:00')}"></div></div><div class="field"><label>${t('c_place')}</label><input id="sLoc" value="${esc(dyn(val(s,'المكان/الرابط')))}"></div><div class="modal-actions"><button class="primary-btn" onclick="saveSession('${esc(val(s,'رقم الجلسة'))}')">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
 }
 async function saveSession(id){try{await api('saveSession',{session:{id,courseCode:$('sCourse').value,date:$('sDate').value,from:$('sFrom').value,to:$('sTo').value,location:$('sLoc').value,status:'متاح'}});closeModal();await refreshData();showPage('sessions')}catch(e){toast(e.message)}}
 
