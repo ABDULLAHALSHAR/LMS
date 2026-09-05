@@ -805,6 +805,15 @@ const DYN_EN={
   'تحليل البيانات في الموارد البشرية':'HR Data Analytics',
   'القيادة الفعالة':'Effective Leadership',
   'مهارات التواصل':'Communication Skills',
+  'إدارة المشاريع':'Project Management',
+  'Excel المتقدم':'Advanced Excel',
+  'السلامة والصحة المهنية':'Occupational Health & Safety',
+  'مهارات التفاوض':'Negotiation Skills',
+  'التخطيط الاستراتيجي':'Strategic Planning',
+  'قاعة التدريب 1':'Training Room 1','قاعة التدريب 2':'Training Room 2',
+  'تحليل البيانات في الموارد البشرية':'HR Data Analytics',
+  'القيادة الفعالة':'Effective Leadership',
+  'مهارات التواصل':'Communication Skills',
   'قاعة التدريب 1':'Training Room 1',
   'قاعة التدريب 2':'Training Room 2'
 };
@@ -1225,9 +1234,23 @@ function openApp(){
  loadLocalNeeds();loadStudy();buildNav();updateHeader();showPage('dashboard');initAssistant();startMiskAutoSync();
  setTimeout(liveSync,250);
 }
+function transliterateArabicName(name){
+  if(!name) return '';
+  const map={
+    'ا':'a','أ':'a','إ':'i','آ':'a','ب':'b','ت':'t','ث':'th','ج':'j','ح':'h','خ':'kh',
+    'د':'d','ذ':'dh','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'z',
+    'ع':'a','غ':'gh','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','ة':'a',
+    'و':'w','ؤ':'u','ي':'y','ى':'a','ئ':'e','ء':'','َ':'','ُ':'','ِ':'','ّ':'','ْ':'','ً':'','ٌ':'','ٍ':''
+  };
+  return String(name).split('').map(ch=>map[ch]!==undefined?map[ch]:ch).join('')
+    .replace(/\s+/g,' ').trim()
+    .split(' ').map(w=>w?w.charAt(0).toUpperCase()+w.slice(1):w).join(' ');
+}
 function userDisplayName(u){
   if(!u) return '—';
-  if(LANG==='en') return u.nameEn || DYN_EN[String(u.name||'').trim()] || u.name || '—';
+  if(LANG==='en'){
+    return u.nameEn || DYN_EN[String(u.name||'').trim()] || transliterateArabicName(u.name) || u.name || '—';
+  }
   return u.name || u.nameEn || '—';
 }
 
