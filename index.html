@@ -473,6 +473,28 @@ html[dir="rtl"] .welcome-side{border-radius:14px 0 0 14px}
   .session-thumb{display:none}
 }
 
+
+/* ===== Full platform color synchronization =====
+   Keep navigation/tools aligned with the selected color theme. */
+.sidebar{
+  background:linear-gradient(180deg,var(--brand1),color-mix(in srgb,var(--brand1) 74%,#000 26%)) !important;
+}
+.side-head small{color:color-mix(in srgb,var(--brand2) 58%,#fff 42%) !important}
+.nav button.active{
+  background:linear-gradient(135deg,var(--brand2),color-mix(in srgb,var(--brand2) 78%,var(--brand1) 22%)) !important;
+}
+.nav .nav-badge{color:var(--brand1) !important}
+.topbar .icon-btn:hover,.icon-btn:hover{border-color:var(--brand2) !important;color:var(--brand2) !important}
+.primary-btn{
+  background:linear-gradient(135deg,var(--brand1),var(--brand2)) !important;
+}
+.assist-fab,.assist-head{
+  background:linear-gradient(135deg,var(--brand1),var(--brand2)) !important;
+}
+.assist-foot button{background:var(--brand2) !important}
+.user-meta small,.kpi-link,a{color:var(--brand2)}
+:focus-visible{outline-color:var(--brand2)}
+
 </style>
 
 <style>
@@ -699,7 +721,7 @@ function applyCourseContentFallback(){
 
 
 /* ---- Backend (Google Apps Script Web App). Leave as-is; JSONP. ---- */
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwe6oRVnOsRbYCim0s4lEQehLymxepsff1SRGS0ijWkQMgRELgM7eNYzjH6tI5pIoWD/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbz2itlbxL5on36_yFMuANyfk2WENd5cqL48uy5PuWN51vsvOS5uV_N4Gr3D-USYx19WHw/exec';
 const EXPECTED_BACKEND_BUILD='MISK-2026-09-04-01';
 
 /* ---- Groq / Groq for the "Ask me" assistant.
@@ -977,7 +999,39 @@ async function login(){
   }finally{if(btn){btn.disabled=false;btn.textContent=old}}
 }
 function showLoginError(html){const el=$('loginError');el.innerHTML=html;el.classList.remove('hidden')}
-async function logout(){try{if(!DEMO_MODE)await api('logout')}catch(_){ }if(MISK_SYNC_TIMER)clearInterval(MISK_SYNC_TIMER);if(MISK_FULL_SYNC_TIMER)clearInterval(MISK_FULL_SYNC_TIMER);TOKEN='';DATA=null;DEMO_MODE=false;localStorage.removeItem('miskHrToken');if($('demoBanner'))$('demoBanner').remove();$('appView').classList.add('hidden');$('assistFab').classList.add('hidden');$('assistPanel').classList.add('hidden');$('loginView').classList.remove('hidden')}
+function logout(){
+  try{
+    if(MISK_SYNC_TIMER){clearInterval(MISK_SYNC_TIMER);MISK_SYNC_TIMER=null;}
+    if(typeof MISK_FULL_SYNC_TIMER!=='undefined' && MISK_FULL_SYNC_TIMER){
+      clearInterval(MISK_FULL_SYNC_TIMER);
+      MISK_FULL_SYNC_TIMER=null;
+    }
+
+    TOKEN='';
+    DATA=null;
+    DEMO_MODE=false;
+    ASSIST_OPEN=false;
+
+    localStorage.removeItem('miskHrToken');
+    localStorage.removeItem('miskCachedUser');
+
+    if($('appView')) $('appView').classList.add('hidden');
+    if($('assistFab')) $('assistFab').classList.add('hidden');
+    if($('assistPanel')) $('assistPanel').classList.add('hidden');
+    if($('loginView')) $('loginView').classList.remove('hidden');
+    if($('loginPin')) $('loginPin').value='';
+    if($('loginError')) $('loginError').classList.add('hidden');
+
+    setTimeout(()=>{ if($('loginId')) $('loginId').focus(); },50);
+  }catch(e){
+    console.error('Logout failed:',e);
+    try{
+      localStorage.removeItem('miskHrToken');
+      localStorage.removeItem('miskCachedUser');
+    }catch(_){}
+    location.reload();
+  }
+}
 async function restore(){if(!TOKEN)return;try{DATA=await api('bootstrap');applyCourseContentFallback();DEMO_MODE=false;openApp()}catch(_){TOKEN='';localStorage.removeItem('miskHrToken')}}
 async function refreshData(){
   const btn = document.querySelector('[onclick="refreshData()"]');
@@ -1005,12 +1059,8 @@ async function refreshData(){
       return;
     }
 
-    DATA = await api('bootstrap');
-    applyCourseContentFallback();
-    buildNav();
-    updateHeader();
-    render();
-    toast(LANG==='ar'?'تم تحديث البيانات من Google Sheet':'Data refreshed from Google Sheet');
+    await liveSync();
+    toast(LANG==='ar'?'تم تحديث البيانات':'Data refreshed');
   }catch(e){
     console.error('Refresh failed:',e);
     toast(LANG==='ar'
@@ -1074,13 +1124,28 @@ function openApp(){
  loadLocalNeeds();loadStudy();buildNav();updateHeader();showPage('dashboard');initAssistant();startMiskAutoSync();
  setTimeout(liveSync,250);
 }
+function userDisplayName(u){
+  if(!u) return '—';
+  return LANG==='en' ? (u.nameEn||u.name||'—') : (u.name||u.nameEn||'—');
+}
+function userDisplayTitle(u){
+  if(!u) return '—';
+  return LANG==='en' ? (u.titleEn||u.title||roleName(u.role)) : (u.title||u.titleEn||roleName(u.role));
+}
+
 function updateHeader(){
-  $('topUserName').textContent=DATA.user.name||'—';
-  $('topUserTitle').textContent=DATA.user.title||roleName(DATA.user.role);
+  const u=DATA.user||{};
+  const displayName = LANG==='en' ? (u.nameEn||u.name||'—') : (u.name||u.nameEn||'—');
+  const displayTitle = LANG==='en' ? (u.titleEn||u.title||roleName(u.role)) : (u.title||u.titleEn||roleName(u.role));
+
+  $('topUserName').textContent=displayName;
+  $('topUserTitle').textContent=displayTitle;
+
   const av=$('avatar');
-  const p=getPhoto(DATA.user.id)||DATA.user.photo||DEFAULT_PROFILE_PHOTO;
-  av.innerHTML=`<img src="${esc(p)}" alt="${esc(DATA.user.name||'')}" style="width:100%;height:100%;object-fit:cover">`;
+  const p=getPhoto(u.id)||u.photo||DEFAULT_PROFILE_PHOTO;
+  av.innerHTML=`<img src="${esc(p)}" alt="${esc(displayName)}" style="width:100%;height:100%;object-fit:cover">`;
   av.style.cursor='pointer';av.onclick=profilePage;av.title=t('my_profile');
+
   const n=(DATA.notifications||[]).filter(x=>val(x,'الحالة')==='غير مقروء'||val(x,'الحالة')==='unread').length;
   $('notifBadge').textContent=n;$('notifBadge').classList.toggle('hidden',!n);
 }
@@ -1282,7 +1347,7 @@ function dashboard(){
  <div class="welcome-card">
    <div class="welcome-side"><img src="${HERO_VISUAL}" alt=""></div>
    <div class="welcome-copy">
-     <h2>${t('welcome_hi')} ${esc(u.name)} 👋</h2>
+     <h2>${t('welcome_hi')} ${esc(userDisplayName(u))} 👋</h2>
      <h3>${esc(u.title||roleName(u.role))}</h3>
      <p>${t('welcome_line')}</p>
    </div>
@@ -1511,9 +1576,9 @@ function profilePage(){
  const u=DATA.user;
  openModal(`<h3>${t('my_profile')}</h3>
   <div class="photo-edit"><div id="pfPhoto">${avatarHtml(u.id,u.name,'photo-lg')}</div>
-   <div><b style="font-size:15px">${esc(u.name)}</b><div style="color:var(--muted);font-size:12px;margin:3px 0 10px">${esc(u.title||roleName(u.role))}</div>
-   <div style="display:flex;gap:8px"><button class="primary-btn" style="padding:8px 12px" onclick="pickPhoto('${u.id}',()=>{ $('pfPhoto').innerHTML=avatarHtml('${u.id}','${esc(u.name)}','photo-lg'); updateHeader(); })">${t('change_photo')}</button>
-   <button class="ghost-btn" style="padding:8px 12px" onclick="setPhotoLocal('${u.id}','');$('pfPhoto').innerHTML=avatarHtml('${u.id}','${esc(u.name)}','photo-lg');updateHeader()">${t('remove_photo')}</button></div>
+   <div><b style="font-size:15px">${esc(userDisplayName(u))}</b><div style="color:var(--muted);font-size:12px;margin:3px 0 10px">${esc(u.title||roleName(u.role))}</div>
+   <div style="display:flex;gap:8px"><button class="primary-btn" style="padding:8px 12px" onclick="pickPhoto('${u.id}',()=>{ $('pfPhoto').innerHTML=avatarHtml('${u.id}','${esc(userDisplayName(u))}','photo-lg'); updateHeader(); })">${t('change_photo')}</button>
+   <button class="ghost-btn" style="padding:8px 12px" onclick="setPhotoLocal('${u.id}','');$('pfPhoto').innerHTML=avatarHtml('${u.id}','${esc(userDisplayName(u))}','photo-lg');updateHeader()">${t('remove_photo')}</button></div>
    <div style="font-size:11px;color:var(--muted);margin-top:8px">${t('photo_hint')}</div></div></div>
   <div class="modal-actions"><button class="ghost-btn" onclick="showBadgeFor('${u.id}')">${t('view_badge')}</button><button class="primary-btn" onclick="closeModal()">${t('close')}</button></div>`);
 }
@@ -1558,7 +1623,7 @@ function showBadgeFor(empId){
  const body=`<div id="printArea"><div class="badge-card">
    <div class="badge-top"><img src="${LOGO}" alt=""><div><b>${t('badge_org')}</b><small>${t('badge_id')}</small></div></div>
    <div class="badge-mid">${photo?`<img class="badge-photo" src="${esc(photo)}" alt="">`:`<div class="badge-photo photo-ph" style="display:grid;place-items:center;font-size:30px">${esc(initials(u.name))}</div>`}
-     <div class="badge-name">${esc(u.name)}</div><div class="badge-title">${esc(u.title||roleName(u.role))}</div></div>
+     <div class="badge-name">${esc(userDisplayName(u))}</div><div class="badge-title">${esc(u.title||roleName(u.role))}</div></div>
    <div class="badge-rows">
      <div class="badge-row"><span>${t('badge_id_no')}</span><b>${esc(u.id)}</b></div>
      <div class="badge-row"><span>${t('badge_dept')}</span><b>${esc(deptName(u.departmentCode))}</b></div>
@@ -1583,7 +1648,7 @@ function issueLetter(empId,courseCode,reqId){
    <div style="font-weight:700;margin:6px 0 14px">${t('letter_subject')}</div>
    <p>${t('letter_body')}</p>
    <div style="background:var(--soft);border-radius:10px;padding:12px 16px;margin:14px 0">
-     <div class="badge-row"><span>${t('letter_emp')}</span><b>${esc(u.name)} (${esc(u.id)}) — ${esc(deptName(u.departmentCode))}</b></div>
+     <div class="badge-row"><span>${t('letter_emp')}</span><b>${esc(userDisplayName(u))} (${esc(u.id)}) — ${esc(deptName(u.departmentCode))}</b></div>
      <div class="badge-row"><span>${t('letter_course')}</span><b>${esc(course)}</b></div>
      <div class="badge-row"><span>${t('letter_need')}</span><b>${n.overall}% (${n.overall>=60?t('need_high'):n.overall>=30?t('need_mid'):t('need_low')})</b></div>
      <div class="badge-row"><span>${t('letter_reason')}</span><b>${esc(needExplain(u))}</b></div>
@@ -1609,7 +1674,7 @@ function reportsPage(){
 
 function peopleTable(role){
  const arr=(DATA.users||[]).filter(u=>u.role===role);
- const rows=arr.map(u=>`<tr><td>${esc(u.id)}</td><td>${esc(u.name)}</td><td>${esc(u.title)}</td><td>${esc(deptName(u.departmentCode))}</td><td>${esc(u.mobile)}</td><td>${esc(u.email)}</td><td>${statusPill(u.status)}</td><td><button class="ghost-btn" onclick='userModal("${role}",${JSON.stringify(u).replace(/'/g,"&#39;")})'>${t('edit')}</button></td></tr>`).join('');
+ const rows=arr.map(u=>`<tr><td>${esc(u.id)}</td><td>${esc(userDisplayName(u))}</td><td>${esc(u.title)}</td><td>${esc(deptName(u.departmentCode))}</td><td>${esc(u.mobile)}</td><td>${esc(u.email)}</td><td>${statusPill(u.status)}</td><td><button class="ghost-btn" onclick='userModal("${role}",${JSON.stringify(u).replace(/'/g,"&#39;")})'>${t('edit')}</button></td></tr>`).join('');
  $('content').innerHTML=pageHead(role==='trainer'?'trainers_title':'emps_title',role==='trainer'?'trainers_sub':'emps_sub',`<button class="primary-btn" onclick="userModal('${role}')">${role==='trainer'?t('add_trainer'):t('add_emp')}</button>`)+`<div class="table-box"><table><thead><tr><th>${t('c_id')}</th><th>${t('c_name')}</th><th>${t('c_title')}</th><th>${t('c_dept')}</th><th>${t('c_mobile')}</th><th>${t('c_mail')}</th><th>${t('c_status')}</th><th>${t('c_action')}</th></tr></thead><tbody>${rows||`<tr><td colspan="8" class="empty">${t('no_data')}</td></tr>`}</tbody></table></div>`;
 }
 function employeesPage(){if(DATA.user.role!=='admin')return dashboard();peopleTable('employee')}
@@ -1655,7 +1720,7 @@ function empAnalysis(empId){
  const rec=n.recs.slice(0,4);
  const sig=[[t('sig_spec'),'✓'],[t('sig_exam'),s.trained&&Object.keys(s.examPen).length?'⚠':(s.trained?'✓':'—')],[t('sig_att'),s.attendance!=null?Math.round(s.attendance)+'%':'—'],[t('sig_quiz'),n.quiz?'✓':'—']];
  openModal(`<h3>${t('emp_analysis')}</h3>
-  <div class="photo-edit" style="margin-bottom:14px">${avatarHtml(u.id,u.name,'photo-lg')}<div><b style="font-size:16px">${esc(u.name)}</b><div style="color:var(--muted);font-size:12px;margin:3px 0 6px">${esc(u.title)} · ${esc(deptName(u.departmentCode))}</div>${needTag(n.overall)} <b style="margin-inline-start:6px">${n.overall}%</b></div></div>
+  <div class="photo-edit" style="margin-bottom:14px">${avatarHtml(u.id,u.name,'photo-lg')}<div><b style="font-size:16px">${esc(userDisplayName(u))}</b><div style="color:var(--muted);font-size:12px;margin:3px 0 6px">${esc(u.title)} · ${esc(deptName(u.departmentCode))}</div>${needTag(n.overall)} <b style="margin-inline-start:6px">${n.overall}%</b></div></div>
   <div class="panel" style="box-shadow:none;margin-bottom:12px"><b style="font-size:12.5px">${t('why_need')}</b><p style="margin:8px 0 0;font-size:12.5px;color:var(--muted);line-height:1.9">${esc(needExplain(u))}</p></div>
   <div class="chips" style="margin-bottom:6px">${sig.map(x=>`<span class="chip">${x[0]}: <b style="color:var(--ink)">${x[1]}</b></span>`).join('')}</div>
   <div class="sec-title" style="font-size:12px">${t('by_skill_gap')}</div>
@@ -1818,7 +1883,7 @@ $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 
 function courseModal(c={}){
  const trainers=(DATA.users||[]).filter(u=>u.role==='trainer');
- openModal(`<h3>${val(c,'رمز الدورة')?t('edit_course'):t('add_course')}</h3><div class="settings-grid"><div class="field"><label>${t('c_session').replace('الجلسة','الدورة')||'رمز الدورة'}</label><input id="cCode" value="${esc(val(c,'رمز الدورة'))}" ${val(c,'رمز الدورة')?'readonly':''}></div><div class="field"><label>${t('c_course')}</label><input id="cName" value="${esc(val(c,'اسم الدورة'))}"></div><div class="field"><label>${t('level')}</label><select id="cLevel">${['مبتدئ','متوسط','متقدم'].map(x=>`<option ${val(c,'المستوى')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('mode')}</label><select id="cMode">${['حضوري','عن بعد','هجين'].map(x=>`<option ${val(c,'النمط')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('trainer_l')}</label><select id="cTrainer"><option value="">—</option>${trainers.map(tr=>`<option value="${esc(tr.id)}" ${val(c,'رقم المدرب')===tr.id?'selected':''}>${esc(tr.name)}</option>`).join('')}</select></div><div class="field"><label>${t('hours')}</label><input id="cHours" type="number" value="${esc(val(c,'الساعات')||6)}"></div><div class="field"><label>${t('c_status').replace('الحالة','السعة')||'السعة'}</label><input id="cCap" type="number" value="${esc(val(c,'السعة')||25)}"></div><div class="field"><label>${t('pass_score')}</label><input id="cPass" type="number" value="${esc(val(c,'درجة النجاح')||70)}"></div></div><div class="field"><label>${t('c_details')}</label><textarea id="cDesc" rows="3">${esc(val(c,'الوصف'))}</textarea></div><div class="modal-actions"><button class="primary-btn" onclick="saveCourse()">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+ openModal(`<h3>${val(c,'رمز الدورة')?t('edit_course'):t('add_course')}</h3><div class="settings-grid"><div class="field"><label>${t('c_session').replace('الجلسة','الدورة')||'رمز الدورة'}</label><input id="cCode" value="${esc(val(c,'رمز الدورة'))}" ${val(c,'رمز الدورة')?'readonly':''}></div><div class="field"><label>${t('c_course')}</label><input id="cName" value="${esc(val(c,'اسم الدورة'))}"></div><div class="field"><label>${t('level')}</label><select id="cLevel">${['مبتدئ','متوسط','متقدم'].map(x=>`<option ${val(c,'المستوى')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('mode')}</label><select id="cMode">${['حضوري','عن بعد','هجين'].map(x=>`<option ${val(c,'النمط')===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>${t('trainer_l')}</label><select id="cTrainer"><option value="">—</option>${trainers.map(tr=>`<option value="${esc(tr.id)}" ${val(c,'رقم المدرب')===tr.id?'selected':''}>${esc(userDisplayName(tr))}</option>`).join('')}</select></div><div class="field"><label>${t('hours')}</label><input id="cHours" type="number" value="${esc(val(c,'الساعات')||6)}"></div><div class="field"><label>${t('c_status').replace('الحالة','السعة')||'السعة'}</label><input id="cCap" type="number" value="${esc(val(c,'السعة')||25)}"></div><div class="field"><label>${t('pass_score')}</label><input id="cPass" type="number" value="${esc(val(c,'درجة النجاح')||70)}"></div></div><div class="field"><label>${t('c_details')}</label><textarea id="cDesc" rows="3">${esc(val(c,'الوصف'))}</textarea></div><div class="modal-actions"><button class="primary-btn" onclick="saveCourse()">${t('save')}</button><button class="ghost-btn" onclick="closeModal()">${t('cancel')}</button></div>`);
 }
 async function saveCourse(){try{await api('saveCourse',{course:{code:$('cCode').value,name:$('cName').value,level:$('cLevel').value,mode:$('cMode').value,trainerId:$('cTrainer').value,hours:$('cHours').value,capacity:$('cCap').value,passScore:$('cPass').value,description:$('cDesc').value,status:'نشط'}});closeModal();await refreshData();showPage('courses')}catch(e){toast(e.message)}}
 
