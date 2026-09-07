@@ -20,7 +20,7 @@ body.dark{
 html,body{height:100%}
 body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,select{font-family:inherit}
+input{font-family:inherit}
 a{color:inherit;text-decoration:none}
 .hidden{display:none!important}
 ::-webkit-scrollbar{width:10px;height:10px}
@@ -40,7 +40,7 @@ body.dark ::-webkit-scrollbar-thumb{background:#33363c}
 
 /* ============ LOGIN ============ */
 #login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  padding:26px;overflow:auto;background:#12232e;z-index:100}
+  padding:26px;overflow:auto;background:#12232e}
 .login-scene{position:absolute;inset:0;overflow:hidden}
 .login-scene .sky{position:absolute;inset:0;
   background:linear-gradient(180deg,#7fb0d6 0%,#c9d7dc 30%,#f0c9a0 60%,#e88a4e 82%,#b8532a 100%)}
@@ -141,7 +141,7 @@ body.dark ::-webkit-scrollbar-thumb{background:#33363c}
 .sidebar .logo{padding:6px 8px 20px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:14px}
 .nav{display:flex;flex-direction:column;gap:3px}
 .nav a{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;font-size:14px;font-weight:600;
-  color:#c8ccd2;transition:.15s;cursor:pointer}
+  color:#c8ccd2;transition:.15s}
 .nav a svg{width:19px;height:19px;flex:none;opacity:.85}
 .nav a:hover{background:rgba(255,255,255,.06);color:#fff}
 .nav a.active{background:linear-gradient(135deg,var(--red),var(--red-2));color:#fff;box-shadow:0 6px 16px rgba(225,27,34,.4)}
@@ -178,6 +178,9 @@ body.dark ::-webkit-scrollbar-thumb{background:#33363c}
 .hero .side .icons{display:flex;gap:24px;justify-content:center}
 .hero .side .icons div{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;font-weight:600}
 .hero .side .icons svg{width:26px;height:26px;color:#fff}
+.dots{position:absolute;bottom:18px;inset-inline-start:44px;display:flex;gap:7px;z-index:3}
+.dots i{width:22px;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}
+.dots i.on{background:var(--red);width:30px}
 
 /* KPI cards */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
@@ -193,7 +196,7 @@ body.dark ::-webkit-scrollbar-thumb{background:#33363c}
 .panel{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
 .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .panel-head h3{font-size:16px;font-weight:800}
-.panel-head .more{color:var(--red);font-weight:700;font-size:13px;display:flex;align-items:center;gap:5px;cursor:pointer}
+.panel-head .more{color:var(--red);font-weight:700;font-size:13px;display:flex;align-items:center;gap:5px}
 .panel-head .more svg{width:14px;height:14px}
 
 /* course mini cards */
@@ -235,12 +238,13 @@ body.dark .donut{background:conic-gradient(var(--green) 0 70%, #26282d 70% 100%)
 .sess .info b{font-size:13.5px;display:block}
 .sess .info small{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:5px;margin-top:2px}
 .sess .info small svg{width:12px;height:12px}
+.sess .cal{color:var(--muted)}.sess .cal svg{width:18px;height:18px}
 
 /* paths */
 .paths-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
 .path-card{position:relative;height:150px;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;
   justify-content:flex-end;padding:16px;color:#fff;box-shadow:var(--shadow)}
-.path-card .bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--red),#232830)}
+.path-card .bg{position:absolute;inset:0}
 .path-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,15,.15),rgba(10,12,15,.82))}
 .path-card .ic{position:relative;z-index:2;width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.14);
   display:grid;place-items:center;margin-bottom:auto}
@@ -254,7 +258,7 @@ body.dark .donut{background:conic-gradient(var(--green) 0 70%, #26282d 70% 100%)
   padding:0 14px;font-size:14px;color:var(--ink)}
 .toolbar input{flex:1;min-width:200px}
 .toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--red)}
-.table-wrap{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:x-auto}
+.table-wrap{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 table{width:100%;border-collapse:collapse}
 th,td{padding:13px 16px;text-align:start;font-size:13.5px;border-bottom:1px solid var(--line)}
 th{background:var(--bg);color:var(--muted);font-weight:800;font-size:12.5px;position:sticky;top:0}
@@ -279,7 +283,8 @@ body.dark .pill.ok{background:#123023}body.dark .pill.warn{background:#33280f}bo
 .set-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
 .set-row:last-child{border-bottom:none}
-.toggle{width:46px;height:26px;border-radius:20px;background:var(--line);position:relative;transition:.2s;cursor:pointer}
+.swatch{width:34px;height:34px;border-radius:9px;border:2px solid var(--line);cursor:pointer}
+.toggle{width:46px;height:26px;border-radius:20px;background:var(--line);position:relative;transition:.2s}
 .toggle.on{background:var(--red)}
 .toggle::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;
   background:#fff;transition:.2s}
@@ -369,20 +374,20 @@ body.dark .pill.ok{background:#123023}body.dark .pill.warn{background:#33280f}bo
         <label data-i="l_empno">الرقم الوظيفي</label>
         <div class="input-wrap">
           <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-          <input id="in-emp" placeholder="أدخل الرقم الوظيفي" autocomplete="off">
+          <input id="in-emp" placeholder="أدخل الرقم الوظيفي" data-ph="l_empph" autocomplete="off">
         </div>
       </div>
       <div class="field">
         <label>PIN</label>
         <div class="input-wrap">
           <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-          <input id="in-pin" type="password" placeholder="أدخل رمز PIN" autocomplete="off">
+          <input id="in-pin" type="password" placeholder="أدخل رمز PIN" data-ph="l_pinph" autocomplete="off">
           <button class="eye" id="toggle-pin" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
       </div>
       <div class="row-between">
         <label class="remember"><input type="checkbox"><span data-i="l_remember">تذكرني</span></label>
-        <a href="#" class="forgot" data-i="l_forgot">نسيت رمز PIN؟</a>
+        <a class="forgot" data-i="l_forgot">نسيت رمز PIN؟</a>
       </div>
       <button class="btn-primary" id="btn-login"><span data-i="l_enter">دخول إلى المنصة</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -421,11 +426,11 @@ body.dark .pill.ok{background:#123023}body.dark .pill.warn{background:#33280f}bo
     <button class="icon-btn menu-btn" id="menu-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     <div class="searchbox">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input placeholder="ابحث عن الدورات، المهارات أو المواضيع…">
+      <input placeholder="ابحث عن الدورات، المهارات أو المواضيع…" data-ph="t_search">
     </div>
     <div class="top-actions">
       <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a2 2 0 0 0 3.4 0"/></svg><span class="badge">8</span></button>
-      <button class="lang-btn" id="app-lang"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg><span id="app-lang-t">English</span></button>
+      <button class="lang-btn" id="app-lang"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg><span id="app-lang-t">عربي</span></button>
       <button class="icon-btn" id="theme-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
       <div class="user-chip">
         <div class="who"><b id="u-name">—</b><small id="u-role">—</small></div>
@@ -448,396 +453,581 @@ body.dark .pill.ok{background:#123023}body.dark .pill.warn{background:#33280f}bo
   <div class="chat" id="chat"></div>
   <div class="suggs" id="suggs"></div>
   <div class="ain">
-    <input id="a-input" placeholder="اكتب سؤالك…">
+    <input id="a-input" placeholder="اكتب سؤالك…" data-ph="a_ph">
     <button id="a-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4Z"/></svg></button>
   </div>
 </div>
 
 <script>
-/* البيانات والنصوص المضمّنة */
-const DATA = {
-  "kpis": {"courses": 12, "upcoming_sessions": 5, "employees": 50, "certificates": 38},
-  "paths": [
-    ["الأنظمة الكهربائية والطاقة", "Electrical Systems & Power"],
-    ["الكابلات والموصلات", "Cables & Conductors"],
-    ["الطاقة المتجددة والاستدامة", "Renewable Energy & Sustainability"],
-    ["السلامة والصحة المهنية", "Occupational Health & Safety"],
-    ["القيادة والتطوير الإداري", "Leadership & Management"],
-    ["المهارات العامة والمهنية", "General & Professional Skills"]
-  ],
-  "employees": [
-    {"EmployeeID":"BE-1001","Name_AR":"د. هادي الغامدي","Name_EN":"Dr. Hadi Alghamdi","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"مدير الموارد البشرية","PIN":"1234","CompletedCourses":3,"InProgressCourses":3,"Certificates":1,"TrainingHours":60,"Progress":54,"Role":"Admin"},
-    {"EmployeeID":"BE-1002","Name_AR":"سلطان الشمري","Name_EN":"Sultan Alshammari","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"أخصائي تدريب","PIN":"2345","CompletedCourses":5,"InProgressCourses":2,"Certificates":1,"TrainingHours":38,"Progress":73,"Role":"Trainer"},
-    {"EmployeeID":"BE-1003","Name_AR":"إبراهيم الشهري","Name_EN":"Ibrahim Alshehri","Department_AR":"الجودة","Department_EN":"Quality","JobTitle_AR":"أخصائي ضبط جودة","PIN":"9486","CompletedCourses":9,"InProgressCourses":3,"Certificates":2,"TrainingHours":156,"Progress":100,"Role":"Employee"}
-  ],
-  "courses": [
-    {"CourseID":"C-101","Title_AR":"السلامة في بيئة العمل","Title_EN":"Workplace Safety","Path_AR":"السلامة والصحة المهنية","Level_AR":"مبتدئ","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":20,"Status":"متاح"},
-    {"CourseID":"C-102","Title_AR":"أساسيات الطاقة المتجددة","Title_EN":"Renewable Energy Basics","Path_AR":"الطاقة المتجددة والاستدامة","Level_AR":"متوسط","DurationHours":20,"Trainer":"ناصر الفيفي","Enrolled":24,"Status":"متاح"},
-    {"CourseID":"C-103","Title_AR":"تقنيات الكابلات والموصلات","Title_EN":"Cable & Conductor Technology","Path_AR":"الكابلات والموصلات","Level_AR":"متقدم","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":44,"Status":"متاح"},
-    {"CourseID":"C-105","Title_AR":"مهارات القيادة","Title_EN":"Leadership Skills","Path_AR":"القيادة والتطوير الإداري","Level_AR":"متوسط","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":33,"Status":"متاح"}
-  ],
-  "sessions": [
-    {"SessionID":"S-2001","Course_AR":"أساسيات الموارد البشرية","Date":"2026-09-07","Start":"09:00","End":"13:00","Mode_AR":"قاعة التدريب 1","Trainer":"سلطان الشمري","Capacity":25,"Registered":22,"Status":"قادمة"},
-    {"SessionID":"S-2002","Course_AR":"مهارات القيادة","Date":"2026-09-10","Start":"10:00","End":"12:00","Mode_AR":"عبر الإنترنت","Trainer":"طلال الصاعدي","Capacity":40,"Registered":31,"Status":"قادمة"}
-  ]
+/* ============================================================
+   منصة بحرة إلكتريك — واجهة أمامية (HTML / CSS / JavaScript)
+   البيانات مضمّنة من نفس ملف Google Sheet / Excel.
+   للربط بالخادم (Code.gs → Google Sheets) اضبط CONFIG أدناه.
+   ============================================================ */
+const CONFIG = {
+  APPS_SCRIPT_URL: "",   // ← ضع رابط النشر (Web App URL) الخاص بـ Code.gs
+  USE_BACKEND: false,    // ← اجعلها true بعد ربط Apps Script + Google Sheets
+  // تدفق البيانات:  GitHub Pages → Apps Script → Google Sheets
 };
+const DATA = {"generated":"2026-09-07","kpis":{"courses":12,"upcoming_sessions":5,"employees":50,"certificates":38},"paths":[["الأنظمة الكهربائية والطاقة","Electrical Systems & Power"],["الكابلات والموصلات","Cables & Conductors"],["الطاقة المتجددة والاستدامة","Renewable Energy & Sustainability"],["السلامة والصحة المهنية","Occupational Health & Safety"],["القيادة والتطوير الإداري","Leadership & Management"],["المهارات العامة والمهنية","General & Professional Skills"]],"levels":[["مبتدئ","Beginner"],["متوسط","Intermediate"],["متقدم","Advanced"]],"employees":[{"EmployeeID":"BE-1001","Name_AR":"د. هادي الغامدي","Name_EN":"Dr. Hadi Alghamdi","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"مدير الموارد البشرية","Gender":"أنثى","Nationality":"سعودي","Email":"abeer.alamri@bahra.com","Phone":"0530911417","HireDate":"2015-02-17","Status":"نشط","PIN":"1234","CompletedCourses":3,"InProgressCourses":3,"Certificates":1,"TrainingHours":60,"Progress":54,"Role":"Admin"},{"EmployeeID":"BE-1002","Name_AR":"سلطان الشمري","Name_EN":"Sultan Alshammari","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"أخصائي تدريب","Gender":"ذكر","Nationality":"سعودي","Email":"sultan.alshammari@bahra.com","Phone":"0584472940","HireDate":"2024-07-04","Status":"نشط","PIN":"2345","CompletedCourses":5,"InProgressCourses":2,"Certificates":1,"TrainingHours":38,"Progress":73,"Role":"Trainer"},{"EmployeeID":"BE-1003","Name_AR":"إبراهيم الشهري","Name_EN":"Ibrahim Alshehri","Department_AR":"الجودة","Department_EN":"Quality","JobTitle_AR":"أخصائي ضبط جودة","Gender":"ذكر","Nationality":"غير سعودي","Email":"ibrahim.alshehri@bahra.com","Phone":"0597684697","HireDate":"2020-10-02","Status":"نشط","PIN":"9486","CompletedCourses":9,"InProgressCourses":3,"Certificates":2,"TrainingHours":156,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1004","Name_AR":"فيصل المطيري","Name_EN":"Faisal Almutairi","Department_AR":"السلامة","Department_EN":"HSE","JobTitle_AR":"مسؤول سلامة","Gender":"ذكر","Nationality":"سعودي","Email":"faisal.almutairi@bahra.com","Phone":"0531778486","HireDate":"2022-07-06","Status":"نشط","PIN":"6040","CompletedCourses":0,"InProgressCourses":0,"Certificates":0,"TrainingHours":0,"Progress":0,"Role":"Employee"},{"EmployeeID":"BE-1005","Name_AR":"هاني العمري","Name_EN":"Hani Alamri","Department_AR":"الصيانة","Department_EN":"Maintenance","JobTitle_AR":"مشرف صيانة","Gender":"ذكر","Nationality":"سعودي","Email":"hani.alamri@bahra.com","Phone":"0529787534","HireDate":"2022-10-08","Status":"نشط","PIN":"8955","CompletedCourses":7,"InProgressCourses":3,"Certificates":1,"TrainingHours":96,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1006","Name_AR":"عبدالرحمن المالكي","Name_EN":"Abdulrahman Almalki","Department_AR":"سلسلة الإمداد","Department_EN":"Supply Chain","JobTitle_AR":"منسق مخازن","Gender":"ذكر","Nationality":"غير سعودي","Email":"abdulrahman.almalki@bahra.com","Phone":"0578472671","HireDate":"2022-04-10","Status":"نشط","PIN":"5365","CompletedCourses":8,"InProgressCourses":0,"Certificates":2,"TrainingHours":96,"Progress":92,"Role":"Employee"},{"EmployeeID":"BE-1007","Name_AR":"ماجد الغامدي","Name_EN":"Majed Alghamdi","Department_AR":"المبيعات","Department_EN":"Sales","JobTitle_AR":"مندوب مبيعات","Gender":"ذكر","Nationality":"سعودي","Email":"majed.alghamdi@bahra.com","Phone":"0581933190","HireDate":"2023-06-07","Status":"نشط","PIN":"9953","CompletedCourses":6,"InProgressCourses":1,"Certificates":1,"TrainingHours":40,"Progress":64,"Role":"Employee"},{"EmployeeID":"BE-1008","Name_AR":"طلال الصاعدي","Name_EN":"Talal Alsaedi","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"مدرب معتمد","Gender":"ذكر","Nationality":"غير سعودي","Email":"talal.alsaedi@bahra.com","Phone":"0583792984","HireDate":"2015-12-12","Status":"نشط","PIN":"7844","CompletedCourses":2,"InProgressCourses":0,"Certificates":0,"TrainingHours":32,"Progress":24,"Role":"Trainer"},{"EmployeeID":"BE-1009","Name_AR":"سعد الفيفي","Name_EN":"Saad Alfaifi","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"أخصائي دعم فني","Gender":"ذكر","Nationality":"سعودي","Email":"saad.alfaifi@bahra.com","Phone":"0501610550","HireDate":"2015-04-15","Status":"نشط","PIN":"9362","CompletedCourses":8,"InProgressCourses":3,"Certificates":1,"TrainingHours":76,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1010","Name_AR":"طلال العنزي","Name_EN":"Talal Alanazi","Department_AR":"المالية","Department_EN":"Finance","JobTitle_AR":"محلل مالي","Gender":"ذكر","Nationality":"غير سعودي","Email":"talal.alanazi@bahra.com","Phone":"0529836957","HireDate":"2021-09-16","Status":"نشط","PIN":"4822","CompletedCourses":5,"InProgressCourses":0,"Certificates":1,"TrainingHours":80,"Progress":60,"Role":"Employee"},{"EmployeeID":"BE-1011","Name_AR":"عبدالله الخالدي","Name_EN":"Abdullah Alkhalidi","Department_AR":"الإنتاج","Department_EN":"Production","JobTitle_AR":"مهندس عمليات","Gender":"ذكر","Nationality":"سعودي","Email":"abdullah.alkhalidi@bahra.com","Phone":"0507370283","HireDate":"2023-10-23","Status":"نشط","PIN":"9468","CompletedCourses":0,"InProgressCourses":1,"Certificates":0,"TrainingHours":4,"Progress":4,"Role":"Employee"},{"EmployeeID":"BE-1012","Name_AR":"سعد الدوسري","Name_EN":"Saad Aldosari","Department_AR":"الهندسة","Department_EN":"Engineering","JobTitle_AR":"مهندس تصميم","Gender":"ذكر","Nationality":"سعودي","Email":"saad.aldosari@bahra.com","Phone":"0525247764","HireDate":"2020-03-30","Status":"نشط","PIN":"3899","CompletedCourses":6,"InProgressCourses":2,"Certificates":1,"TrainingHours":104,"Progress":90,"Role":"Employee"},{"EmployeeID":"BE-1013","Name_AR":"سامي السلمي","Name_EN":"Sami Alsulami","Department_AR":"الجودة","Department_EN":"Quality","JobTitle_AR":"فني جودة","Gender":"ذكر","Nationality":"غير سعودي","Email":"sami.alsulami@bahra.com","Phone":"0575682052","HireDate":"2018-12-11","Status":"نشط","PIN":"9820","CompletedCourses":8,"InProgressCourses":2,"Certificates":1,"TrainingHours":72,"Progress":93,"Role":"Employee"},{"EmployeeID":"BE-1014","Name_AR":"أسماء الثبيتي","Name_EN":"Asmaa Althobaiti","Department_AR":"السلامة","Department_EN":"HSE","JobTitle_AR":"أخصائي HSE","Gender":"أنثى","Nationality":"سعودي","Email":"asmaa.althobaiti@bahra.com","Phone":"0541621052","HireDate":"2022-03-30","Status":"نشط","PIN":"2741","CompletedCourses":8,"InProgressCourses":1,"Certificates":1,"TrainingHours":100,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1015","Name_AR":"ناصر الفيفي","Name_EN":"Nasser Alfaifi","Department_AR":"الصيانة","Department_EN":"Maintenance","JobTitle_AR":"مدرب معتمد","Gender":"ذكر","Nationality":"سعودي","Email":"nasser.alfaifi@bahra.com","Phone":"0546001304","HireDate":"2016-05-18","Status":"نشط","PIN":"2537","CompletedCourses":4,"InProgressCourses":2,"Certificates":0,"TrainingHours":56,"Progress":47,"Role":"Trainer"},{"EmployeeID":"BE-1016","Name_AR":"فيصل البقمي","Name_EN":"Faisal Albiqami","Department_AR":"سلسلة الإمداد","Department_EN":"Supply Chain","JobTitle_AR":"منسق مخازن","Gender":"ذكر","Nationality":"سعودي","Email":"faisal.albiqami@bahra.com","Phone":"0561584645","HireDate":"2015-08-25","Status":"نشط","PIN":"8155","CompletedCourses":7,"InProgressCourses":0,"Certificates":2,"TrainingHours":84,"Progress":85,"Role":"Employee"},{"EmployeeID":"BE-1017","Name_AR":"تركي الثبيتي","Name_EN":"Turki Althobaiti","Department_AR":"المبيعات","Department_EN":"Sales","JobTitle_AR":"أخصائي تطوير أعمال","Gender":"ذكر","Nationality":"غير سعودي","Email":"turki.althobaiti@bahra.com","Phone":"0585380129","HireDate":"2016-05-17","Status":"نشط","PIN":"2937","CompletedCourses":4,"InProgressCourses":0,"Certificates":0,"TrainingHours":64,"Progress":43,"Role":"Employee"},{"EmployeeID":"BE-1018","Name_AR":"عبير البقمي","Name_EN":"Abeer Albiqami","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"شريك أعمال HR","Gender":"أنثى","Nationality":"سعودي","Email":"abeer.albiqami@bahra.com","Phone":"0536322808","HireDate":"2022-09-01","Status":"نشط","PIN":"7502","CompletedCourses":4,"InProgressCourses":0,"Certificates":1,"TrainingHours":32,"Progress":44,"Role":"Employee"},{"EmployeeID":"BE-1019","Name_AR":"سعد المطيري","Name_EN":"Saad Almutairi","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"مطور أنظمة","Gender":"ذكر","Nationality":"سعودي","Email":"saad.almutairi@bahra.com","Phone":"0591280845","HireDate":"2022-02-05","Status":"نشط","PIN":"9527","CompletedCourses":0,"InProgressCourses":2,"Certificates":0,"TrainingHours":8,"Progress":8,"Role":"Employee"},{"EmployeeID":"BE-1020","Name_AR":"بندر القحطاني","Name_EN":"Bandar Alqahtani","Department_AR":"المالية","Department_EN":"Finance","JobTitle_AR":"أخصائي تكاليف","Gender":"ذكر","Nationality":"غير سعودي","Email":"bandar.alqahtani@bahra.com","Phone":"0565384535","HireDate":"2019-01-10","Status":"نشط","PIN":"8524","CompletedCourses":0,"InProgressCourses":1,"Certificates":0,"TrainingHours":4,"Progress":5,"Role":"Employee"},{"EmployeeID":"BE-1021","Name_AR":"راكان المالكي","Name_EN":"Rakan Almalki","Department_AR":"الإنتاج","Department_EN":"Production","JobTitle_AR":"مشرف إنتاج","Gender":"ذكر","Nationality":"سعودي","Email":"rakan.almalki@bahra.com","Phone":"0558602145","HireDate":"2021-02-17","Status":"نشط","PIN":"5342","CompletedCourses":3,"InProgressCourses":1,"Certificates":1,"TrainingHours":28,"Progress":39,"Role":"Employee"},{"EmployeeID":"BE-1022","Name_AR":"ريم العتيبي","Name_EN":"Reem Alotaibi","Department_AR":"الهندسة","Department_EN":"Engineering","JobTitle_AR":"مهندس تصميم","Gender":"أنثى","Nationality":"غير سعودي","Email":"reem.alotaibi@bahra.com","Phone":"0582811265","HireDate":"2021-02-20","Status":"نشط","PIN":"5283","CompletedCourses":9,"InProgressCourses":2,"Certificates":1,"TrainingHours":152,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1023","Name_AR":"مشعل الفيفي","Name_EN":"Meshal Alfaifi","Department_AR":"الجودة","Department_EN":"Quality","JobTitle_AR":"مشرف جودة","Gender":"ذكر","Nationality":"سعودي","Email":"meshal.alfaifi@bahra.com","Phone":"0563097658","HireDate":"2016-11-30","Status":"نشط","PIN":"9457","CompletedCourses":3,"InProgressCourses":1,"Certificates":2,"TrainingHours":40,"Progress":40,"Role":"Employee"},{"EmployeeID":"BE-1024","Name_AR":"أمل الخالدي","Name_EN":"Amal Alkhalidi","Department_AR":"السلامة","Department_EN":"HSE","JobTitle_AR":"مسؤول سلامة","Gender":"أنثى","Nationality":"سعودي","Email":"amal.alkhalidi@bahra.com","Phone":"0543829932","HireDate":"2016-03-11","Status":"نشط","PIN":"6345","CompletedCourses":2,"InProgressCourses":0,"Certificates":2,"TrainingHours":12,"Progress":26,"Role":"Employee"},{"EmployeeID":"BE-1025","Name_AR":"مشعل الشهري","Name_EN":"Meshal Alshehri","Department_AR":"الصيانة","Department_EN":"Maintenance","JobTitle_AR":"فني ميكانيكا","Gender":"ذكر","Nationality":"سعودي","Email":"meshal.alshehri@bahra.com","Phone":"0588357951","HireDate":"2015-10-10","Status":"نشط","PIN":"2439","CompletedCourses":4,"InProgressCourses":2,"Certificates":1,"TrainingHours":56,"Progress":56,"Role":"Employee"},{"EmployeeID":"BE-1026","Name_AR":"عبدالرحمن العنزي","Name_EN":"Abdulrahman Alanazi","Department_AR":"سلسلة الإمداد","Department_EN":"Supply Chain","JobTitle_AR":"منسق مخازن","Gender":"ذكر","Nationality":"غير سعودي","Email":"abdulrahman.alanazi@bahra.com","Phone":"0576523735","HireDate":"2023-07-06","Status":"نشط","PIN":"6736","CompletedCourses":3,"InProgressCourses":1,"Certificates":0,"TrainingHours":40,"Progress":37,"Role":"Employee"},{"EmployeeID":"BE-1027","Name_AR":"فيصل الشمري","Name_EN":"Faisal Alshammari","Department_AR":"المبيعات","Department_EN":"Sales","JobTitle_AR":"مندوب مبيعات","Gender":"ذكر","Nationality":"سعودي","Email":"faisal.alshammari@bahra.com","Phone":"0515474284","HireDate":"2017-08-17","Status":"نشط","PIN":"6435","CompletedCourses":2,"InProgressCourses":3,"Certificates":1,"TrainingHours":28,"Progress":37,"Role":"Employee"},{"EmployeeID":"BE-1028","Name_AR":"راكان الغامدي","Name_EN":"Rakan Alghamdi","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"أخصائي تدريب","Gender":"ذكر","Nationality":"سعودي","Email":"rakan.alghamdi@bahra.com","Phone":"0565178836","HireDate":"2018-12-13","Status":"نشط","PIN":"6414","CompletedCourses":4,"InProgressCourses":3,"Certificates":1,"TrainingHours":76,"Progress":50,"Role":"Employee"},{"EmployeeID":"BE-1029","Name_AR":"لينا الحازمي","Name_EN":"Lina Alhazmi","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"مطور أنظمة","Gender":"أنثى","Nationality":"سعودي","Email":"lina.alhazmi@bahra.com","Phone":"0596775003","HireDate":"2022-02-19","Status":"نشط","PIN":"2979","CompletedCourses":0,"InProgressCourses":2,"Certificates":0,"TrainingHours":8,"Progress":8,"Role":"Employee"},{"EmployeeID":"BE-1030","Name_AR":"ناصر الرشيدي","Name_EN":"Nasser Alrashidi","Department_AR":"المالية","Department_EN":"Finance","JobTitle_AR":"محاسب","Gender":"ذكر","Nationality":"سعودي","Email":"nasser.alrashidi@bahra.com","Phone":"0580125373","HireDate":"2021-10-18","Status":"نشط","PIN":"3798","CompletedCourses":3,"InProgressCourses":3,"Certificates":1,"TrainingHours":48,"Progress":42,"Role":"Employee"},{"EmployeeID":"BE-1031","Name_AR":"عبدالله الفيفي","Name_EN":"Abdullah Alfaifi","Department_AR":"الإنتاج","Department_EN":"Production","JobTitle_AR":"مهندس عمليات","Gender":"ذكر","Nationality":"سعودي","Email":"abdullah.alfaifi@bahra.com","Phone":"0588375555","HireDate":"2021-10-20","Status":"نشط","PIN":"8859","CompletedCourses":8,"InProgressCourses":1,"Certificates":0,"TrainingHours":100,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1032","Name_AR":"أمل السبيعي","Name_EN":"Amal Alsubaie","Department_AR":"الهندسة","Department_EN":"Engineering","JobTitle_AR":"مهندس كهرباء","Gender":"أنثى","Nationality":"غير سعودي","Email":"amal.alsubaie@bahra.com","Phone":"0535486439","HireDate":"2015-08-10","Status":"نشط","PIN":"7731","CompletedCourses":7,"InProgressCourses":1,"Certificates":0,"TrainingHours":88,"Progress":79,"Role":"Employee"},{"EmployeeID":"BE-1033","Name_AR":"مشعل الحازمي","Name_EN":"Meshal Alhazmi","Department_AR":"الجودة","Department_EN":"Quality","JobTitle_AR":"مشرف جودة","Gender":"ذكر","Nationality":"غير سعودي","Email":"meshal.alhazmi@bahra.com","Phone":"0595755521","HireDate":"2021-04-21","Status":"نشط","PIN":"3856","CompletedCourses":8,"InProgressCourses":2,"Certificates":2,"TrainingHours":56,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1034","Name_AR":"وليد العمري","Name_EN":"Waleed Alamri","Department_AR":"السلامة","Department_EN":"HSE","JobTitle_AR":"أخصائي HSE","Gender":"ذكر","Nationality":"سعودي","Email":"waleed.alamri@bahra.com","Phone":"0582834728","HireDate":"2022-08-11","Status":"نشط","PIN":"6337","CompletedCourses":1,"InProgressCourses":1,"Certificates":0,"TrainingHours":12,"Progress":14,"Role":"Employee"},{"EmployeeID":"BE-1035","Name_AR":"هاني الشمري","Name_EN":"Hani Alshammari","Department_AR":"الصيانة","Department_EN":"Maintenance","JobTitle_AR":"مشرف صيانة","Gender":"ذكر","Nationality":"سعودي","Email":"hani.alshammari@bahra.com","Phone":"0590044224","HireDate":"2021-01-22","Status":"نشط","PIN":"6843","CompletedCourses":9,"InProgressCourses":1,"Certificates":0,"TrainingHours":76,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1036","Name_AR":"منيرة الدوسري","Name_EN":"Munira Aldosari","Department_AR":"سلسلة الإمداد","Department_EN":"Supply Chain","JobTitle_AR":"أخصائي لوجستيات","Gender":"أنثى","Nationality":"سعودي","Email":"munira.aldosari@bahra.com","Phone":"0580438581","HireDate":"2020-03-22","Status":"نشط","PIN":"7664","CompletedCourses":0,"InProgressCourses":1,"Certificates":0,"TrainingHours":4,"Progress":5,"Role":"Employee"},{"EmployeeID":"BE-1037","Name_AR":"أمل الحربي","Name_EN":"Amal Alharbi","Department_AR":"المبيعات","Department_EN":"Sales","JobTitle_AR":"مدير حساب","Gender":"أنثى","Nationality":"سعودي","Email":"amal.alharbi@bahra.com","Phone":"0545028316","HireDate":"2022-06-10","Status":"نشط","PIN":"8096","CompletedCourses":8,"InProgressCourses":0,"Certificates":1,"TrainingHours":48,"Progress":79,"Role":"Employee"},{"EmployeeID":"BE-1038","Name_AR":"منيرة المطيري","Name_EN":"Munira Almutairi","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"أخصائي موارد بشرية","Gender":"أنثى","Nationality":"سعودي","Email":"munira.almutairi@bahra.com","Phone":"0553478971","HireDate":"2024-11-08","Status":"نشط","PIN":"4457","CompletedCourses":7,"InProgressCourses":1,"Certificates":1,"TrainingHours":116,"Progress":93,"Role":"Employee"},{"EmployeeID":"BE-1039","Name_AR":"خالد الشهري","Name_EN":"Khaled Alshehri","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"أخصائي دعم فني","Gender":"ذكر","Nationality":"سعودي","Email":"khaled.alshehri@bahra.com","Phone":"0560824456","HireDate":"2015-02-09","Status":"نشط","PIN":"8808","CompletedCourses":9,"InProgressCourses":1,"Certificates":0,"TrainingHours":76,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1040","Name_AR":"ناصر البقمي","Name_EN":"Nasser Albiqami","Department_AR":"المالية","Department_EN":"Finance","JobTitle_AR":"محلل مالي","Gender":"ذكر","Nationality":"سعودي","Email":"nasser.albiqami@bahra.com","Phone":"0599085417","HireDate":"2020-04-03","Status":"نشط","PIN":"6667","CompletedCourses":2,"InProgressCourses":0,"Certificates":1,"TrainingHours":16,"Progress":27,"Role":"Employee"},{"EmployeeID":"BE-1041","Name_AR":"وليد الغامدي","Name_EN":"Waleed Alghamdi","Department_AR":"الصيانة","Department_EN":"Maintenance","JobTitle_AR":"فني ميكانيكا","Gender":"ذكر","Nationality":"سعودي","Email":"waleed.alghamdi@bahra.com","Phone":"0516979780","HireDate":"2016-09-19","Status":"نشط","PIN":"6216","CompletedCourses":0,"InProgressCourses":0,"Certificates":0,"TrainingHours":0,"Progress":0,"Role":"Employee"},{"EmployeeID":"BE-1042","Name_AR":"ريم الشمري","Name_EN":"Reem Alshammari","Department_AR":"الهندسة","Department_EN":"Engineering","JobTitle_AR":"مهندس تصميم","Gender":"أنثى","Nationality":"سعودي","Email":"reem.alshammari@bahra.com","Phone":"0598152473","HireDate":"2018-08-12","Status":"نشط","PIN":"8678","CompletedCourses":8,"InProgressCourses":2,"Certificates":0,"TrainingHours":56,"Progress":100,"Role":"Employee"},{"EmployeeID":"BE-1043","Name_AR":"يوسف المطيري","Name_EN":"Yousef Almutairi","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"أخصائي دعم فني","Gender":"ذكر","Nationality":"غير سعودي","Email":"yousef.almutairi@bahra.com","Phone":"0597967807","HireDate":"2017-06-14","Status":"نشط","PIN":"7303","CompletedCourses":6,"InProgressCourses":0,"Certificates":1,"TrainingHours":48,"Progress":68,"Role":"Employee"},{"EmployeeID":"BE-1044","Name_AR":"وليد السلمي","Name_EN":"Waleed Alsulami","Department_AR":"الجودة","Department_EN":"Quality","JobTitle_AR":"أخصائي ضبط جودة","Gender":"ذكر","Nationality":"سعودي","Email":"waleed.alsulami@bahra.com","Phone":"0559828195","HireDate":"2024-01-14","Status":"نشط","PIN":"4552","CompletedCourses":3,"InProgressCourses":2,"Certificates":0,"TrainingHours":56,"Progress":50,"Role":"Employee"},{"EmployeeID":"BE-1045","Name_AR":"راكان الدوسري","Name_EN":"Rakan Aldosari","Department_AR":"الموارد البشرية","Department_EN":"Human Resources","JobTitle_AR":"أخصائي تدريب","Gender":"ذكر","Nationality":"سعودي","Email":"rakan.aldosari@bahra.com","Phone":"0530428451","HireDate":"2017-11-11","Status":"نشط","PIN":"3746","CompletedCourses":1,"InProgressCourses":0,"Certificates":1,"TrainingHours":16,"Progress":11,"Role":"Employee"},{"EmployeeID":"BE-1046","Name_AR":"أحمد الزهراني","Name_EN":"Ahmed Alzahrani","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"مطور أنظمة","Gender":"ذكر","Nationality":"سعودي","Email":"ahmed.alzahrani@bahra.com","Phone":"0503704121","HireDate":"2018-02-17","Status":"نشط","PIN":"4352","CompletedCourses":7,"InProgressCourses":0,"Certificates":0,"TrainingHours":112,"Progress":91,"Role":"Employee"},{"EmployeeID":"BE-1047","Name_AR":"أسماء الصاعدي","Name_EN":"Asmaa Alsaedi","Department_AR":"الإنتاج","Department_EN":"Production","JobTitle_AR":"مهندس عمليات","Gender":"أنثى","Nationality":"سعودي","Email":"asmaa.alsaedi@bahra.com","Phone":"0583708538","HireDate":"2019-05-29","Status":"نشط","PIN":"8602","CompletedCourses":4,"InProgressCourses":0,"Certificates":2,"TrainingHours":32,"Progress":47,"Role":"Employee"},{"EmployeeID":"BE-1048","Name_AR":"سارة العتيبي","Name_EN":"Sara Alotaibi","Department_AR":"المبيعات","Department_EN":"Sales","JobTitle_AR":"أخصائي تطوير أعمال","Gender":"أنثى","Nationality":"سعودي","Email":"sara.alotaibi@bahra.com","Phone":"0538564271","HireDate":"2015-03-19","Status":"نشط","PIN":"6641","CompletedCourses":8,"InProgressCourses":0,"Certificates":1,"TrainingHours":64,"Progress":82,"Role":"Employee"},{"EmployeeID":"BE-1049","Name_AR":"العنود الفيفي","Name_EN":"Alanoud Alfaifi","Department_AR":"تقنية المعلومات","Department_EN":"IT","JobTitle_AR":"مطور أنظمة","Gender":"أنثى","Nationality":"سعودي","Email":"alanoud.alfaifi@bahra.com","Phone":"0520617695","HireDate":"2020-09-29","Status":"نشط","PIN":"6832","CompletedCourses":7,"InProgressCourses":1,"Certificates":1,"TrainingHours":88,"Progress":76,"Role":"Employee"},{"EmployeeID":"BE-1050","Name_AR":"غادة العتيبي","Name_EN":"Ghada Alotaibi","Department_AR":"الصيانة","Department_EN":"Maintenance","JobTitle_AR":"فني صيانة كهربائية","Gender":"أنثى","Nationality":"سعودي","Email":"ghada.alotaibi@bahra.com","Phone":"0592480052","HireDate":"2023-01-05","Status":"نشط","PIN":"8506","CompletedCourses":1,"InProgressCourses":3,"Certificates":1,"TrainingHours":24,"Progress":27,"Role":"Employee"}],"courses":[{"CourseID":"C-101","Title_AR":"السلامة في بيئة العمل","Title_EN":"Workplace Safety","Path_AR":"السلامة والصحة المهنية","Path_EN":"Occupational Health & Safety","Level_AR":"مبتدئ","Level_EN":"Beginner","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":20,"Status":"متاح"},{"CourseID":"C-102","Title_AR":"أساسيات الطاقة المتجددة","Title_EN":"Renewable Energy Basics","Path_AR":"الطاقة المتجددة والاستدامة","Path_EN":"Renewable Energy & Sustainability","Level_AR":"متوسط","Level_EN":"Intermediate","DurationHours":20,"Trainer":"ناصر الفيفي","Enrolled":24,"Status":"متاح"},{"CourseID":"C-103","Title_AR":"تقنيات الكابلات والموصلات","Title_EN":"Cable & Conductor Technology","Path_AR":"الكابلات والموصلات","Path_EN":"Cables & Conductors","Level_AR":"متقدم","Level_EN":"Advanced","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":44,"Status":"متاح"},{"CourseID":"C-104","Title_AR":"أساسيات الموارد البشرية","Title_EN":"HR Fundamentals","Path_AR":"المهارات العامة والمهنية","Path_EN":"General & Professional Skills","Level_AR":"مبتدئ","Level_EN":"Beginner","DurationHours":8,"Trainer":"سلطان الشمري","Enrolled":22,"Status":"متاح"},{"CourseID":"C-105","Title_AR":"مهارات القيادة","Title_EN":"Leadership Skills","Path_AR":"القيادة والتطوير الإداري","Path_EN":"Leadership & Management","Level_AR":"متوسط","Level_EN":"Intermediate","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":33,"Status":"متاح"},{"CourseID":"C-106","Title_AR":"الأنظمة الكهربائية الصناعية","Title_EN":"Industrial Electrical Systems","Path_AR":"الأنظمة الكهربائية والطاقة","Path_EN":"Electrical Systems & Power","Level_AR":"متقدم","Level_EN":"Advanced","DurationHours":20,"Trainer":"سلطان الشمري","Enrolled":30,"Status":"متاح"},{"CourseID":"C-107","Title_AR":"إدارة الجودة الشاملة","Title_EN":"Total Quality Management","Path_AR":"المهارات العامة والمهنية","Path_EN":"General & Professional Skills","Level_AR":"متوسط","Level_EN":"Intermediate","DurationHours":20,"Trainer":"سلطان الشمري","Enrolled":32,"Status":"متاح"},{"CourseID":"C-108","Title_AR":"الاستدامة وكفاءة الطاقة","Title_EN":"Sustainability & Energy Efficiency","Path_AR":"الطاقة المتجددة والاستدامة","Path_EN":"Renewable Energy & Sustainability","Level_AR":"متوسط","Level_EN":"Intermediate","DurationHours":20,"Trainer":"طلال الصاعدي","Enrolled":14,"Status":"متاح"},{"CourseID":"C-109","Title_AR":"مهارات التواصل الفعّال","Title_EN":"Effective Communication","Path_AR":"المهارات العامة والمهنية","Path_EN":"General & Professional Skills","Level_AR":"مبتدئ","Level_EN":"Beginner","DurationHours":24,"Trainer":"سلطان الشمري","Enrolled":21,"Status":"متاح"},{"CourseID":"C-110","Title_AR":"إدارة المشاريع الاحترافية","Title_EN":"Professional Project Management","Path_AR":"القيادة والتطوير الإداري","Path_EN":"Leadership & Management","Level_AR":"متقدم","Level_EN":"Advanced","DurationHours":12,"Trainer":"طلال الصاعدي","Enrolled":34,"Status":"متاح"},{"CourseID":"C-111","Title_AR":"الإسعافات الأولية والطوارئ","Title_EN":"First Aid & Emergency","Path_AR":"السلامة والصحة المهنية","Path_EN":"Occupational Health & Safety","Level_AR":"مبتدئ","Level_EN":"Beginner","DurationHours":8,"Trainer":"طلال الصاعدي","Enrolled":38,"Status":"متاح"},{"CourseID":"C-112","Title_AR":"تحليل البيانات لصنع القرار","Title_EN":"Data-Driven Decision Making","Path_AR":"المهارات العامة والمهنية","Path_EN":"General & Professional Skills","Level_AR":"متقدم","Level_EN":"Advanced","DurationHours":20,"Trainer":"ناصر الفيفي","Enrolled":42,"Status":"متاح"}],"sessions":[{"SessionID":"S-2001","Course_AR":"أساسيات الموارد البشرية","Date":"2026-09-07","Start":"09:00","End":"13:00","Mode_AR":"قاعة التدريب 1","Trainer":"سلطان الشمري","Capacity":25,"Registered":22,"Status":"قادمة"},{"SessionID":"S-2002","Course_AR":"مهارات القيادة","Date":"2026-09-10","Start":"10:00","End":"12:00","Mode_AR":"عبر الإنترنت","Trainer":"طلال الصاعدي","Capacity":40,"Registered":31,"Status":"قادمة"},{"SessionID":"S-2003","Course_AR":"السلامة في بيئة العمل","Date":"2026-09-15","Start":"09:00","End":"13:00","Mode_AR":"قاعة التدريب 2","Trainer":"ناصر الفيفي","Capacity":30,"Registered":18,"Status":"قادمة"},{"SessionID":"S-2004","Course_AR":"تحليل البيانات لصنع القرار","Date":"2026-09-21","Start":"13:00","End":"16:00","Mode_AR":"قاعة التدريب 1","Trainer":"طلال الصاعدي","Capacity":30,"Registered":18,"Status":"قادمة"},{"SessionID":"S-2005","Course_AR":"الإسعافات الأولية والطوارئ","Date":"2026-09-28","Start":"09:00","End":"12:00","Mode_AR":"قاعة التدريب 2","Trainer":"طلال الصاعدي","Capacity":30,"Registered":23,"Status":"قادمة"},{"SessionID":"S-1990","Course_AR":"مهارات التواصل الفعّال","Date":"2026-08-12","Start":"09:00","End":"13:00","Mode_AR":"قاعة التدريب 2","Trainer":"طلال الصاعدي","Capacity":30,"Registered":23,"Status":"منتهية"},{"SessionID":"S-1991","Course_AR":"إدارة الجودة الشاملة","Date":"2026-08-20","Start":"09:00","End":"13:00","Mode_AR":"قاعة التدريب 1","Trainer":"سلطان الشمري","Capacity":30,"Registered":27,"Status":"منتهية"},{"SessionID":"S-1992","Course_AR":"أساسيات الطاقة المتجددة","Date":"2026-08-25","Start":"09:00","End":"13:00","Mode_AR":"عبر الإنترنت","Trainer":"سلطان الشمري","Capacity":30,"Registered":21,"Status":"منتهية"},{"SessionID":"S-1993","Course_AR":"تقنيات الكابلات والموصلات","Date":"2026-08-30","Start":"09:00","End":"13:00","Mode_AR":"قاعة التدريب 1","Trainer":"ناصر الفيفي","Capacity":30,"Registered":22,"Status":"منتهية"}],"requests":[{"RequestID":"R-3001","EmployeeID":"BE-1046","EmployeeName":"أحمد الزهراني","Course_AR":"إدارة الجودة الشاملة","RequestDate":"2026-08-15","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3002","EmployeeID":"BE-1043","EmployeeName":"يوسف المطيري","Course_AR":"الأنظمة الكهربائية الصناعية","RequestDate":"2026-08-11","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3003","EmployeeID":"BE-1015","EmployeeName":"ناصر الفيفي","Course_AR":"إدارة الجودة الشاملة","RequestDate":"2026-08-09","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3004","EmployeeID":"BE-1042","EmployeeName":"ريم الشمري","Course_AR":"مهارات التواصل الفعّال","RequestDate":"2026-08-26","Status":"معلق","Approver":"د. هادي الغامدي"},{"RequestID":"R-3005","EmployeeID":"BE-1036","EmployeeName":"منيرة الدوسري","Course_AR":"مهارات القيادة","RequestDate":"2026-09-04","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3006","EmployeeID":"BE-1025","EmployeeName":"مشعل الشهري","Course_AR":"تحليل البيانات لصنع القرار","RequestDate":"2026-08-17","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3007","EmployeeID":"BE-1029","EmployeeName":"لينا الحازمي","Course_AR":"أساسيات الموارد البشرية","RequestDate":"2026-08-12","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3008","EmployeeID":"BE-1003","EmployeeName":"إبراهيم الشهري","Course_AR":"تحليل البيانات لصنع القرار","RequestDate":"2026-08-13","Status":"معلق","Approver":"د. هادي الغامدي"},{"RequestID":"R-3009","EmployeeID":"BE-1028","EmployeeName":"راكان الغامدي","Course_AR":"الإسعافات الأولية والطوارئ","RequestDate":"2026-08-09","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3010","EmployeeID":"BE-1025","EmployeeName":"مشعل الشهري","Course_AR":"الإسعافات الأولية والطوارئ","RequestDate":"2026-09-01","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3011","EmployeeID":"BE-1040","EmployeeName":"ناصر البقمي","Course_AR":"مهارات القيادة","RequestDate":"2026-08-03","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3012","EmployeeID":"BE-1033","EmployeeName":"مشعل الحازمي","Course_AR":"الأنظمة الكهربائية الصناعية","RequestDate":"2026-09-05","Status":"معلق","Approver":"د. هادي الغامدي"},{"RequestID":"R-3013","EmployeeID":"BE-1027","EmployeeName":"فيصل الشمري","Course_AR":"أساسيات الموارد البشرية","RequestDate":"2026-09-04","Status":"معتمد","Approver":"د. هادي الغامدي"},{"RequestID":"R-3014","EmployeeID":"BE-1033","EmployeeName":"مشعل الحازمي","Course_AR":"مهارات القيادة","RequestDate":"2026-09-02","Status":"معتمد","Approver":"د. هادي الغامدي"}],"attendance":[{"AttID":"A-4001","SessionID":"S-1990","EmployeeID":"BE-1049","EmployeeName":"العنود الفيفي","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4002","SessionID":"S-1990","EmployeeID":"BE-1025","EmployeeName":"مشعل الشهري","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4003","SessionID":"S-1990","EmployeeID":"BE-1034","EmployeeName":"وليد العمري","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4004","SessionID":"S-1990","EmployeeID":"BE-1015","EmployeeName":"ناصر الفيفي","Date":"2026-08-12","Status":"متأخر"},{"AttID":"A-4005","SessionID":"S-1990","EmployeeID":"BE-1001","EmployeeName":"د. هادي الغامدي","Date":"2026-08-12","Status":"غائب"},{"AttID":"A-4006","SessionID":"S-1990","EmployeeID":"BE-1027","EmployeeName":"فيصل الشمري","Date":"2026-08-12","Status":"متأخر"},{"AttID":"A-4007","SessionID":"S-1990","EmployeeID":"BE-1048","EmployeeName":"سارة العتيبي","Date":"2026-08-12","Status":"متأخر"},{"AttID":"A-4008","SessionID":"S-1990","EmployeeID":"BE-1028","EmployeeName":"راكان الغامدي","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4009","SessionID":"S-1990","EmployeeID":"BE-1050","EmployeeName":"غادة العتيبي","Date":"2026-08-12","Status":"متأخر"},{"AttID":"A-4010","SessionID":"S-1990","EmployeeID":"BE-1040","EmployeeName":"ناصر البقمي","Date":"2026-08-12","Status":"غائب"},{"AttID":"A-4011","SessionID":"S-1990","EmployeeID":"BE-1024","EmployeeName":"أمل الخالدي","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4012","SessionID":"S-1990","EmployeeID":"BE-1016","EmployeeName":"فيصل البقمي","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4013","SessionID":"S-1990","EmployeeID":"BE-1036","EmployeeName":"منيرة الدوسري","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4014","SessionID":"S-1990","EmployeeID":"BE-1042","EmployeeName":"ريم الشمري","Date":"2026-08-12","Status":"غائب"},{"AttID":"A-4015","SessionID":"S-1990","EmployeeID":"BE-1023","EmployeeName":"مشعل الفيفي","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4016","SessionID":"S-1990","EmployeeID":"BE-1002","EmployeeName":"سلطان الشمري","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4017","SessionID":"S-1990","EmployeeID":"BE-1007","EmployeeName":"ماجد الغامدي","Date":"2026-08-12","Status":"حاضر"},{"AttID":"A-4018","SessionID":"S-1991","EmployeeID":"BE-1026","EmployeeName":"عبدالرحمن العنزي","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4019","SessionID":"S-1991","EmployeeID":"BE-1008","EmployeeName":"طلال الصاعدي","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4020","SessionID":"S-1991","EmployeeID":"BE-1030","EmployeeName":"ناصر الرشيدي","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4021","SessionID":"S-1991","EmployeeID":"BE-1039","EmployeeName":"خالد الشهري","Date":"2026-08-20","Status":"متأخر"},{"AttID":"A-4022","SessionID":"S-1991","EmployeeID":"BE-1023","EmployeeName":"مشعل الفيفي","Date":"2026-08-20","Status":"متأخر"},{"AttID":"A-4023","SessionID":"S-1991","EmployeeID":"BE-1041","EmployeeName":"وليد الغامدي","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4024","SessionID":"S-1991","EmployeeID":"BE-1034","EmployeeName":"وليد العمري","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4025","SessionID":"S-1991","EmployeeID":"BE-1045","EmployeeName":"راكان الدوسري","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4026","SessionID":"S-1991","EmployeeID":"BE-1007","EmployeeName":"ماجد الغامدي","Date":"2026-08-20","Status":"غائب"},{"AttID":"A-4027","SessionID":"S-1991","EmployeeID":"BE-1027","EmployeeName":"فيصل الشمري","Date":"2026-08-20","Status":"متأخر"},{"AttID":"A-4028","SessionID":"S-1991","EmployeeID":"BE-1016","EmployeeName":"فيصل البقمي","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4029","SessionID":"S-1991","EmployeeID":"BE-1021","EmployeeName":"راكان المالكي","Date":"2026-08-20","Status":"غائب"},{"AttID":"A-4030","SessionID":"S-1991","EmployeeID":"BE-1020","EmployeeName":"بندر القحطاني","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4031","SessionID":"S-1991","EmployeeID":"BE-1001","EmployeeName":"د. هادي الغامدي","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4032","SessionID":"S-1991","EmployeeID":"BE-1042","EmployeeName":"ريم الشمري","Date":"2026-08-20","Status":"حاضر"},{"AttID":"A-4033","SessionID":"S-1992","EmployeeID":"BE-1016","EmployeeName":"فيصل البقمي","Date":"2026-08-25","Status":"متأخر"},{"AttID":"A-4034","SessionID":"S-1992","EmployeeID":"BE-1010","EmployeeName":"طلال العنزي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4035","SessionID":"S-1992","EmployeeID":"BE-1029","EmployeeName":"لينا الحازمي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4036","SessionID":"S-1992","EmployeeID":"BE-1030","EmployeeName":"ناصر الرشيدي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4037","SessionID":"S-1992","EmployeeID":"BE-1007","EmployeeName":"ماجد الغامدي","Date":"2026-08-25","Status":"متأخر"},{"AttID":"A-4038","SessionID":"S-1992","EmployeeID":"BE-1036","EmployeeName":"منيرة الدوسري","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4039","SessionID":"S-1992","EmployeeID":"BE-1028","EmployeeName":"راكان الغامدي","Date":"2026-08-25","Status":"متأخر"},{"AttID":"A-4040","SessionID":"S-1992","EmployeeID":"BE-1009","EmployeeName":"سعد الفيفي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4041","SessionID":"S-1992","EmployeeID":"BE-1006","EmployeeName":"عبدالرحمن المالكي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4042","SessionID":"S-1992","EmployeeID":"BE-1002","EmployeeName":"سلطان الشمري","Date":"2026-08-25","Status":"غائب"},{"AttID":"A-4043","SessionID":"S-1992","EmployeeID":"BE-1047","EmployeeName":"أسماء الصاعدي","Date":"2026-08-25","Status":"غائب"},{"AttID":"A-4044","SessionID":"S-1992","EmployeeID":"BE-1044","EmployeeName":"وليد السلمي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4045","SessionID":"S-1992","EmployeeID":"BE-1005","EmployeeName":"هاني العمري","Date":"2026-08-25","Status":"متأخر"},{"AttID":"A-4046","SessionID":"S-1992","EmployeeID":"BE-1048","EmployeeName":"سارة العتيبي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4047","SessionID":"S-1992","EmployeeID":"BE-1032","EmployeeName":"أمل السبيعي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4048","SessionID":"S-1992","EmployeeID":"BE-1004","EmployeeName":"فيصل المطيري","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4049","SessionID":"S-1992","EmployeeID":"BE-1037","EmployeeName":"أمل الحربي","Date":"2026-08-25","Status":"حاضر"},{"AttID":"A-4050","SessionID":"S-1993","EmployeeID":"BE-1039","EmployeeName":"خالد الشهري","Date":"2026-08-30","Status":"متأخر"},{"AttID":"A-4051","SessionID":"S-1993","EmployeeID":"BE-1050","EmployeeName":"غادة العتيبي","Date":"2026-08-30","Status":"غائب"},{"AttID":"A-4052","SessionID":"S-1993","EmployeeID":"BE-1020","EmployeeName":"بندر القحطاني","Date":"2026-08-30","Status":"غائب"},{"AttID":"A-4053","SessionID":"S-1993","EmployeeID":"BE-1017","EmployeeName":"تركي الثبيتي","Date":"2026-08-30","Status":"حاضر"},{"AttID":"A-4054","SessionID":"S-1993","EmployeeID":"BE-1028","EmployeeName":"راكان الغامدي","Date":"2026-08-30","Status":"حاضر"},{"AttID":"A-4055","SessionID":"S-1993","EmployeeID":"BE-1007","EmployeeName":"ماجد الغامدي","Date":"2026-08-30","Status":"غائب"},{"AttID":"A-4056","SessionID":"S-1993","EmployeeID":"BE-1015","EmployeeName":"ناصر الفيفي","Date":"2026-08-30","Status":"غائب"},{"AttID":"A-4057","SessionID":"S-1993","EmployeeID":"BE-1024","EmployeeName":"أمل الخالدي","Date":"2026-08-30","Status":"حاضر"},{"AttID":"A-4058","SessionID":"S-1993","EmployeeID":"BE-1005","EmployeeName":"هاني العمري","Date":"2026-08-30","Status":"غائب"},{"AttID":"A-4059","SessionID":"S-1993","EmployeeID":"BE-1027","EmployeeName":"فيصل الشمري","Date":"2026-08-30","Status":"متأخر"},{"AttID":"A-4060","SessionID":"S-1993","EmployeeID":"BE-1006","EmployeeName":"عبدالرحمن المالكي","Date":"2026-08-30","Status":"حاضر"},{"AttID":"A-4061","SessionID":"S-1993","EmployeeID":"BE-1037","EmployeeName":"أمل الحربي","Date":"2026-08-30","Status":"حاضر"},{"AttID":"A-4062","SessionID":"S-1993","EmployeeID":"BE-1047","EmployeeName":"أسماء الصاعدي","Date":"2026-08-30","Status":"غائب"},{"AttID":"A-4063","SessionID":"S-1993","EmployeeID":"BE-1021","EmployeeName":"راكان المالكي","Date":"2026-08-30","Status":"غائب"}],"evaluations":[{"EvalID":"E-5001","EmployeeID":"BE-1017","EmployeeName":"تركي الثبيتي","Course_AR":"مهارات التواصل الفعّال","Score":91,"Grade":"ممتاز","Reaction":4,"Learning":86,"Date":"2026-08-17"},{"EvalID":"E-5002","EmployeeID":"BE-1017","EmployeeName":"تركي الثبيتي","Course_AR":"أساسيات الموارد البشرية","Score":99,"Grade":"ممتاز","Reaction":4,"Learning":70,"Date":"2026-07-23"},{"EvalID":"E-5003","EmployeeID":"BE-1034","EmployeeName":"وليد العمري","Course_AR":"مهارات القيادة","Score":78,"Grade":"جيد","Reaction":4,"Learning":67,"Date":"2026-08-25"},{"EvalID":"E-5004","EmployeeID":"BE-1039","EmployeeName":"خالد الشهري","Course_AR":"أساسيات الموارد البشرية","Score":62,"Grade":"مقبول","Reaction":3,"Learning":98,"Date":"2026-08-08"},{"EvalID":"E-5005","EmployeeID":"BE-1022","EmployeeName":"ريم العتيبي","Course_AR":"تحليل البيانات لصنع القرار","Score":82,"Grade":"جيد جداً","Reaction":5,"Learning":100,"Date":"2026-07-08"},{"EvalID":"E-5006","EmployeeID":"BE-1043","EmployeeName":"يوسف المطيري","Course_AR":"الأنظمة الكهربائية الصناعية","Score":87,"Grade":"جيد جداً","Reaction":5,"Learning":87,"Date":"2026-08-09"},{"EvalID":"E-5007","EmployeeID":"BE-1030","EmployeeName":"ناصر الرشيدي","Course_AR":"إدارة المشاريع الاحترافية","Score":86,"Grade":"جيد جداً","Reaction":5,"Learning":66,"Date":"2026-07-24"},{"EvalID":"E-5008","EmployeeID":"BE-1028","EmployeeName":"راكان الغامدي","Course_AR":"الإسعافات الأولية والطوارئ","Score":90,"Grade":"ممتاز","Reaction":5,"Learning":80,"Date":"2026-08-06"},{"EvalID":"E-5009","EmployeeID":"BE-1025","EmployeeName":"مشعل الشهري","Course_AR":"الأنظمة الكهربائية الصناعية","Score":62,"Grade":"مقبول","Reaction":4,"Learning":84,"Date":"2026-08-17"},{"EvalID":"E-5010","EmployeeID":"BE-1023","EmployeeName":"مشعل الفيفي","Course_AR":"مهارات القيادة","Score":92,"Grade":"ممتاز","Reaction":3,"Learning":83,"Date":"2026-07-27"},{"EvalID":"E-5011","EmployeeID":"BE-1030","EmployeeName":"ناصر الرشيدي","Course_AR":"السلامة في بيئة العمل","Score":63,"Grade":"مقبول","Reaction":5,"Learning":78,"Date":"2026-08-04"},{"EvalID":"E-5012","EmployeeID":"BE-1035","EmployeeName":"هاني الشمري","Course_AR":"السلامة في بيئة العمل","Score":69,"Grade":"مقبول","Reaction":4,"Learning":87,"Date":"2026-07-17"},{"EvalID":"E-5013","EmployeeID":"BE-1025","EmployeeName":"مشعل الشهري","Course_AR":"مهارات القيادة","Score":78,"Grade":"جيد","Reaction":3,"Learning":73,"Date":"2026-07-14"},{"EvalID":"E-5014","EmployeeID":"BE-1004","EmployeeName":"فيصل المطيري","Course_AR":"أساسيات الطاقة المتجددة","Score":76,"Grade":"جيد","Reaction":3,"Learning":63,"Date":"2026-08-15"},{"EvalID":"E-5015","EmployeeID":"BE-1024","EmployeeName":"أمل الخالدي","Course_AR":"إدارة المشاريع الاحترافية","Score":96,"Grade":"ممتاز","Reaction":4,"Learning":66,"Date":"2026-08-13"},{"EvalID":"E-5016","EmployeeID":"BE-1040","EmployeeName":"ناصر البقمي","Course_AR":"مهارات التواصل الفعّال","Score":95,"Grade":"ممتاز","Reaction":5,"Learning":99,"Date":"2026-07-04"},{"EvalID":"E-5017","EmployeeID":"BE-1019","EmployeeName":"سعد المطيري","Course_AR":"تقنيات الكابلات والموصلات","Score":68,"Grade":"مقبول","Reaction":4,"Learning":74,"Date":"2026-07-08"},{"EvalID":"E-5018","EmployeeID":"BE-1045","EmployeeName":"راكان الدوسري","Course_AR":"أساسيات الطاقة المتجددة","Score":68,"Grade":"مقبول","Reaction":3,"Learning":97,"Date":"2026-08-25"},{"EvalID":"E-5019","EmployeeID":"BE-1048","EmployeeName":"سارة العتيبي","Course_AR":"تحليل البيانات لصنع القرار","Score":86,"Grade":"جيد جداً","Reaction":3,"Learning":68,"Date":"2026-07-29"},{"EvalID":"E-5020","EmployeeID":"BE-1036","EmployeeName":"منيرة الدوسري","Course_AR":"تحليل البيانات لصنع القرار","Score":63,"Grade":"مقبول","Reaction":4,"Learning":86,"Date":"2026-08-29"},{"EvalID":"E-5021","EmployeeID":"BE-1024","EmployeeName":"أمل الخالدي","Course_AR":"مهارات التواصل الفعّال","Score":90,"Grade":"ممتاز","Reaction":3,"Learning":63,"Date":"2026-07-27"},{"EvalID":"E-5022","EmployeeID":"BE-1020","EmployeeName":"بندر القحطاني","Course_AR":"تقنيات الكابلات والموصلات","Score":79,"Grade":"جيد","Reaction":5,"Learning":94,"Date":"2026-07-11"},{"EvalID":"E-5023","EmployeeID":"BE-1039","EmployeeName":"خالد الشهري","Course_AR":"إدارة الجودة الشاملة","Score":65,"Grade":"مقبول","Reaction":3,"Learning":89,"Date":"2026-08-06"},{"EvalID":"E-5024","EmployeeID":"BE-1027","EmployeeName":"فيصل الشمري","Course_AR":"الاستدامة وكفاءة الطاقة","Score":90,"Grade":"ممتاز","Reaction":5,"Learning":100,"Date":"2026-07-10"},{"EvalID":"E-5025","EmployeeID":"BE-1001","EmployeeName":"د. هادي الغامدي","Course_AR":"مهارات القيادة","Score":68,"Grade":"مقبول","Reaction":3,"Learning":87,"Date":"2026-07-13"},{"EvalID":"E-5026","EmployeeID":"BE-1018","EmployeeName":"عبير البقمي","Course_AR":"تحليل البيانات لصنع القرار","Score":91,"Grade":"ممتاز","Reaction":5,"Learning":99,"Date":"2026-07-10"},{"EvalID":"E-5027","EmployeeID":"BE-1014","EmployeeName":"أسماء الثبيتي","Course_AR":"الأنظمة الكهربائية الصناعية","Score":72,"Grade":"جيد","Reaction":5,"Learning":78,"Date":"2026-07-02"},{"EvalID":"E-5028","EmployeeID":"BE-1007","EmployeeName":"ماجد الغامدي","Course_AR":"أساسيات الموارد البشرية","Score":91,"Grade":"ممتاز","Reaction":4,"Learning":64,"Date":"2026-07-24"},{"EvalID":"E-5029","EmployeeID":"BE-1026","EmployeeName":"عبدالرحمن العنزي","Course_AR":"أساسيات الطاقة المتجددة","Score":62,"Grade":"مقبول","Reaction":4,"Learning":96,"Date":"2026-08-12"},{"EvalID":"E-5030","EmployeeID":"BE-1006","EmployeeName":"عبدالرحمن المالكي","Course_AR":"مهارات القيادة","Score":97,"Grade":"ممتاز","Reaction":3,"Learning":72,"Date":"2026-07-22"}],"certificates":[{"CertID":"CERT-6001","EmployeeID":"BE-1001","EmployeeName":"د. هادي الغامدي","Course_AR":"مهارات القيادة","IssueDate":"2025-04-06","ExpiryDate":"2027-04-06","Status":"سارية"},{"CertID":"CERT-6002","EmployeeID":"BE-1002","EmployeeName":"سلطان الشمري","Course_AR":"مهارات القيادة","IssueDate":"2026-07-06","ExpiryDate":"2028-07-05","Status":"سارية"},{"CertID":"CERT-6003","EmployeeID":"BE-1003","EmployeeName":"إبراهيم الشهري","Course_AR":"مهارات التواصل الفعّال","IssueDate":"2025-04-24","ExpiryDate":"2027-04-24","Status":"سارية"},{"CertID":"CERT-6004","EmployeeID":"BE-1003","EmployeeName":"إبراهيم الشهري","Course_AR":"مهارات التواصل الفعّال","IssueDate":"2025-03-16","ExpiryDate":"2027-03-16","Status":"سارية"},{"CertID":"CERT-6005","EmployeeID":"BE-1005","EmployeeName":"هاني العمري","Course_AR":"تحليل البيانات لصنع القرار","IssueDate":"2025-08-19","ExpiryDate":"2027-08-19","Status":"سارية"},{"CertID":"CERT-6006","EmployeeID":"BE-1006","EmployeeName":"عبدالرحمن المالكي","Course_AR":"الاستدامة وكفاءة الطاقة","IssueDate":"2026-07-26","ExpiryDate":"2028-07-25","Status":"سارية"},{"CertID":"CERT-6007","EmployeeID":"BE-1006","EmployeeName":"عبدالرحمن المالكي","Course_AR":"الأنظمة الكهربائية الصناعية","IssueDate":"2025-05-21","ExpiryDate":"2027-05-21","Status":"سارية"},{"CertID":"CERT-6008","EmployeeID":"BE-1007","EmployeeName":"ماجد الغامدي","Course_AR":"تقنيات الكابلات والموصلات","IssueDate":"2025-06-03","ExpiryDate":"2027-06-03","Status":"سارية"},{"CertID":"CERT-6009","EmployeeID":"BE-1009","EmployeeName":"سعد الفيفي","Course_AR":"أساسيات الموارد البشرية","IssueDate":"2026-07-20","ExpiryDate":"2028-07-19","Status":"سارية"},{"CertID":"CERT-6010","EmployeeID":"BE-1010","EmployeeName":"طلال العنزي","Course_AR":"مهارات القيادة","IssueDate":"2025-05-03","ExpiryDate":"2027-05-03","Status":"سارية"},{"CertID":"CERT-6011","EmployeeID":"BE-1012","EmployeeName":"سعد الدوسري","Course_AR":"إدارة الجودة الشاملة","IssueDate":"2025-09-15","ExpiryDate":"2027-09-15","Status":"سارية"},{"CertID":"CERT-6012","EmployeeID":"BE-1013","EmployeeName":"سامي السلمي","Course_AR":"إدارة المشاريع الاحترافية","IssueDate":"2026-04-28","ExpiryDate":"2028-04-27","Status":"سارية"},{"CertID":"CERT-6013","EmployeeID":"BE-1014","EmployeeName":"أسماء الثبيتي","Course_AR":"الأنظمة الكهربائية الصناعية","IssueDate":"2025-07-15","ExpiryDate":"2027-07-15","Status":"سارية"},{"CertID":"CERT-6014","EmployeeID":"BE-1016","EmployeeName":"فيصل البقمي","Course_AR":"أساسيات الموارد البشرية","IssueDate":"2025-07-02","ExpiryDate":"2027-07-02","Status":"سارية"},{"CertID":"CERT-6015","EmployeeID":"BE-1016","EmployeeName":"فيصل البقمي","Course_AR":"الأنظمة الكهربائية الصناعية","IssueDate":"2026-05-01","ExpiryDate":"2028-04-30","Status":"سارية"},{"CertID":"CERT-6016","EmployeeID":"BE-1018","EmployeeName":"عبير البقمي","Course_AR":"أساسيات الطاقة المتجددة","IssueDate":"2025-05-19","ExpiryDate":"2027-05-19","Status":"سارية"},{"CertID":"CERT-6017","EmployeeID":"BE-1021","EmployeeName":"راكان المالكي","Course_AR":"إدارة المشاريع الاحترافية","IssueDate":"2025-10-21","ExpiryDate":"2027-10-21","Status":"سارية"},{"CertID":"CERT-6018","EmployeeID":"BE-1022","EmployeeName":"ريم العتيبي","Course_AR":"مهارات التواصل الفعّال","IssueDate":"2025-02-20","ExpiryDate":"2027-02-20","Status":"سارية"},{"CertID":"CERT-6019","EmployeeID":"BE-1023","EmployeeName":"مشعل الفيفي","Course_AR":"مهارات التواصل الفعّال","IssueDate":"2025-12-20","ExpiryDate":"2027-12-20","Status":"سارية"},{"CertID":"CERT-6020","EmployeeID":"BE-1023","EmployeeName":"مشعل الفيفي","Course_AR":"أساسيات الموارد البشرية","IssueDate":"2025-10-10","ExpiryDate":"2027-10-10","Status":"سارية"},{"CertID":"CERT-6021","EmployeeID":"BE-1024","EmployeeName":"أمل الخالدي","Course_AR":"الاستدامة وكفاءة الطاقة","IssueDate":"2025-02-04","ExpiryDate":"2027-02-04","Status":"سارية"},{"CertID":"CERT-6022","EmployeeID":"BE-1024","EmployeeName":"أمل الخالدي","Course_AR":"مهارات القيادة","IssueDate":"2025-06-05","ExpiryDate":"2027-06-05","Status":"سارية"},{"CertID":"CERT-6023","EmployeeID":"BE-1025","EmployeeName":"مشعل الشهري","Course_AR":"مهارات القيادة","IssueDate":"2026-04-11","ExpiryDate":"2028-04-10","Status":"سارية"},{"CertID":"CERT-6024","EmployeeID":"BE-1027","EmployeeName":"فيصل الشمري","Course_AR":"إدارة الجودة الشاملة","IssueDate":"2025-04-16","ExpiryDate":"2027-04-16","Status":"سارية"},{"CertID":"CERT-6025","EmployeeID":"BE-1028","EmployeeName":"راكان الغامدي","Course_AR":"أساسيات الموارد البشرية","IssueDate":"2025-11-11","ExpiryDate":"2027-11-11","Status":"سارية"},{"CertID":"CERT-6026","EmployeeID":"BE-1030","EmployeeName":"ناصر الرشيدي","Course_AR":"أساسيات الطاقة المتجددة","IssueDate":"2025-09-22","ExpiryDate":"2027-09-22","Status":"سارية"},{"CertID":"CERT-6027","EmployeeID":"BE-1033","EmployeeName":"مشعل الحازمي","Course_AR":"الإسعافات الأولية والطوارئ","IssueDate":"2026-03-01","ExpiryDate":"2028-02-29","Status":"سارية"},{"CertID":"CERT-6028","EmployeeID":"BE-1033","EmployeeName":"مشعل الحازمي","Course_AR":"أساسيات الطاقة المتجددة","IssueDate":"2026-05-06","ExpiryDate":"2028-05-05","Status":"سارية"},{"CertID":"CERT-6029","EmployeeID":"BE-1037","EmployeeName":"أمل الحربي","Course_AR":"الأنظمة الكهربائية الصناعية","IssueDate":"2025-10-18","ExpiryDate":"2027-10-18","Status":"سارية"},{"CertID":"CERT-6030","EmployeeID":"BE-1038","EmployeeName":"منيرة المطيري","Course_AR":"مهارات القيادة","IssueDate":"2025-05-15","ExpiryDate":"2027-05-15","Status":"سارية"},{"CertID":"CERT-6031","EmployeeID":"BE-1040","EmployeeName":"ناصر البقمي","Course_AR":"تحليل البيانات لصنع القرار","IssueDate":"2025-02-18","ExpiryDate":"2027-02-18","Status":"سارية"},{"CertID":"CERT-6032","EmployeeID":"BE-1043","EmployeeName":"يوسف المطيري","Course_AR":"أساسيات الطاقة المتجددة","IssueDate":"2025-10-26","ExpiryDate":"2027-10-26","Status":"سارية"},{"CertID":"CERT-6033","EmployeeID":"BE-1045","EmployeeName":"راكان الدوسري","Course_AR":"إدارة الجودة الشاملة","IssueDate":"2025-04-03","ExpiryDate":"2027-04-03","Status":"سارية"},{"CertID":"CERT-6034","EmployeeID":"BE-1047","EmployeeName":"أسماء الصاعدي","Course_AR":"أساسيات الموارد البشرية","IssueDate":"2025-07-27","ExpiryDate":"2027-07-27","Status":"سارية"},{"CertID":"CERT-6035","EmployeeID":"BE-1047","EmployeeName":"أسماء الصاعدي","Course_AR":"مهارات التواصل الفعّال","IssueDate":"2025-01-12","ExpiryDate":"2027-01-12","Status":"سارية"},{"CertID":"CERT-6036","EmployeeID":"BE-1048","EmployeeName":"سارة العتيبي","Course_AR":"السلامة في بيئة العمل","IssueDate":"2025-11-19","ExpiryDate":"2027-11-19","Status":"سارية"},{"CertID":"CERT-6037","EmployeeID":"BE-1049","EmployeeName":"العنود الفيفي","Course_AR":"أساسيات الموارد البشرية","IssueDate":"2025-01-29","ExpiryDate":"2027-01-29","Status":"سارية"},{"CertID":"CERT-6038","EmployeeID":"BE-1050","EmployeeName":"غادة العتيبي","Course_AR":"الإسعافات الأولية والطوارئ","IssueDate":"2025-11-23","ExpiryDate":"2027-11-23","Status":"سارية"}],"needs":[{"NeedID":"N-7001","Department_AR":"الإنتاج","Skill_AR":"السلامة الكهربائية","Priority":"عالية","Gap":"فجوة عالية","TargetQuarter":"Q1 2027"},{"NeedID":"N-7002","Department_AR":"الهندسة","Skill_AR":"قراءة المخططات","Priority":"متوسطة","Gap":"فجوة متوسطة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7003","Department_AR":"الجودة","Skill_AR":"إدارة الوقت","Priority":"متوسطة","Gap":"فجوة متوسطة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7004","Department_AR":"السلامة","Skill_AR":"تحليل البيانات","Priority":"عالية","Gap":"فجوة متوسطة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7005","Department_AR":"الصيانة","Skill_AR":"مهارات العرض","Priority":"منخفضة","Gap":"فجوة منخفضة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7006","Department_AR":"سلسلة الإمداد","Skill_AR":"الجودة والامتثال","Priority":"عالية","Gap":"فجوة عالية","TargetQuarter":"Q4 2026"},{"NeedID":"N-7007","Department_AR":"المبيعات","Skill_AR":"الطاقة المتجددة","Priority":"متوسطة","Gap":"فجوة متوسطة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7008","Department_AR":"الموارد البشرية","Skill_AR":"خدمة العملاء","Priority":"متوسطة","Gap":"فجوة منخفضة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7009","Department_AR":"تقنية المعلومات","Skill_AR":"القيادة","Priority":"عالية","Gap":"فجوة متوسطة","TargetQuarter":"Q2 2027"},{"NeedID":"N-7010","Department_AR":"المالية","Skill_AR":"الإسعافات الأولية","Priority":"عالية","Gap":"فجوة متوسطة","TargetQuarter":"Q2 2027"}],"users":[{"EmployeeID":"BE-1001","Username":"abeer.alamri","Role":"Admin","PIN":"1234","Permissions_AR":"كامل الصلاحيات","Status":"مفعل"},{"EmployeeID":"BE-1002","Username":"sultan.alshammari","Role":"Trainer","PIN":"2345","Permissions_AR":"إدارة الدورات والجلسات والحضور والتقييم","Status":"مفعل"},{"EmployeeID":"BE-1003","Username":"ibrahim.alshehri","Role":"Employee","PIN":"9486","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1004","Username":"faisal.almutairi","Role":"Employee","PIN":"6040","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1005","Username":"hani.alamri","Role":"Employee","PIN":"8955","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1006","Username":"abdulrahman.almalki","Role":"Employee","PIN":"5365","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1007","Username":"majed.alghamdi","Role":"Employee","PIN":"9953","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1008","Username":"talal.alsaedi","Role":"Trainer","PIN":"7844","Permissions_AR":"إدارة الدورات والجلسات والحضور والتقييم","Status":"مفعل"},{"EmployeeID":"BE-1009","Username":"saad.alfaifi","Role":"Employee","PIN":"9362","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1010","Username":"talal.alanazi","Role":"Employee","PIN":"4822","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1011","Username":"abdullah.alkhalidi","Role":"Employee","PIN":"9468","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1012","Username":"saad.aldosari","Role":"Employee","PIN":"3899","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1013","Username":"sami.alsulami","Role":"Employee","PIN":"9820","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1014","Username":"asmaa.althobaiti","Role":"Employee","PIN":"2741","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1015","Username":"nasser.alfaifi","Role":"Trainer","PIN":"2537","Permissions_AR":"إدارة الدورات والجلسات والحضور والتقييم","Status":"مفعل"},{"EmployeeID":"BE-1016","Username":"faisal.albiqami","Role":"Employee","PIN":"8155","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1017","Username":"turki.althobaiti","Role":"Employee","PIN":"2937","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1018","Username":"abeer.albiqami","Role":"Employee","PIN":"7502","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1019","Username":"saad.almutairi","Role":"Employee","PIN":"9527","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1020","Username":"bandar.alqahtani","Role":"Employee","PIN":"8524","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1021","Username":"rakan.almalki","Role":"Employee","PIN":"5342","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1022","Username":"reem.alotaibi","Role":"Employee","PIN":"5283","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1023","Username":"meshal.alfaifi","Role":"Employee","PIN":"9457","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1024","Username":"amal.alkhalidi","Role":"Employee","PIN":"6345","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1025","Username":"meshal.alshehri","Role":"Employee","PIN":"2439","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1026","Username":"abdulrahman.alanazi","Role":"Employee","PIN":"6736","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1027","Username":"faisal.alshammari","Role":"Employee","PIN":"6435","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1028","Username":"rakan.alghamdi","Role":"Employee","PIN":"6414","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1029","Username":"lina.alhazmi","Role":"Employee","PIN":"2979","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1030","Username":"nasser.alrashidi","Role":"Employee","PIN":"3798","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1031","Username":"abdullah.alfaifi","Role":"Employee","PIN":"8859","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1032","Username":"amal.alsubaie","Role":"Employee","PIN":"7731","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1033","Username":"meshal.alhazmi","Role":"Employee","PIN":"3856","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1034","Username":"waleed.alamri","Role":"Employee","PIN":"6337","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1035","Username":"hani.alshammari","Role":"Employee","PIN":"6843","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1036","Username":"munira.aldosari","Role":"Employee","PIN":"7664","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1037","Username":"amal.alharbi","Role":"Employee","PIN":"8096","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1038","Username":"munira.almutairi","Role":"Employee","PIN":"4457","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1039","Username":"khaled.alshehri","Role":"Employee","PIN":"8808","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1040","Username":"nasser.albiqami","Role":"Employee","PIN":"6667","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1041","Username":"waleed.alghamdi","Role":"Employee","PIN":"6216","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1042","Username":"reem.alshammari","Role":"Employee","PIN":"8678","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1043","Username":"yousef.almutairi","Role":"Employee","PIN":"7303","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1044","Username":"waleed.alsulami","Role":"Employee","PIN":"4552","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1045","Username":"rakan.aldosari","Role":"Employee","PIN":"3746","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1046","Username":"ahmed.alzahrani","Role":"Employee","PIN":"4352","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1047","Username":"asmaa.alsaedi","Role":"Employee","PIN":"8602","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1048","Username":"sara.alotaibi","Role":"Employee","PIN":"6641","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1049","Username":"alanoud.alfaifi","Role":"Employee","PIN":"6832","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"},{"EmployeeID":"BE-1050","Username":"ghada.alotaibi","Role":"Employee","PIN":"8506","Permissions_AR":"عرض الدورات، طلب تدريب، عرض الشهادات","Status":"مفعل"}],"demo":{"admin":{"id":"BE-1001","pin":"1234","name":"د. هادي الغامدي"},"trainer":{"id":"BE-1002","pin":"2345","name":"سلطان الشمري"},"employee":{"id":"BE-1004","pin":"6040","name":"فيصل المطيري"}}};
 
-const I18N = {
-  ar: {
-    l_h1a: "منصة بحرة الكتريك", l_h1b: "لتطوير الموظفين", l_lead: "نستثمر في تطوير موظفينا لنبني مستقبلاً أكثر إشراقاً.",
-    l_f1: "تطوير المهارات", l_f2: "إدارة الدورات", l_f3: "قياس التقدم", l_f4: "فرص التطوير",
-    l_signin: "تسجيل الدخول", l_sub: "استخدم رقمك الوظيفي للدخول إلى حسابك.", l_empno: "الرقم الوظيفي",
-    l_remember: "تذكرني", l_forgot: "نسيت رمز PIN؟", l_enter: "دخول إلى المنصة", l_demo: "حسابات تجريبية للاختبار:",
-    l_help: "في حال وجود أي مشكلة في تسجيل الدخول، يرجى التواصل مع قسم الموارد البشرية.",
-    n_dashboard: "الرئيسية", n_courses: "الدورات التدريبية", n_sessions: "الجلوس التدريبية", n_employees: "الموظفون", n_reports: "التقارير والتحليلات", n_settings: "الإعدادات", n_logout: "تسجيل الخروج",
-    s_slogan1: "معاً.", s_slogan2: "نصنع مستقبلاً", s_slogan3: "أكثر إشراقاً",
-    a_title: "مساعد اسألني", a_sub: "مدعوم بالذكاء الاصطناعي"
-  },
-  en: {
-    l_h1a: "Bahra Electric", l_h1b: "Employee Development", l_lead: "Investing in our workforce for a brighter future.",
-    l_f1: "Skill Development", l_f2: "Course Management", l_f3: "Track Progress", l_f4: "Growth Opportunities",
-    l_signin: "Sign In", l_sub: "Enter your Employee ID and PIN to log in.", l_empno: "Employee ID",
-    l_remember: "Remember me", l_forgot: "Forgot PIN?", l_enter: "Sign In to Platform", l_demo: "Demo Test Accounts:",
-    l_help: "For login support, please contact HR Department.",
-    n_dashboard: "Dashboard", n_courses: "Courses", n_sessions: "Sessions", n_employees: "Employees", n_reports: "Reports", n_settings: "Settings", n_logout: "Log Out",
-    s_slogan1: "Together.", s_slogan2: "Building a", s_slogan3: "Brighter Future",
-    a_title: "Ask Me Assistant", a_sub: "Powered by AI"
+/* ------------- i18n (نصوص الواجهة) ------------- */
+const I18N={
+ ar:{l_h1a:"منصة بحرة الكتريك",l_h1b:"لتطوير الموظفين",
+  l_lead:"نستثمر في تطوير موظفينا لنبني مستقبلاً أكثر إشراقاً.",
+  l_f1:"تطوير المهارات",l_f2:"إدارة الدورات",l_f3:"قياس التقدم",l_f4:"فرص التطوير",
+  l_signin:"تسجيل الدخول",l_sub:"استخدم رقمك الوظيفي للدخول إلى حسابك.",
+  l_empno:"الرقم الوظيفي",l_empph:"أدخل الرقم الوظيفي",l_pinph:"أدخل رمز PIN",
+  l_remember:"تذكرني",l_forgot:"نسيت رمز PIN؟",l_enter:"دخول إلى المنصة",
+  l_demo:"حسابات تجريبية للاختبار:",
+  l_help:"في حال وجود أي مشكلة في تسجيل الدخول، يرجى التواصل مع قسم الموارد البشرية.",
+  n_home:"الصفحة الرئيسية",n_courses:"الدورات التدريبية",n_sessions:"الجلسات التدريبية",
+  n_requests:"طلبات التدريب",n_eval:"التقييم",n_certs:"الشهادات",n_needs:"الاحتياجات التدريبية",
+  n_reports:"التقارير والتحليلات",n_employees:"الموظفون",n_trainers:"المدربون",n_settings:"الإعدادات",
+  n_logout:"تسجيل الخروج",
+  s_slogan1:"معاً.",s_slogan2:"نصنع مستقبلاً",s_slogan3:"أكثر إشراقاً",
+  t_search:"ابحث عن الدورات، المهارات أو المواضيع…",
+  a_title:"مساعد اسألني",a_sub:"مدعوم بالذكاء الاصطناعي",a_ph:"اكتب سؤالك…",
+  kc:"الدورات التدريبية",ks:"الجلسات القادمة",ke:"الموظفون المسجلون",kcert:"الشهادات الصادرة",
+  hero_h1:"معاً نطور قدراتنا",hero_h2:"لنصنع مستقبلاً أفضل",
+  hero_p:"منصة بحرة إلكتريك للتعلم والتطوير — تمكين موظفينا بالمعرفة والمهارات والفرص لبناء مستقبل أكثر إشراقاً.",
+  hero_cta:"ابدأ رحلتك في التعلم",hero_side1:"الطاقة",hero_side2:"تصنع الفرق",
+  hi1:"تعلّم",hi2:"تطوّر",hi3:"ننجح معاً",hi4:"نحقق أهدافنا",
+  latest:"أحدث الدورات",viewall:"عرض الكل",journey:"رحلتك التطويرية",
+  journey_h:"أنت تسير بخطى ثابتة",journey_p:"استمر نحو أهدافك في التعلم والتطوير",journey_cta:"متابعة رحلتي",
+  upcoming:"الجلسات القادمة",paths:"المسارات التدريبية",
+  search:"بحث…",all:"الكل",
+  th_id:"الرقم الوظيفي",th_name:"الاسم",th_dept:"القسم",th_title:"المسمى",th_role:"الدور",
+  th_progress:"التقدم",th_hours:"الساعات",th_status:"الحالة",th_course:"الدورة",th_path:"المسار",
+  th_level:"المستوى",th_dur:"المدة",th_trainer:"المدرب",th_enrolled:"المسجلون",th_date:"التاريخ",
+  th_time:"الوقت",th_place:"المكان",th_reg:"مسجل/سعة",th_emp:"الموظف",th_reqdate:"تاريخ الطلب",
+  th_score:"الدرجة",th_grade:"التقدير",th_issue:"الإصدار",th_expiry:"الانتهاء",th_skill:"المهارة",
+  th_priority:"الأولوية",th_gap:"الفجوة",th_quarter:"المستهدف",th_perms:"الصلاحيات",th_user:"المستخدم",
+  role_Admin:"مدير النظام",role_Trainer:"مدرب",role_Employee:"موظف",
+  rep_title:"التقارير والتحليلات",rep_bypath:"الدورات حسب المسار",rep_att:"معدل الحضور",
+  rep_present:"حاضر",rep_late:"متأخر",rep_absent:"غائب",rep_avg:"متوسط الدرجات",rep_hours:"إجمالي الساعات",
+  set_title:"الإعدادات",set_brand:"الهوية والألوان",set_primary:"اللون الأساسي",set_general:"عام",
+  set_theme:"الوضع الداكن",set_lang:"اللغة الافتراضية عربية",set_notif:"تفعيل الإشعارات",
+  set_note:"مبدأ التصميم: كل شيء قابل للضبط من الإعدادات — الألوان، المؤشرات، القواعد والقوالب.",
+  empno_hint:"الرقم / الاسم / القسم",
+  a_welcome:"مرحباً 👋 أنا مساعد «اسألني». اسألني عن الدورات، الجلسات، الموظفين، الشهادات أو مؤشرات المنصة.",
+  logout_c:"تم تسجيل الخروج"},
+ en:{l_h1a:"Bahra Electric",l_h1b:"Employee Development",
+  l_lead:"We invest in developing our people to build a brighter future.",
+  l_f1:"Skill Development",l_f2:"Course Management",l_f3:"Progress Tracking",l_f4:"Growth Opportunities",
+  l_signin:"Sign in",l_sub:"Use your employee number to access your account.",
+  l_empno:"Employee number",l_empph:"Enter employee number",l_pinph:"Enter PIN",
+  l_remember:"Remember me",l_forgot:"Forgot PIN?",l_enter:"Enter platform",
+  l_demo:"Demo accounts for testing:",
+  l_help:"If you have trouble signing in, please contact the Human Resources department.",
+  n_home:"Home",n_courses:"Courses",n_sessions:"Sessions",n_requests:"Training Requests",
+  n_eval:"Evaluation",n_certs:"Certificates",n_needs:"Training Needs",n_reports:"Reports & Analytics",
+  n_employees:"Employees",n_trainers:"Trainers",n_settings:"Settings",n_logout:"Log out",
+  s_slogan1:"Together.",s_slogan2:"Building a",s_slogan3:"brighter future",
+  t_search:"Search courses, skills or topics…",
+  a_title:"Ask-Me Assistant",a_sub:"Powered by AI",a_ph:"Type your question…",
+  kc:"Training courses",ks:"Upcoming sessions",ke:"Registered employees",kcert:"Certificates issued",
+  hero_h1:"Together we grow",hero_h2:"to build a better future",
+  hero_p:"Bahra Electric learning & development platform — empowering our people with knowledge, skills and opportunities.",
+  hero_cta:"Start your learning journey",hero_side1:"Energy",hero_side2:"makes the difference",
+  hi1:"Learn",hi2:"Develop",hi3:"Succeed",hi4:"Achieve",
+  latest:"Latest courses",viewall:"View all",journey:"Your journey",
+  journey_h:"You're on a steady path",journey_p:"Keep going toward your learning goals",journey_cta:"Continue my journey",
+  upcoming:"Upcoming sessions",paths:"Training paths",
+  search:"Search…",all:"All",
+  th_id:"Employee #",th_name:"Name",th_dept:"Department",th_title:"Title",th_role:"Role",
+  th_progress:"Progress",th_hours:"Hours",th_status:"Status",th_course:"Course",th_path:"Path",
+  th_level:"Level",th_dur:"Duration",th_trainer:"Trainer",th_enrolled:"Enrolled",th_date:"Date",
+  th_time:"Time",th_place:"Location",th_reg:"Reg/Cap",th_emp:"Employee",th_reqdate:"Request date",
+  th_score:"Score",th_grade:"Grade",th_issue:"Issued",th_expiry:"Expiry",th_skill:"Skill",
+  th_priority:"Priority",th_gap:"Gap",th_quarter:"Target",th_perms:"Permissions",th_user:"Username",
+  role_Admin:"System Admin",role_Trainer:"Trainer",role_Employee:"Employee",
+  rep_title:"Reports & Analytics",rep_bypath:"Courses by path",rep_att:"Attendance rate",
+  rep_present:"Present",rep_late:"Late",rep_absent:"Absent",rep_avg:"Avg. score",rep_hours:"Total hours",
+  set_title:"Settings",set_brand:"Brand & colors",set_primary:"Primary color",set_general:"General",
+  set_theme:"Dark mode",set_lang:"Default language Arabic",set_notif:"Enable notifications",
+  set_note:"Design principle: everything configurable from Settings — colors, KPIs, rules and templates.",
+  empno_hint:"ID / name / department",
+  a_welcome:"Hi 👋 I'm the Ask-Me assistant. Ask me about courses, sessions, employees, certificates or platform KPIs.",
+  logout_c:"Logged out"}
+};
+let LANG="ar";
+const t=k=>(I18N[LANG][k]??k);
+const isEN=()=>LANG==="en";
+
+/* ------------- SVG icons ------------- */
+const SVG=(p,sw=2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ home:SVG('<path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>'),
+ book:SVG('<path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2Z"/><path d="M8 3v18"/>'),
+ cal:SVG('<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>'),
+ doc:SVG('<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>'),
+ star:SVG('<path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19l1-5.8L3.5 9.2l5.9-.9Z"/>'),
+ award:SVG('<circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/>'),
+ chart:SVG('<path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>'),
+ users:SVG('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M17 5a3.5 3.5 0 0 1 0 7M22 20a6 6 0 0 0-5-5.9"/>'),
+ trainer:SVG('<circle cx="12" cy="7" r="3.5"/><path d="M6 21a6 6 0 0 1 12 0"/><path d="M18 8l3-2-3-2"/>'),
+ gear:SVG('<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.3 1a7 7 0 0 0-1.7-1L14.5 2h-4l-.4 2.5a7 7 0 0 0-1.7 1l-2.3-1-2 3.5L4.1 11a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.3-1a7 7 0 0 0 1.7 1L10.5 22h4l.4-2.5a7 7 0 0 0 1.7-1l2.3 1 2-3.5-2-1.5c.1-.3.1-.7.1-1Z"/>'),
+ play:SVG('<path d="M8 5v14l11-7Z" fill="currentColor" stroke="none"/>'),
+ arrow:SVG('<path d="M5 12h14M13 6l6 6-6 6"/>',2.5),
+ clock:SVG('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+ pin:SVG('<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/>'),
+ bolt:SVG('<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>'),
+ leaf:SVG('<path d="M11 20a8 8 0 0 1-2-8c2-6 9-8 11-8 0 3-2 10-8 12a8 8 0 0 1-1 4M5 20c3-6 6-8 10-9"/>'),
+ shield:SVG('<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6Z"/><path d="m9 12 2 2 4-4"/>'),
+ cable:SVG('<path d="M4 4v4a4 4 0 0 0 4 4h8a4 4 0 0 1 4 4v4"/><rect x="2" y="2" width="4" height="4" rx="1"/><rect x="18" y="18" width="4" height="4" rx="1"/>'),
+ skill:SVG('<path d="M12 2 2 7l10 5 10-5Z"/><path d="M2 7v6l10 5 10-5V7"/>'),
+};
+const PATH_ICONS=[IC.bolt,IC.cable,IC.leaf,IC.shield,IC.users,IC.skill];
+
+/* ------------- logo markup ------------- */
+function logoHTML(){return `<div class="mark">${SVG('<path d="M4 4h9a4 4 0 0 1 0 8H4Z M4 12h10a4 4 0 0 1 0 8H4Z" fill="currentColor" stroke="none"/>')}</div>
+  <div class="word"><b>BAHRA <span>ELECTRIC</span></b><small>PEOPLE • ENERGY • A BRIGHTER TOMORROW</small></div>`;}
+
+/* ------------- session state ------------- */
+let USER=null;
+
+/* ============ MENUS by role ============ */
+const MENU=[
+ {id:"home",i:"n_home",ic:IC.home,roles:["Admin","Trainer","Employee"]},
+ {id:"courses",i:"n_courses",ic:IC.book,roles:["Admin","Trainer","Employee"]},
+ {id:"sessions",i:"n_sessions",ic:IC.cal,roles:["Admin","Trainer","Employee"]},
+ {id:"requests",i:"n_requests",ic:IC.doc,roles:["Admin","Trainer","Employee"]},
+ {id:"eval",i:"n_eval",ic:IC.star,roles:["Admin","Trainer"]},
+ {id:"certs",i:"n_certs",ic:IC.award,roles:["Admin","Trainer","Employee"]},
+ {id:"needs",i:"n_needs",ic:IC.chart,roles:["Admin","Trainer"]},
+ {id:"reports",i:"n_reports",ic:IC.chart,roles:["Admin","Trainer"]},
+ {id:"employees",i:"n_employees",ic:IC.users,roles:["Admin"]},
+ {id:"trainers",i:"n_trainers",ic:IC.trainer,roles:["Admin"]},
+ {id:"settings",i:"n_settings",ic:IC.gear,roles:["Admin"]},
+];
+
+/* ============ apply language ============ */
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=isEN()?"ltr":"rtl";
+  document.querySelectorAll("[data-i]").forEach(el=>el.textContent=t(el.dataset.i));
+  document.querySelectorAll("[data-ph]").forEach(el=>el.placeholder=t(el.dataset.ph));
+  document.getElementById("login-lang-t").textContent=isEN()?"عربي":"EN";
+  document.getElementById("app-lang-t").textContent=isEN()?"English":"عربي";
+  ["logo-login","logo-login-r","logo-side"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=logoHTML();});
+  document.getElementById("f1").innerHTML=IC.skill;document.getElementById("f2").innerHTML=IC.book;
+  document.getElementById("f3").innerHTML=IC.chart;document.getElementById("f4").innerHTML=IC.award;
+  if(USER){buildNav();render(currentPage);renderChatWelcome();}
+}
+
+/* ============ LOGIN ============ */
+async function doLogin(id,pin){
+  id=(id||"").trim();pin=(pin||"").trim();
+  const err=document.getElementById("login-err");err.textContent="";
+  if(!id||!pin){err.textContent=isEN()?"Please enter both fields.":"يرجى إدخال الحقلين.";return;}
+  let user=null;
+  if(CONFIG.USE_BACKEND && CONFIG.APPS_SCRIPT_URL){
+    // ── ربط الخادم: Code.gs يتحقق من Google Sheet (المستخدمون) ──
+    try{
+      const r=await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=login&id=${encodeURIComponent(id)}&pin=${encodeURIComponent(pin)}`);
+      const j=await r.json(); if(j.ok)user=j.user;
+    }catch(e){err.textContent="تعذّر الاتصال بالخادم.";return;}
+  }else{
+    const u=DATA.users.find(x=>x.EmployeeID===id && x.PIN===pin);
+    if(u){const emp=DATA.employees.find(e=>e.EmployeeID===id);user={...u,...emp};}
   }
-};
-
-let currentLang = 'ar';
-let currentUser = null;
-
-function renderLogo(containerId, isOnDark = false) {
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  el.className = `logo ${isOnDark ? 'on-dark' : ''}`;
-  el.innerHTML = `
-    <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-    <div class="word"><b>BAHRA <span>ELECTRIC</span></b><small>TRAINING &amp; DEVELOPMENT</small></div>
-  `;
+  if(!user){err.textContent=isEN()?"Invalid employee number or PIN.":"الرقم الوظيفي أو رمز PIN غير صحيح.";return;}
+  USER=user; enterApp();
+}
+function fillDemo(role){
+  const d=DATA.demo[role];
+  document.getElementById("in-emp").value=d.id;
+  document.getElementById("in-pin").value=d.pin;
 }
 
-function updateI18n() {
-  document.querySelectorAll('[data-i]').forEach(el => {
-    const key = el.getAttribute('data-i');
-    if(I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
+/* ============ enter app ============ */
+let currentPage="home";
+function enterApp(){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("assistant-btn").classList.remove("hidden");
+  const nm=isEN()?USER.Name_EN:USER.Name_AR;
+  document.getElementById("u-name").textContent=nm||USER.Name_AR;
+  document.getElementById("u-role").textContent=USER.JobTitle_AR||t("role_"+USER.Role);
+  document.getElementById("u-av").textContent=(USER.Name_AR||"؟").trim()[0];
+  buildNav();go("home");
+}
+function buildNav(){
+  const nav=document.getElementById("nav");nav.innerHTML="";
+  MENU.filter(m=>m.roles.includes(USER.Role)).forEach(m=>{
+    const a=document.createElement("a");a.dataset.page=m.id;
+    a.className=m.id===currentPage?"active":"";
+    a.innerHTML=`${m.ic}<span>${t(m.i)}</span>`;
+    a.onclick=()=>go(m.id);
+    nav.appendChild(a);
   });
-  document.documentElement.lang = currentLang;
-  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-  document.getElementById('login-lang-t').textContent = currentLang === 'ar' ? 'EN' : 'عربي';
-  document.getElementById('app-lang-t').textContent = currentLang === 'ar' ? 'English' : 'عربي';
+}
+function go(p){currentPage=p;buildNav();render(p);
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("main").scrollTop=0;}
+
+/* ============ helpers ============ */
+const avInit=n=>`<span class="mini-av">${(n||"؟").trim()[0]}</span>`;
+const levelChip=lv=>{const cls=lv==="مبتدئ"?"mub":lv==="متوسط"?"mut":"mut2";
+  return `<span class="chip ${cls}">${isEN()?({مبتدئ:"Beginner",متوسط:"Intermediate",متقدم:"Advanced"}[lv]):lv}</span>`;};
+const statusPill=s=>{const map={"نشط":"ok","سارية":"ok","متاح":"ok","قادمة":"info","منتهية":"warn",
+  "معتمد":"ok","معلق":"warn","مرفوض":"bad","حاضر":"ok","متأخر":"warn","غائب":"bad","مفعل":"ok"};
+  return `<span class="pill ${map[s]||'info'}">${s}</span>`;}
+const cName=c=>isEN()?c.Title_EN:c.Title_AR;
+const pName=p=>isEN()?p.Path_EN:p.Path_AR;
+const eName=e=>isEN()?(e.Name_EN||e.Name_AR):e.Name_AR;
+const MONTH_AR=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const dchip=iso=>{const d=new Date(iso);return {d:d.getDate(),m:MONTH_AR[d.getMonth()]};};
+
+/* ============ RENDER pages ============ */
+function render(p){
+  const m=document.getElementById("main");
+  ({home:pageHome,courses:pageCourses,sessions:pageSessions,requests:pageRequests,
+    eval:pageEval,certs:pageCerts,needs:pageNeeds,reports:pageReports,
+    employees:pageEmployees,trainers:pageTrainers,settings:pageSettings}[p]||pageHome)(m);
 }
 
-function renderNav() {
-  const nav = document.getElementById('nav');
-  if(!nav) return;
-  const items = [
-    {id:'dashboard', icon:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>', label: I18N[currentLang].n_dashboard},
-    {id:'courses', icon:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>', label: I18N[currentLang].n_courses},
-    {id:'sessions', icon:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>', label: I18N[currentLang].n_sessions},
-    {id:'employees', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', label: I18N[currentLang].n_employees},
-    {id:'reports', icon:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>', label: I18N[currentLang].n_reports},
-    {id:'settings', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>', label: I18N[currentLang].n_settings}
+function pageHome(m){
+  const k=DATA.kpis;
+  const cards=[
+   {ic:IC.book,n:k.courses,l:t("kc"),tr:"20%"},
+   {ic:IC.cal,n:k.upcoming_sessions,l:t("ks"),tr:"25%"},
+   {ic:IC.users,n:k.employees,l:t("ke"),tr:"12%"},
+   {ic:IC.award,n:k.certificates,l:t("kcert"),tr:"18%"},
   ];
-  
-  nav.innerHTML = items.map((item, idx) => `
-    <a class="${idx === 0 ? 'active' : ''}" data-view="${item.id}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${item.icon}</svg>
-      <span>${item.label}</span>
-    </a>
-  `).join('');
+  const latest=DATA.courses.slice(0,3);
+  const up=DATA.sessions.filter(s=>s.Status==="قادمة").slice(0,3);
+  const prog=USER.Progress||70;
+  m.innerHTML=`
+   <section class="hero">
+     <div class="art">
+       <svg viewBox="0 0 600 400" preserveAspectRatio="none" fill="#0e1216">
+        <circle cx="120" cy="300" r="95" opacity=".55"/><circle cx="300" cy="320" r="80" opacity=".45"/>
+        <circle cx="470" cy="330" r="70" opacity=".4"/>
+        <path d="M0 400 L0 250 L30 250 L30 180 L55 180 L55 250 L90 250 L90 210 L120 210 L120 120 L135 120 L135 210 L180 210 L180 400Z" opacity=".6"/>
+        <rect x="150" y="140" width="70" height="10" transform="rotate(-28 150 140)" opacity=".6"/>
+       </svg>
+     </div>
+     <div class="inner">
+       <div class="txt">
+         <h2>${t("hero_h1")} <span class="r">${t("hero_h2")}</span></h2>
+         <p>${t("hero_p")}</p>
+         <a class="cta">${t("hero_cta")} ${IC.arrow}</a>
+       </div>
+       <div class="side">
+         <h3>${t("hero_side1")}<span>${t("hero_side2")}</span></h3>
+         <div class="divider"></div>
+         <div class="icons">
+           <div>${IC.book}${t("hi1")}</div><div>${IC.chart}${t("hi2")}</div>
+           <div>${IC.users}${t("hi3")}</div><div>${IC.award}${t("hi4")}</div>
+         </div>
+       </div>
+     </div>
+     <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+   </section>
 
-  nav.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      nav.querySelectorAll('a').forEach(x => x.classList.remove('active'));
-      a.classList.add('active');
-      renderView(a.getAttribute('data-view'));
-    });
-  });
+   <section class="kpi-grid">
+     ${cards.map(c=>`<div class="kpi"><div class="ic">${c.ic}</div>
+        <div><div class="n">${c.n}</div><div class="l">${c.l}</div></div>
+        <div class="trend">${IC.arrow}${c.tr}</div></div>`).join("")}
+   </section>
+
+   <section class="grid-3">
+     <div class="panel">
+       <div class="panel-head"><h3>${t("latest")}</h3><a class="more">${t("viewall")} ${IC.arrow}</a></div>
+       <div class="course-mini">
+         ${latest.map(c=>`<div class="cmini">
+            <div class="thumb"><div class="play"><span>${IC.play}</span></div></div>
+            <div class="meta"><b>${cName(c)}</b>${levelChip(c.Level_AR)}</div></div>`).join("")}
+       </div>
+     </div>
+     <div class="panel">
+       <div class="panel-head"><h3>${t("journey")}</h3><a class="more">${t("viewall")} ${IC.arrow}</a></div>
+       <div class="donut-wrap">
+         <div class="donut" style="background:conic-gradient(var(--green) 0 ${prog}%, var(--line) ${prog}% 100%)"><b>${prog}%</b></div>
+         <h4>${t("journey_h")}</h4><p>${t("journey_p")}</p>
+         <a class="cta">${t("journey_cta")} ${IC.arrow}</a>
+       </div>
+     </div>
+     <div class="panel">
+       <div class="panel-head"><h3>${t("upcoming")}</h3><a class="more">${t("viewall")} ${IC.arrow}</a></div>
+       <div class="sess-list">
+         ${up.map(s=>{const dc=dchip(s.Date);return `<div class="sess">
+            <div class="date"><b>${String(dc.d).padStart(2,"0")}</b><small>${dc.m}</small></div>
+            <div class="info"><b>${s.Course_AR}</b><small>${IC.clock}${s.Start} - ${s.End} · ${s.Mode_AR}</small></div>
+            <div class="cal">${IC.cal}</div></div>`;}).join("")}
+       </div>
+     </div>
+   </section>
+
+   <section class="panel">
+     <div class="panel-head"><h3>${t("paths")}</h3><a class="more">${t("viewall")} ${IC.arrow}</a></div>
+     <div class="paths-grid">
+       ${DATA.paths.map((p,i)=>`<div class="path-card">
+          <div class="bg" style="background:linear-gradient(135deg,hsl(${[8,28,140,215,265,190][i]} 45% 30%),hsl(${[8,28,140,215,265,190][i]} 55% 18%))"></div>
+          <div class="ic">${PATH_ICONS[i]}</div>
+          <b>${isEN()?p[1]:p[0]}</b></div>`).join("")}
+     </div>
+   </section>`;
 }
 
-function renderView(view) {
-  const main = document.getElementById('main');
-  if(view === 'dashboard') {
-    main.innerHTML = `
-      <div class="hero">
-        <div class="art"></div>
-        <div class="inner">
-          <div class="txt">
-            <h2>مرحباً بك، <span class="r">${currentUser ? (currentLang === 'ar' ? currentUser.Name_AR : currentUser.Name_EN) : ''}</span></h2>
-            <p>أهلاً بك في منصة التدريب الخاصة بـ بحرة إلكتريك. تابع دوراتك واستكشف جديد البرامج التدريبية.</p>
-            <a class="cta">استكشف الدورات المتاحة <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-          <div class="side">
-            <h3>50+ <span>برنامج تدريبي</span></h3>
-            <div class="divider"></div>
-            <div class="icons">
-              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>ساعات معتمدة</div>
-              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>شهادات فورية</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div><div class="n">${DATA.kpis.courses}</div><div class="l">إجمالي الدورات</div></div></div>
-        <div class="kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg></div><div><div class="n">${DATA.kpis.upcoming_sessions}</div><div class="l">جلسات قادمة</div></div></div>
-        <div class="kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="n">${DATA.kpis.employees}</div><div class="l">الموظفون المسجلون</div></div></div>
-        <div class="kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div><div><div class="n">${DATA.kpis.certificates}</div><div class="l">شهادات ممنوحة</div></div></div>
-      </div>
-
-      <div class="grid-3">
-        <div class="panel">
-          <div class="panel-head"><h3>أحدث الدورات التدريبية</h3><a class="more">عرض الكل <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-          <div class="course-mini">
-            ${DATA.courses.slice(0, 3).map(c => `
-              <div class="cmini">
-                <div class="thumb"><div class="play"><span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></div></div>
-                <div class="meta">
-                  <b>${currentLang === 'ar' ? c.Title_AR : c.Title_EN}</b>
-                  <span class="chip mub">${c.Level_AR}</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h3>نسبة إكمال الخطة</h3></div>
-          <div class="donut-wrap">
-            <div class="donut"><b>75%</b></div>
-            <h4>ممتاز جداً</h4>
-            <p>لقد أنجزت معظم الدورات المطلوبة لعام 2026</p>
-            <a class="cta">تفاصيل التقدم <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h3>الجلسات القادمة</h3></div>
-          <div class="sess-list">
-            ${DATA.sessions.map(s => `
-              <div class="sess">
-                <div class="date"><b>${s.Date.split('-')[2]}</b><small>سبتمبر</small></div>
-                <div class="info">
-                  <b>${s.Course_AR}</b>
-                  <small>${s.Mode_AR} • ${s.Start}</small>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-  } else if(view === 'courses') {
-    main.innerHTML = `
-      <div class="page-head"><h1>الدورات التدريبية</h1><p>استعرض جميع البرامج التدريبية المتاحة للتسجيل</p></div>
-      <div class="toolbar">
-        <input placeholder="ابحث باسم الدورة…">
-        <select><option>كل المسارات</option></select>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>كود الدورة</th><th>عنوان الدورة</th><th>المسار</th><th>المستوى</th><th>المدة</th><th>المدرب</th><th>الحالة</th></tr>
-          </thead>
-          <tbody>
-            ${DATA.courses.map(c => `
-              <tr>
-                <td><b>${c.CourseID}</b></td>
-                <td>${currentLang === 'ar' ? c.Title_AR : c.Title_EN}</td>
-                <td>${c.Path_AR}</td>
-                <td><span class="pill info">${c.Level_AR}</span></td>
-                <td>${c.DurationHours} ساعة</td>
-                <td>${c.Trainer}</td>
-                <td><span class="pill ok">${c.Status}</span></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  } else if(view === 'sessions') {
-    main.innerHTML = `
-      <div class="page-head"><h1>الجلسات التدريبية</h1><p>جدول الجلسات القادمة والسابقة</p></div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>كود الجلسة</th><th>اسم الدورة</th><th>التاريخ</th><th>الوقت</th><th>المكان/النمط</th><th>المدرب</th><th>الحالة</th></tr>
-          </thead>
-          <tbody>
-            ${DATA.sessions.map(s => `
-              <tr>
-                <td><b>${s.SessionID}</b></td>
-                <td>${s.Course_AR}</td>
-                <td>${s.Date}</td>
-                <td>${s.Start} - ${s.End}</td>
-                <td>${s.Mode_AR}</td>
-                <td>${s.Trainer}</td>
-                <td><span class="pill ok">${s.Status}</span></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  } else if(view === 'employees') {
-    main.innerHTML = `
-      <div class="page-head"><h1>سجل الموظفين</h1><p>إدارة وتتبع أداء الموظفين في البرامج التدريبية</p></div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>الرقم الوظيفي</th><th>الاسم</th><th>القسم</th><th>المسمى الوظيفي</th><th>ساعات التدريب</th><th>التقدم</th><th>الدور</th></tr>
-          </thead>
-          <tbody>
-            ${DATA.employees.map(e => `
-              <tr>
-                <td><b>${e.EmployeeID}</b></td>
-                <td><span class="mini-av">${e.Name_AR[0]}</span> ${currentLang === 'ar' ? e.Name_AR : e.Name_EN}</td>
-                <td>${currentLang === 'ar' ? e.Department_AR : e.Department_EN}</td>
-                <td>${e.JobTitle_AR}</td>
-                <td>${e.TrainingHours} ساعة</td>
-                <td>
-                  <div class="progress-bar"><i style="width: ${e.Progress}%"></i></div>
-                </td>
-                <td><span class="pill info">${e.Role}</span></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  } else if(view === 'reports') {
-    main.innerHTML = `
-      <div class="page-head"><h1>التقارير والتحليلات</h1><p>مؤشرات وإحصائيات عامة عن العملية التدريبية</p></div>
-      <div class="panel">
-        <div class="panel-head"><h3>إجمالي الساعات التدريبية لكل قسم</h3></div>
-        <div class="bars">
-          <div class="b"><div class="bar" style="height: 80%"></div><b>156</b><small>الجودة</small></div>
-          <div class="b"><div class="bar" style="height: 60%"></div><b>96</b><small>الصيانة</small></div>
-          <div class="b"><div class="bar" style="height: 40%"></div><b>60</b><small>HR</small></div>
-          <div class="b"><div class="bar" style="height: 90%"></div><b>180</b><small>الهندسة</small></div>
-        </div>
-      </div>
-    `;
-  } else if(view === 'settings') {
-    main.innerHTML = `
-      <div class="page-head"><h1>الإعدادات</h1><p>تخصيص تفضيلات المنصة والحساب</p></div>
-      <div class="panel set-grid">
-        <div class="set-row">
-          <div><b>الوضع الداكن</b><p style="font-size:12px;color:var(--muted)">تفعيل المظهر الليلي للتطبيق</p></div>
-          <div class="toggle ${document.body.classList.contains('dark') ? 'on' : ''}" id="dark-toggle"></div>
-        </div>
-      </div>
-    `;
-    document.getElementById('dark-toggle')?.addEventListener('click', function() {
-      this.classList.toggle('on');
-      document.body.classList.toggle('dark');
+/* generic table page */
+function tablePage(m,{title,sub,rows,cols,filters=[]}){
+  const fid="flt_"+Math.random().toString(36).slice(2,7);
+  m.innerHTML=`<div class="page-head"><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div>
+    <div class="toolbar">
+      <input id="${fid}" placeholder="${t("search")}">
+      ${filters.map((f,i)=>`<select data-fcol="${f.col}" class="${fid}-sel">
+        <option value="">${t("all")} — ${f.label}</option>
+        ${f.opts.map(o=>`<option>${o}</option>`).join("")}</select>`).join("")}
+    </div>
+    <div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th>${c.h}</th>`).join("")}</tr></thead>
+    <tbody id="${fid}_body"></tbody></table></div>`;
+  const body=document.getElementById(fid+"_body");
+  function draw(){
+    const q=document.getElementById(fid).value.trim().toLowerCase();
+    const sels=[...document.querySelectorAll("."+fid+"-sel")];
+    const out=rows.filter(r=>{
+      const hay=cols.map(c=>c.raw?c.raw(r):"").join(" ").toLowerCase();
+      if(q&&!hay.includes(q))return false;
+      for(const s of sels){if(s.value&&String(r[s.dataset.fcol])!==s.value)return false;}
+      return true;
     });
+    body.innerHTML=out.map(r=>`<tr>${cols.map(c=>`<td>${c.cell(r)}</td>`).join("")}</tr>`).join("")
+      ||`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--muted);padding:30px">لا توجد نتائج</td></tr>`;
   }
+  document.getElementById(fid).oninput=draw;
+  document.querySelectorAll("."+fid+"-sel").forEach(s=>s.onchange=draw);
+  draw();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderLogo('logo-login', true);
-  renderLogo('logo-login-r', false);
-  renderLogo('logo-side', true);
+function scopeEmp(rows,idField="EmployeeID"){ // employees see only their own rows
+  if(USER.Role==="Employee")return rows.filter(r=>r[idField]===USER.EmployeeID);
+  return rows;
+}
 
-  // Toggle Password Eye
-  document.getElementById('toggle-pin')?.addEventListener('click', () => {
-    const input = document.getElementById('in-pin');
-    input.type = input.type === 'password' ? 'text' : 'password';
-  });
+function pageCourses(m){
+  tablePage(m,{title:t("n_courses"),sub:`${DATA.courses.length} ${isEN()?"courses":"دورة"}`,
+    rows:DATA.courses,
+    filters:[{col:"Level_AR",label:t("th_level"),opts:["مبتدئ","متوسط","متقدم"]},
+             {col:"Path_AR",label:t("th_path"),opts:DATA.paths.map(p=>p[0])}],
+    cols:[
+      {h:t("th_course"),raw:c=>c.Title_AR+" "+c.Title_EN,cell:c=>`<b>${cName(c)}</b>`},
+      {h:t("th_path"),raw:c=>c.Path_AR,cell:c=>pName(c)},
+      {h:t("th_level"),cell:c=>levelChip(c.Level_AR)},
+      {h:t("th_dur"),cell:c=>`${c.DurationHours} ${isEN()?"h":"س"}`},
+      {h:t("th_trainer"),raw:c=>c.Trainer,cell:c=>c.Trainer},
+      {h:t("th_enrolled"),cell:c=>c.Enrolled},
+      {h:t("th_status"),cell:c=>statusPill(c.Status)},
+    ]});
+}
+function pageSessions(m){
+  tablePage(m,{title:t("n_sessions"),rows:DATA.sessions,
+    filters:[{col:"Status",label:t("th_status"),opts:["قادمة","منتهية"]}],
+    cols:[
+      {h:t("th_course"),raw:s=>s.Course_AR,cell:s=>`<b>${s.Course_AR}</b>`},
+      {h:t("th_date"),raw:s=>s.Date,cell:s=>s.Date},
+      {h:t("th_time"),cell:s=>`${s.Start} - ${s.End}`},
+      {h:t("th_place"),raw:s=>s.Mode_AR,cell:s=>s.Mode_AR},
+      {h:t("th_trainer"),raw:s=>s.Trainer,cell:s=>s.Trainer},
+      {h:t("th_reg"),cell:s=>`<div class="progress-bar" title="${s.Registered}/${s.Capacity}"><i style="width:${Math.round(s.Registered/s.Capacity*100)}%"></i></div> ${s.Registered}/${s.Capacity}`},
+      {h:t("th_status"),cell:s=>statusPill(s.Status)},
+    ]});
+}
+function pageRequests(m){
+  tablePage(m,{title:t("n_requests"),rows:scopeEmp(DATA.requests),
+    filters:[{col:"Status",label:t("th_status"),opts:["معلق","معتمد","مرفوض"]}],
+    cols:[
+      {h:t("th_emp"),raw:r=>r.EmployeeName+" "+r.EmployeeID,cell:r=>`${avInit(r.EmployeeName)}${r.EmployeeName}`},
+      {h:t("th_course"),raw:r=>r.Course_AR,cell:r=>r.Course_AR},
+      {h:t("th_reqdate"),raw:r=>r.RequestDate,cell:r=>r.RequestDate},
+      {h:t("th_status"),cell:r=>statusPill(r.Status)},
+    ]});
+}
+function pageEval(m){
+  tablePage(m,{title:t("n_eval"),rows:DATA.evaluations,
+    cols:[
+      {h:t("th_emp"),raw:v=>v.EmployeeName,cell:v=>`${avInit(v.EmployeeName)}${v.EmployeeName}`},
+      {h:t("th_course"),raw:v=>v.Course_AR,cell:v=>v.Course_AR},
+      {h:t("th_score"),cell:v=>`<b>${v.Score}</b>`},
+      {h:t("th_grade"),cell:v=>statusPill(v.Score>=90?"سارية":v.Score>=70?"معتمد":"معلق").replace(/سارية|معتمد|معلق/,v.Grade)},
+      {h:t("th_date"),raw:v=>v.Date,cell:v=>v.Date},
+    ]});
+}
+function pageCerts(m){
+  tablePage(m,{title:t("n_certs"),rows:scopeEmp(DATA.certificates),
+    cols:[
+      {h:"#",raw:c=>c.CertID,cell:c=>c.CertID},
+      {h:t("th_emp"),raw:c=>c.EmployeeName,cell:c=>`${avInit(c.EmployeeName)}${c.EmployeeName}`},
+      {h:t("th_course"),raw:c=>c.Course_AR,cell:c=>c.Course_AR},
+      {h:t("th_issue"),raw:c=>c.IssueDate,cell:c=>c.IssueDate},
+      {h:t("th_expiry"),cell:c=>c.ExpiryDate},
+      {h:t("th_status"),cell:c=>statusPill(c.Status)},
+    ]});
+}
+function pageNeeds(m){
+  tablePage(m,{title:t("n_needs"),rows:DATA.needs,
+    filters:[{col:"Priority",label:t("th_priority"),opts:["عالية","متوسطة","منخفضة"]}],
+    cols:[
+      {h:t("th_dept"),raw:n=>n.Department_AR,cell:n=>n.Department_AR},
+      {h:t("th_skill"),raw:n=>n.Skill_AR,cell:n=>`<b>${n.Skill_AR}</b>`},
+      {h:t("th_priority"),cell:n=>statusPill(n.Priority==="عالية"?"مرفوض":n.Priority==="متوسطة"?"معلق":"معتمد").replace(/مرفوض|معلق|معتمد/,n.Priority)},
+      {h:t("th_gap"),cell:n=>n.Gap},
+      {h:t("th_quarter"),cell:n=>n.TargetQuarter},
+    ]});
+}
+function pageEmployees(m){
+  tablePage(m,{title:t("n_employees"),sub:`${DATA.employees.length} ${isEN()?"employees":"موظف"}`,
+    rows:DATA.employees,
+    filters:[{col:"Department_AR",label:t("th_dept"),opts:[...new Set(DATA.employees.map(e=>e.Department_AR))]},
+             {col:"Role",label:t("th_role"),opts:["Admin","Trainer","Employee"]}],
+    cols:[
+      {h:t("th_id"),raw:e=>e.EmployeeID,cell:e=>e.EmployeeID},
+      {h:t("th_name"),raw:e=>e.Name_AR+" "+e.Name_EN,cell:e=>`${avInit(e.Name_AR)}${eName(e)}`},
+      {h:t("th_dept"),raw:e=>e.Department_AR,cell:e=>isEN()?e.Department_EN:e.Department_AR},
+      {h:t("th_title"),raw:e=>e.JobTitle_AR,cell:e=>e.JobTitle_AR},
+      {h:t("th_role"),cell:e=>t("role_"+e.Role)},
+      {h:t("th_progress"),cell:e=>`<div class="progress-bar"><i style="width:${e.Progress}%"></i></div> ${e.Progress}%`},
+      {h:t("th_hours"),cell:e=>e.TrainingHours},
+      {h:t("th_status"),cell:e=>statusPill(e.Status)},
+    ]});
+}
+function pageTrainers(m){
+  const trainers=DATA.employees.filter(e=>e.Role==="Trainer");
+  tablePage(m,{title:t("n_trainers"),rows:trainers,
+    cols:[
+      {h:t("th_id"),raw:e=>e.EmployeeID,cell:e=>e.EmployeeID},
+      {h:t("th_name"),raw:e=>e.Name_AR,cell:e=>`${avInit(e.Name_AR)}${eName(e)}`},
+      {h:t("th_dept"),cell:e=>isEN()?e.Department_EN:e.Department_AR},
+      {h:isEN()?"Courses":"عدد الدورات",cell:e=>DATA.courses.filter(c=>c.Trainer===e.Name_AR).length},
+      {h:t("th_status"),cell:e=>statusPill(e.Status)},
+    ]});
+}
+function pageReports(m){
+  const byPath=DATA.paths.map(p=>({name:isEN()?p[1]:p[0],
+    n:DATA.courses.filter(c=>c.Path_AR===p[0]).length}));
+  const maxN=Math.max(...byPath.map(x=>x.n),1);
+  const att={present:0,late:0,absent:0};
+  DATA.attendance.forEach(a=>{att[a.Status==="حاضر"?"present":a.Status==="متأخر"?"late":"absent"]++;});
+  const tot=att.present+att.late+att.absent||1;
+  const avg=(DATA.evaluations.reduce((s,v)=>s+v.Score,0)/DATA.evaluations.length).toFixed(1);
+  const hours=DATA.employees.reduce((s,e)=>s+e.TrainingHours,0);
+  const pPct=Math.round(att.present/tot*100),lPct=Math.round(att.late/tot*100);
+  m.innerHTML=`<div class="page-head"><h1>${t("rep_title")}</h1></div>
+   <section class="kpi-grid">
+     <div class="kpi"><div class="ic">${IC.star}</div><div><div class="n">${avg}</div><div class="l">${t("rep_avg")}</div></div></div>
+     <div class="kpi"><div class="ic">${IC.clock}</div><div><div class="n">${hours}</div><div class="l">${t("rep_hours")}</div></div></div>
+     <div class="kpi"><div class="ic">${IC.award}</div><div><div class="n">${DATA.certificates.length}</div><div class="l">${t("kcert")}</div></div></div>
+     <div class="kpi"><div class="ic">${IC.users}</div><div><div class="n">${DATA.employees.length}</div><div class="l">${t("ke")}</div></div></div>
+   </section>
+   <section class="grid-3" style="grid-template-columns:1.4fr 1fr">
+     <div class="panel"><div class="panel-head"><h3>${t("rep_bypath")}</h3></div>
+       <div class="bars">${byPath.map(x=>`<div class="b"><b>${x.n}</b>
+         <div class="bar" style="height:${Math.max(8,x.n/maxN*160)}px"></div>
+         <small>${x.name}</small></div>`).join("")}</div>
+     </div>
+     <div class="panel"><div class="panel-head"><h3>${t("rep_att")}</h3></div>
+       <div class="donut-wrap">
+         <div class="donut" style="background:conic-gradient(var(--green) 0 ${pPct}%, #c98a12 ${pPct}% ${pPct+lPct}%, var(--red) ${pPct+lPct}% 100%)"><b>${pPct}%</b></div>
+         <div style="display:flex;gap:16px;margin-top:14px;font-size:12.5px;font-weight:700">
+           <span style="color:var(--green)">● ${t("rep_present")} ${att.present}</span>
+           <span style="color:#c98a12">● ${t("rep_late")} ${att.late}</span>
+           <span style="color:var(--red)">● ${t("rep_absent")} ${att.absent}</span>
+         </div>
+       </div>
+     </div>
+   </section>`;
+}
+function pageSettings(m){
+  m.innerHTML=`<div class="page-head"><h1>${t("set_title")}</h1></div>
+   <div class="set-grid">
+     <div class="panel"><div class="panel-head"><h3>${t("set_brand")}</h3></div>
+       <div class="set-row"><span>${t("set_primary")}</span>
+         <div style="display:flex;gap:8px">
+          ${["#E11B22","#C0392B","#1D6FD0","#0d8a4f","#7a3418"].map(c=>`<div class="swatch" style="background:${c}" data-c="${c}"></div>`).join("")}
+         </div></div>
+       <p style="color:var(--muted);font-size:13px;margin-top:12px">${t("set_note")}</p>
+     </div>
+     <div class="panel"><div class="panel-head"><h3>${t("set_general")}</h3></div>
+       <div class="set-row"><span>${t("set_theme")}</span><div class="toggle ${document.body.classList.contains('dark')?'on':''}" id="tg-theme"></div></div>
+       <div class="set-row"><span>${t("set_lang")}</span><div class="toggle ${LANG==='ar'?'on':''}" id="tg-lang"></div></div>
+       <div class="set-row"><span>${t("set_notif")}</span><div class="toggle on"></div></div>
+     </div>
+   </div>`;
+  m.querySelectorAll(".swatch").forEach(s=>s.onclick=()=>{
+    document.documentElement.style.setProperty("--red",s.dataset.c);});
+  document.getElementById("tg-theme").onclick=e=>{e.target.classList.toggle("on");document.body.classList.toggle("dark");render("settings");};
+  document.getElementById("tg-lang").onclick=()=>{LANG=LANG==="ar"?"en":"ar";applyLang();};
+}
 
-  // Language switch
-  const switchLang = () => {
-    currentLang = currentLang === 'ar' ? 'en' : 'ar';
-    updateI18n();
-    renderNav();
-    if(currentUser) renderView('dashboard');
-  };
-  document.getElementById('login-lang')?.addEventListener('click', switchLang);
-  document.getElementById('app-lang')?.addEventListener('click', switchLang);
+/* ============ ASSISTANT (اسألني) ============ */
+function renderChatWelcome(){
+  const chat=document.getElementById("chat");chat.innerHTML="";
+  addMsg("bot",t("a_welcome"));
+  const s=document.getElementById("suggs");
+  const list=isEN()?["Upcoming sessions","How many employees?","Top courses","My certificates"]
+                   :["الجلسات القادمة","كم عدد الموظفين؟","أفضل الدورات","شهاداتي"];
+  s.innerHTML=list.map(x=>`<button>${x}</button>`).join("");
+  s.querySelectorAll("button").forEach(b=>b.onclick=()=>{document.getElementById("a-input").value=b.textContent;sendAI();});
+}
+function addMsg(who,text){const c=document.getElementById("chat");
+  const d=document.createElement("div");d.className="msg "+who;d.textContent=text;c.appendChild(d);c.scrollTop=c.scrollHeight;}
 
-  // Demo Login Quick Fill
-  document.querySelectorAll('.demo-hint button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const role = btn.getAttribute('data-role');
-      const emp = DATA.employees.find(e => e.Role.toLowerCase() === role) || DATA.employees[0];
-      document.getElementById('in-emp').value = emp.EmployeeID;
-      document.getElementById('in-pin').value = emp.PIN;
-    });
-  });
+async function sendAI(){
+  const inp=document.getElementById("a-input");const q=inp.value.trim();if(!q)return;
+  addMsg("me",q);inp.value="";
+  if(CONFIG.USE_BACKEND && CONFIG.APPS_SCRIPT_URL){
+    // ── الذكاء الاصطناعي عبر Groq: Code.gs يمرر السؤال إلى Groq API ──
+    addMsg("bot","…");
+    try{
+      const r=await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=ask&q=${encodeURIComponent(q)}`);
+      const j=await r.json();
+      document.getElementById("chat").lastChild.textContent=j.answer||"—";
+    }catch(e){document.getElementById("chat").lastChild.textContent="تعذّر الاتصال بمساعد الذكاء الاصطناعي.";}
+    return;
+  }
+  addMsg("bot",localAI(q));
+}
+function localAI(q){ // إجابات محلية من البيانات (بدون خادم)
+  const s=q.toLowerCase();
+  const has=(...w)=>w.some(x=>q.includes(x)||s.includes(x));
+  if(has("موظف","employee","كم عدد")) return isEN()?`There are ${DATA.employees.length} registered employees across ${new Set(DATA.employees.map(e=>e.Department_AR)).size} departments.`:`يوجد ${DATA.employees.length} موظفاً مسجلاً موزّعين على ${new Set(DATA.employees.map(e=>e.Department_AR)).size} أقسام.`;
+  if(has("جلس","session")){const up=DATA.sessions.filter(x=>x.Status==="قادمة");
+    return (isEN()?`Upcoming sessions (${up.length}):\n`:`الجلسات القادمة (${up.length}):\n`)+up.map(x=>`• ${x.Course_AR} — ${x.Date} ${x.Start}`).join("\n");}
+  if(has("شهاد","cert")){const n=USER.Role==="Employee"?DATA.certificates.filter(c=>c.EmployeeID===USER.EmployeeID).length:DATA.certificates.length;
+    return isEN()?`Certificates issued: ${n}.`:`عدد الشهادات: ${n}.`;}
+  if(has("دورة","دورات","course","أفضل")){const top=[...DATA.courses].sort((a,b)=>b.Enrolled-a.Enrolled).slice(0,3);
+    return (isEN()?"Top courses by enrollment:\n":"أكثر الدورات تسجيلاً:\n")+top.map(c=>`• ${cName(c)} (${c.Enrolled})`).join("\n");}
+  if(has("تقدم","progress","نسبة")) return isEN()?`Your progress is ${USER.Progress||70}%.`:`نسبة تقدمك ${USER.Progress||70}%.`;
+  if(has("مسار","path")) return (isEN()?"Training paths:\n":"المسارات التدريبية:\n")+DATA.paths.map(p=>"• "+(isEN()?p[1]:p[0])).join("\n");
+  return isEN()?"I can answer about courses, sessions, employees, certificates, paths and progress. (Connect Groq via Code.gs for open-ended answers.)":
+                "أستطيع الإجابة عن الدورات، الجلسات، الموظفين، الشهادات، المسارات والتقدم. (اربط Groq عبر Code.gs للإجابات المفتوحة.)";
+}
 
-  // Login Handle
-  document.getElementById('btn-login')?.addEventListener('click', () => {
-    const empId = document.getElementById('in-emp').value.trim();
-    const pin = document.getElementById('in-pin').value.trim();
-    const user = DATA.employees.find(e => e.EmployeeID === empId && e.PIN === pin);
+/* ============ EVENTS ============ */
+document.getElementById("btn-login").onclick=()=>doLogin(document.getElementById("in-emp").value,document.getElementById("in-pin").value);
+document.getElementById("in-pin").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("btn-login").click();});
+document.getElementById("toggle-pin").onclick=()=>{const i=document.getElementById("in-pin");i.type=i.type==="password"?"text":"password";};
+document.querySelectorAll(".demo-hint .chips button").forEach(b=>b.onclick=()=>fillDemo(b.dataset.role));
+document.getElementById("login-lang").onclick=()=>{LANG=isEN()?"ar":"en";applyLang();};
+document.getElementById("app-lang").onclick=()=>{LANG=isEN()?"ar":"en";applyLang();};
+document.getElementById("theme-btn").onclick=()=>document.body.classList.toggle("dark");
+document.getElementById("logout-link").onclick=()=>{USER=null;
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("assistant").classList.add("hidden");
+  document.getElementById("assistant-btn").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("in-pin").value="";document.getElementById("login-err").textContent="";};
+document.getElementById("menu-btn").onclick=()=>document.getElementById("sidebar").classList.toggle("open");
+document.getElementById("assistant-btn").onclick=()=>{document.getElementById("assistant").classList.toggle("hidden");renderChatWelcome();};
+document.getElementById("a-close").onclick=()=>document.getElementById("assistant").classList.add("hidden");
+document.getElementById("a-send").onclick=sendAI;
+document.getElementById("a-input").addEventListener("keydown",e=>{if(e.key==="Enter")sendAI();});
+document.getElementById("assistant-btn").classList.add("hidden");
 
-    if(user) {
-      currentUser = user;
-      document.getElementById('login').classList.add('hidden');
-      document.getElementById('app').classList.remove('hidden');
-      document.getElementById('u-name').textContent = currentLang === 'ar' ? user.Name_AR : user.Name_EN;
-      document.getElementById('u-role').textContent = user.Role;
-      document.getElementById('u-av').textContent = user.Name_AR[0];
-      renderNav();
-      renderView('dashboard');
-    } else {
-      document.getElementById('login-err').textContent = 'الرقم الوظيفي أو رمز PIN غير صحيح';
-    }
-  });
-
-  // Logout
-  document.getElementById('logout-link')?.addEventListener('click', () => {
-    currentUser = null;
-    document.getElementById('app').classList.add('hidden');
-    document.getElementById('login').classList.remove('hidden');
-  });
-
-  // Theme Toggle (Header)
-  document.getElementById('theme-btn')?.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-  });
-
-  // Mobile Menu Toggle
-  document.getElementById('menu-btn')?.addEventListener('click', () => {
-    document.getElementById('sidebar')?.classList.toggle('open');
-  });
-
-  // AI Assistant Toggle
-  const astBtn = document.getElementById('assistant-btn');
-  const astBox = document.getElementById('assistant');
-  const astClose = document.getElementById('a-close');
-
-  astBtn?.addEventListener('click', () => astBox?.classList.toggle('hidden'));
-  astClose?.addEventListener('click', () => astBox?.classList.add('hidden'));
-
-  // AI Chat functionality
-  const sendBtn = document.getElementById('a-send');
-  const chatInput = document.getElementById('a-input');
-  const chatArea = document.getElementById('chat');
-
-  const addMsg = (txt, type) => {
-    const div = document.createElement('div');
-    div.className = `msg ${type}`;
-    div.textContent = txt;
-    chatArea.appendChild(div);
-    chatArea.scrollTop = chatArea.scrollHeight;
-  };
-
-  sendBtn?.addEventListener('click', () => {
-    const val = chatInput.value.trim();
-    if(!val) return;
-    addMsg(val, 'me');
-    chatInput.value = '';
-    setTimeout(() => {
-      addMsg('أهلاً بك! أنا مساعد منصة بحرة إلكتريك. كيف يمكنني مساعدتك في الدورات أو الاستفسارات اليوم؟', 'bot');
-    }, 600);
-  });
-
-  updateI18n();
-});
+/* init */
+applyLang();
 </script>
 </body>
 </html>
